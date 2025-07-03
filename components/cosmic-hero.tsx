@@ -1,95 +1,9 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
-
-// Enhanced Star component with more variety
-const Star = ({
-  size,
-  top,
-  left,
-  delay,
-  intensity,
-}: {
-  size: number
-  top: string
-  left: string
-  delay: string
-  intensity: number
-}) => (
-  <div
-    className={`absolute bg-white rounded-full animate-twinkle`}
-    style={{
-      width: `${size}px`,
-      height: `${size}px`,
-      top,
-      left,
-      opacity: 0.2, // Start with the minimum opacity to prevent flash
-      animationDelay: delay,
-      boxShadow: `0 0 ${size * 3}px rgba(255, 255, 255, ${intensity}), 0 0 ${size * 6}px rgba(135, 206, 250, ${intensity * 0.3})`,
-    }}
-  />
-)
-
-// Planet component with zoom effect
-const Planet = ({
-  size,
-  color,
-  top,
-  left,
-  glowColor,
-  title,
-  description,
-  onClick,
-}: {
-  size: number
-  color: string
-  top: string
-  left: string
-  glowColor: string
-  title: string
-  description: string
-  onClick: (planetData: { top: string; left: string; title: string; description: string }) => void
-}) => {
-  const [isHovered, setIsHovered] = useState(false)
-
-  return (
-    <div
-      className="absolute transition-all duration-300 ease-out z-20 cursor-pointer"
-      style={{ 
-        top, 
-        left,
-        transform: isHovered ? "scale(1.1)" : "scale(1)",
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={(e) => {
-        e.stopPropagation()
-        onClick({ top, left, title, description })
-      }}
-    >
-      <div
-        className={`rounded-full transition-all duration-300 animate-pulse-slow ${color}`}
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          filter: isHovered ? "brightness(1.25)" : "brightness(1)",
-          boxShadow: `0 0 ${size * 2}px ${glowColor}, 0 0 ${size * 4}px ${glowColor}40, inset 0 0 ${size / 3}px rgba(255, 255, 255, 0.2)`,
-        }}
-      />
-      {/* Orbital ring */}
-      <div
-        className="absolute top-1/2 left-1/2 rounded-full animate-spin-slow transition-all duration-300"
-        style={{
-          width: `${size * 2.5}px`,
-          height: `${size * 2.5}px`,
-          transform: "translate(-50%, -50%)",
-          animationDuration: "20s",
-          border: `1px solid ${isHovered ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)"}`,
-        }}
-      />
-    </div>
-  )
-}
+import { useState, useEffect, useMemo, useCallback } from "react"
+import Star from "./star"
+import Planet from "./planet"
+import DescriptionPanel from "./description-panel"
 
 export default function CosmicHero({ 
   onHoverChange 
@@ -111,23 +25,29 @@ export default function CosmicHero({
   })
   
   const [activePlanet, setActivePlanet] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Generate more varied stars (memoized to prevent position changes)
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 200 }, (_, i) => ({
-        id: i,
-        size: Math.random() * 2.5 + 0.5,
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 2}s`, // Shorter delay so twinkling starts faster
-        intensity: Math.random() * 0.8 + 0.2,
-      })),
-    [],
-  )
+  const stars = useMemo(() => {
+    if (!mounted) return []
+    return Array.from({ length: 200 }, (_, i) => ({
+      id: i,
+      size: Math.random() * 2.5 + 0.5,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 2}s`,
+      intensity: Math.random() * 0.8 + 0.2,
+    }))
+  }, [mounted])
 
 
 
+
+  const [activePlanetPosition, setActivePlanetPosition] = useState({ x: 50, y: 50 })
 
   const handlePlanetClick = (planetData: { top: string; left: string; title: string; description: string }) => {
     const isCurrentlyActive = activePlanet === planetData.title
@@ -162,6 +82,17 @@ export default function CosmicHero({
       }
     }
   }
+
+  const handlePlanetPositionUpdate = useCallback((position: { x: number; y: number }) => {
+    setActivePlanetPosition(position)
+    
+    // Schedule zoom update for next frame to avoid render-time setState
+    requestAnimationFrame(() => {
+      if (onHoverChange) {
+        onHoverChange(true, position)
+      }
+    })
+  }, [onHoverChange])
 
   const handleBackgroundClick = () => {
     // Zoom out when clicking background
@@ -243,54 +174,70 @@ export default function CosmicHero({
           transition: "transform 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
         }}
       >
-        {/* Planets */}
-        <Planet
-          size={35}
-          color="bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600"
-          glowColor="rgba(59, 130, 246, 0.8)"
-          top="20%"
-          left="15%"
-          title="Aqua Nexus"
-          description="A crystalline world where liquid starlight flows through quantum channels."
-          onClick={handlePlanetClick}
-        />
+        {/* Orbiting Planets */}
+        {mounted && (
+          <>
+            <Planet
+              size={60}
+              color="bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600"
+              glowColor="rgba(59, 130, 246, 0.8)"
+              title="Aqua Nexus"
+              description="A crystalline world where liquid starlight flows through quantum channels."
+              onClick={handlePlanetClick}
+              orbitRadius={600}
+              orbitSpeed={0.3}
+              orbitOffset={0}
+              isActive={activePlanet === "Aqua Nexus"}
+              onPositionUpdate={handlePlanetPositionUpdate}
+            />
 
-        <Planet
-          size={28}
-          color="bg-gradient-to-br from-orange-400 via-red-500 to-pink-600"
-          glowColor="rgba(239, 68, 68, 0.8)"
-          top="30%"
-          left="80%"
-          title="Ember Core"
-          description="The forge of creation where stellar flames dance with primordial energy."
-          onClick={handlePlanetClick}
-        />
+            <Planet
+              size={55}
+              color="bg-gradient-to-br from-orange-400 via-red-500 to-pink-600"
+              glowColor="rgba(239, 68, 68, 0.8)"
+              title="Ember Core"
+              description="The forge of creation where stellar flames dance with primordial energy."
+              onClick={handlePlanetClick}
+              orbitRadius={450}
+              orbitSpeed={0.45}
+              orbitOffset={Math.PI / 2}
+              isActive={activePlanet === "Ember Core"}
+              onPositionUpdate={handlePlanetPositionUpdate}
+            />
 
-        <Planet
-          size={32}
-          color="bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600"
-          glowColor="rgba(16, 185, 129, 0.8)"
-          top="65%"
-          left="20%"
-          title="Verdant Sphere"
-          description="An ancient sanctuary where the universe's heartbeat resonates through crystalline forests."
-          onClick={handlePlanetClick}
-        />
+            <Planet
+              size={65}
+              color="bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600"
+              glowColor="rgba(16, 185, 129, 0.8)"
+              title="Verdant Sphere"
+              description="An ancient sanctuary where the universe's heartbeat resonates through crystalline forests."
+              onClick={handlePlanetClick}
+              orbitRadius={750}
+              orbitSpeed={0.2}
+              orbitOffset={Math.PI}
+              isActive={activePlanet === "Verdant Sphere"}
+              onPositionUpdate={handlePlanetPositionUpdate}
+            />
 
-        <Planet
-          size={25}
-          color="bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600"
-          glowColor="rgba(139, 92, 246, 0.8)"
-          top="70%"
-          left="75%"
-          title="Void Prism"
-          description="A mysterious realm where thoughts become reality and dimensions dissolve."
-          onClick={handlePlanetClick}
-        />
+            <Planet
+              size={45}
+              color="bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600"
+              glowColor="rgba(139, 92, 246, 0.8)"
+              title="Void Prism"
+              description="A mysterious realm where thoughts become reality and dimensions dissolve."
+              onClick={handlePlanetClick}
+              orbitRadius={520}
+              orbitSpeed={0.35}
+              orbitOffset={3 * Math.PI / 2}
+              isActive={activePlanet === "Void Prism"}
+              onPositionUpdate={handlePlanetPositionUpdate}
+            />
+          </>
+        )}
 
 
         {/* Enhanced Central Nameplate */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="absolute inset-0 flex items-center justify-center z-20">
           <div className="text-center">
             <div className="relative">
               {/* Glow effect behind text */}
@@ -331,113 +278,13 @@ export default function CosmicHero({
       </div>
 
       {/* Description Panel */}
-      {hoveredPlanet.isHovered && hoveredPlanet.title && (
-        <div
-          className="fixed top-1/2 w-80 z-50 backdrop-blur-md border rounded-lg p-6"
-          style={{
-            left: Number.parseFloat(hoveredPlanet.left) > 50 ? "5%" : "auto",
-            right: Number.parseFloat(hoveredPlanet.left) > 50 ? "auto" : "5%",
-            transform: "translateY(-50%)",
-            animation: "fadeIn 500ms ease-out 800ms forwards",
-            opacity: 0,
-            background: getPanelBackground(hoveredPlanet.title),
-            borderColor: getPanelBorderColor(hoveredPlanet.title),
-          }}
-        >
-          <h2 
-            className="text-2xl font-bold mb-4 tracking-wide"
-            style={{ 
-              color: getPanelTextColor(hoveredPlanet.title),
-              textShadow: `0 0 15px ${getPanelGlowColor(hoveredPlanet.title)}`,
-            }}
-          >
-            {hoveredPlanet.title}
-          </h2>
-          <p 
-            className="text-base leading-relaxed opacity-90"
-            style={{ color: getPanelSecondaryColor(hoveredPlanet.title) }}
-          >
-            {hoveredPlanet.description}
-          </p>
-        </div>
-      )}
+      <DescriptionPanel
+        isVisible={hoveredPlanet.isHovered}
+        title={hoveredPlanet.title}
+        description={hoveredPlanet.description}
+        activePlanetPosition={activePlanetPosition}
+      />
 
     </div>
   )
-}
-
-// Helper functions for panel styling
-function getPanelBackground(title: string): string {
-  switch (title) {
-    case "Aqua Nexus":
-      return "linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(59,130,246,0.1) 50%, rgba(147,51,234,0.15) 100%)"
-    case "Ember Core":
-      return "linear-gradient(135deg, rgba(251,146,60,0.15) 0%, rgba(239,68,68,0.1) 50%, rgba(236,72,153,0.15) 100%)"
-    case "Verdant Sphere":
-      return "linear-gradient(135deg, rgba(52,211,153,0.15) 0%, rgba(16,185,129,0.1) 50%, rgba(20,184,166,0.15) 100%)"
-    case "Void Prism":
-      return "linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(139,92,246,0.1) 50%, rgba(99,102,241,0.15) 100%)"
-    default:
-      return "rgba(0,0,0,0.5)"
-  }
-}
-
-function getPanelBorderColor(title: string): string {
-  switch (title) {
-    case "Aqua Nexus":
-      return "rgba(6,182,212,0.4)"
-    case "Ember Core":
-      return "rgba(251,146,60,0.4)"
-    case "Verdant Sphere":
-      return "rgba(52,211,153,0.4)"
-    case "Void Prism":
-      return "rgba(168,85,247,0.4)"
-    default:
-      return "rgba(255,255,255,0.2)"
-  }
-}
-
-function getPanelTextColor(title: string): string {
-  switch (title) {
-    case "Aqua Nexus":
-      return "#bfdbfe"
-    case "Ember Core":
-      return "#fed7aa"
-    case "Verdant Sphere":
-      return "#a7f3d0"
-    case "Void Prism":
-      return "#ddd6fe"
-    default:
-      return "#ffffff"
-  }
-}
-
-function getPanelSecondaryColor(title: string): string {
-  switch (title) {
-    case "Aqua Nexus":
-      return "#93c5fd"
-    case "Ember Core":
-      return "#fdba74"
-    case "Verdant Sphere":
-      return "#86efac"
-    case "Void Prism":
-      return "#c4b5fd"
-    default:
-      return "#e5e7eb"
-  }
-}
-
-function getPanelGlowColor(title: string): string {
-  switch (title) {
-    case "Aqua Nexus":
-      return "rgba(6,182,212,0.6)"
-    case "Ember Core":
-      return "rgba(251,146,60,0.6)"
-    case "Verdant Sphere":
-      return "rgba(52,211,153,0.6)"
-    case "Void Prism":
-      return "rgba(168,85,247,0.6)"
-    default:
-      return "rgba(255,255,255,0.3)"
-  }
 }
