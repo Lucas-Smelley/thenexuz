@@ -50,31 +50,41 @@ const Planet = ({
   description: string
   onClick: (planetData: { top: string; left: string; title: string; description: string }) => void
 }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
   return (
     <div
-      className="absolute transition-all duration-300 ease-out z-20 cursor-pointer hover:scale-110"
-      style={{ top, left }}
+      className="absolute transition-all duration-300 ease-out z-20 cursor-pointer"
+      style={{ 
+        top, 
+        left,
+        transform: isHovered ? "scale(1.1)" : "scale(1)",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={(e) => {
         e.stopPropagation()
         onClick({ top, left, title, description })
       }}
     >
       <div
-        className={`rounded-full transition-all duration-300 animate-pulse-slow ${color} hover:brightness-125`}
+        className={`rounded-full transition-all duration-300 animate-pulse-slow ${color}`}
         style={{
           width: `${size}px`,
           height: `${size}px`,
+          filter: isHovered ? "brightness(1.25)" : "brightness(1)",
           boxShadow: `0 0 ${size * 2}px ${glowColor}, 0 0 ${size * 4}px ${glowColor}40, inset 0 0 ${size / 3}px rgba(255, 255, 255, 0.2)`,
         }}
       />
       {/* Orbital ring */}
       <div
-        className="absolute top-1/2 left-1/2 border border-white/10 rounded-full animate-spin-slow transition-all duration-300 hover:border-white/30"
+        className="absolute top-1/2 left-1/2 rounded-full animate-spin-slow transition-all duration-300"
         style={{
           width: `${size * 2.5}px`,
           height: `${size * 2.5}px`,
           transform: "translate(-50%, -50%)",
           animationDuration: "20s",
+          border: `1px solid ${isHovered ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)"}`,
         }}
       />
     </div>
