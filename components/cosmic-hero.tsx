@@ -39,7 +39,7 @@ const Planet = ({
   glowColor,
   title,
   description,
-  onHover,
+  onClick,
 }: {
   size: number
   color: string
@@ -48,17 +48,19 @@ const Planet = ({
   glowColor: string
   title: string
   description: string
-  onHover: (isHovered: boolean, planetData: { top: string; left: string; title: string; description: string }) => void
+  onClick: (planetData: { top: string; left: string; title: string; description: string }) => void
 }) => {
   return (
     <div
-      className="absolute transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-110 z-20"
+      className="absolute transition-all duration-300 ease-out z-20 cursor-pointer hover:scale-110"
       style={{ top, left }}
-      onMouseEnter={() => onHover(true, { top, left, title, description })}
-      onMouseLeave={() => onHover(false, { top, left, title, description })}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick({ top, left, title, description })
+      }}
     >
       <div
-        className={`rounded-full transition-all duration-700 animate-pulse-slow ${color}`}
+        className={`rounded-full transition-all duration-300 animate-pulse-slow ${color} hover:brightness-125`}
         style={{
           width: `${size}px`,
           height: `${size}px`,
@@ -67,7 +69,7 @@ const Planet = ({
       />
       {/* Orbital ring */}
       <div
-        className="absolute top-1/2 left-1/2 border border-white/10 rounded-full animate-spin-slow"
+        className="absolute top-1/2 left-1/2 border border-white/10 rounded-full animate-spin-slow transition-all duration-300 hover:border-white/30"
         style={{
           width: `${size * 2.5}px`,
           height: `${size * 2.5}px`,
@@ -79,7 +81,11 @@ const Planet = ({
   )
 }
 
-export default function CosmicHero() {
+export default function CosmicHero({ 
+  onHoverChange 
+}: { 
+  onHoverChange?: (isHovered: boolean, center: { x: number; y: number }) => void 
+} = {}) {
   const [hoveredPlanet, setHoveredPlanet] = useState<{
     isHovered: boolean
     top: string
@@ -93,6 +99,8 @@ export default function CosmicHero() {
     title: "",
     description: "",
   })
+  
+  const [activePlanet, setActivePlanet] = useState<string | null>(null)
 
   // Generate more varied stars (memoized to prevent position changes)
   const stars = useMemo(
@@ -109,14 +117,58 @@ export default function CosmicHero() {
   )
 
 
-  const handlePlanetHover = (
-    isHovered: boolean,
-    planetData: { top: string; left: string; title: string; description: string },
-  ) => {
-    setHoveredPlanet({
-      isHovered,
-      ...planetData,
-    })
+
+
+  const handlePlanetClick = (planetData: { top: string; left: string; title: string; description: string }) => {
+    const isCurrentlyActive = activePlanet === planetData.title
+    
+    if (isCurrentlyActive) {
+      // Zoom out if clicking the same planet
+      setActivePlanet(null)
+      setHoveredPlanet({
+        isHovered: false,
+        top: "50%",
+        left: "50%",
+        title: "",
+        description: "",
+      })
+      
+      if (onHoverChange) {
+        onHoverChange(false, { x: 50, y: 50 })
+      }
+    } else {
+      // Zoom in to new planet
+      setActivePlanet(planetData.title)
+      setHoveredPlanet({
+        isHovered: true,
+        ...planetData,
+      })
+      
+      if (onHoverChange) {
+        onHoverChange(true, {
+          x: Number.parseFloat(planetData.left),
+          y: Number.parseFloat(planetData.top),
+        })
+      }
+    }
+  }
+
+  const handleBackgroundClick = () => {
+    // Zoom out when clicking background
+    if (activePlanet) {
+      setActivePlanet(null)
+      setHoveredPlanet({
+        isHovered: false,
+        top: "50%",
+        left: "50%",
+        title: "",
+        description: "",
+      })
+      
+      if (onHoverChange) {
+        onHoverChange(false, { x: 50, y: 50 })
+      }
+    }
   }
 
 
@@ -136,7 +188,10 @@ export default function CosmicHero() {
   }
 
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden">
+    <div 
+      className="relative w-full h-screen bg-black overflow-hidden"
+      onClick={handleBackgroundClick}
+    >
 
       {/* Background stars with parallax effect */}
       <div
@@ -187,7 +242,7 @@ export default function CosmicHero() {
           left="15%"
           title="Aqua Nexus"
           description="A crystalline world where liquid starlight flows through quantum channels."
-          onHover={handlePlanetHover}
+          onClick={handlePlanetClick}
         />
 
         <Planet
@@ -198,7 +253,7 @@ export default function CosmicHero() {
           left="80%"
           title="Ember Core"
           description="The forge of creation where stellar flames dance with primordial energy."
-          onHover={handlePlanetHover}
+          onClick={handlePlanetClick}
         />
 
         <Planet
@@ -209,7 +264,7 @@ export default function CosmicHero() {
           left="20%"
           title="Verdant Sphere"
           description="An ancient sanctuary where the universe's heartbeat resonates through crystalline forests."
-          onHover={handlePlanetHover}
+          onClick={handlePlanetClick}
         />
 
         <Planet
@@ -220,117 +275,9 @@ export default function CosmicHero() {
           left="75%"
           title="Void Prism"
           description="A mysterious realm where thoughts become reality and dimensions dissolve."
-          onHover={handlePlanetHover}
+          onClick={handlePlanetClick}
         />
 
-        {/* Text that scales with everything else */}
-        {hoveredPlanet.title && (
-          <div
-            className="absolute z-50 pointer-events-none"
-            style={{
-              top: hoveredPlanet.top,
-              left: hoveredPlanet.left,
-              transform:
-                Number.parseFloat(hoveredPlanet.left) > 50
-                  ? `translateX(-240px) translateY(-20px)` // Closer for right-side planets
-                  : `translateX(100px) translateY(-20px)`, // Further for left-side planets
-              opacity: hoveredPlanet.isHovered ? 1 : 0,
-              transition: "opacity 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
-            }}
-          >
-            {hoveredPlanet.title === "Aqua Nexus" && (
-              <div
-                className="relative backdrop-blur-md border border-cyan-400/40 rounded-lg px-3 py-2.5 shadow-2xl w-48"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(59,130,246,0.1) 50%, rgba(147,51,234,0.15) 100%)",
-                  boxShadow: "0 15px 35px rgba(6,182,212,0.2), 0 0 15px rgba(59,130,246,0.1)",
-                }}
-              >
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/5 via-blue-500/5 to-purple-500/5 blur-sm"></div>
-                <div className="relative">
-                  <div
-                    className="text-cyan-100 text-sm font-semibold tracking-wide mb-1"
-                    style={{ textShadow: "0 0 8px rgba(6,182,212,0.6)" }}
-                  >
-                    {hoveredPlanet.title}
-                  </div>
-                  <div className="text-cyan-200/90 text-xs leading-snug font-light">{hoveredPlanet.description}</div>
-                </div>
-                <div className="absolute top-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent"></div>
-              </div>
-            )}
-
-            {hoveredPlanet.title === "Ember Core" && (
-              <div
-                className="relative backdrop-blur-md border border-orange-400/40 rounded-lg px-3 py-2.5 shadow-2xl w-48"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(251,146,60,0.15) 0%, rgba(239,68,68,0.1) 50%, rgba(236,72,153,0.15) 100%)",
-                  boxShadow: "0 15px 35px rgba(251,146,60,0.2), 0 0 15px rgba(239,68,68,0.1)",
-                }}
-              >
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-orange-500/5 via-red-500/5 to-pink-500/5 blur-sm"></div>
-                <div className="relative">
-                  <div
-                    className="text-orange-100 text-sm font-semibold tracking-wide mb-1"
-                    style={{ textShadow: "0 0 8px rgba(251,146,60,0.6)" }}
-                  >
-                    {hoveredPlanet.title}
-                  </div>
-                  <div className="text-orange-200/90 text-xs leading-snug font-light">{hoveredPlanet.description}</div>
-                </div>
-                <div className="absolute top-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-orange-400/40 to-transparent"></div>
-              </div>
-            )}
-
-            {hoveredPlanet.title === "Verdant Sphere" && (
-              <div
-                className="relative backdrop-blur-md border border-emerald-400/40 rounded-lg px-3 py-2.5 shadow-2xl w-48"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(52,211,153,0.15) 0%, rgba(16,185,129,0.1) 50%, rgba(20,184,166,0.15) 100%)",
-                  boxShadow: "0 15px 35px rgba(52,211,153,0.2), 0 0 15px rgba(16,185,129,0.1)",
-                }}
-              >
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-500/5 via-green-500/5 to-teal-500/5 blur-sm"></div>
-                <div className="relative">
-                  <div
-                    className="text-emerald-100 text-sm font-semibold tracking-wide mb-1"
-                    style={{ textShadow: "0 0 8px rgba(52,211,153,0.6)" }}
-                  >
-                    {hoveredPlanet.title}
-                  </div>
-                  <div className="text-emerald-200/90 text-xs leading-snug font-light">{hoveredPlanet.description}</div>
-                </div>
-                <div className="absolute top-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent"></div>
-              </div>
-            )}
-
-            {hoveredPlanet.title === "Void Prism" && (
-              <div
-                className="relative backdrop-blur-md border border-violet-400/40 rounded-lg px-3 py-2.5 shadow-2xl w-48"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(139,92,246,0.1) 50%, rgba(99,102,241,0.15) 100%)",
-                  boxShadow: "0 15px 35px rgba(168,85,247,0.2), 0 0 15px rgba(139,92,246,0.1)",
-                }}
-              >
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-indigo-500/5 blur-sm"></div>
-                <div className="relative">
-                  <div
-                    className="text-violet-100 text-sm font-semibold tracking-wide mb-1"
-                    style={{ textShadow: "0 0 8px rgba(168,85,247,0.6)" }}
-                  >
-                    {hoveredPlanet.title}
-                  </div>
-                  <div className="text-violet-200/90 text-xs leading-snug font-light">{hoveredPlanet.description}</div>
-                </div>
-                <div className="absolute top-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-violet-400/40 to-transparent"></div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Enhanced Central Nameplate */}
         <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -372,6 +319,7 @@ export default function CosmicHero() {
           </div>
         </div>
       </div>
+
     </div>
   )
 }
