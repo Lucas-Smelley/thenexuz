@@ -5,7 +5,7 @@ import Star from "./star"
 import Planet from "./planet"
 import DescriptionPanel from "./description-panel"
 
-export default function CosmicHero({ 
+export default function NexuzHero({ 
   onHoverChange 
 }: { 
   onHoverChange?: (isHovered: boolean, center: { x: number; y: number }) => void 
@@ -25,6 +25,7 @@ export default function CosmicHero({
   })
   
   const [activePlanet, setActivePlanet] = useState<string | null>(null)
+  const [showPlanetPage, setShowPlanetPage] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -49,22 +50,16 @@ export default function CosmicHero({
 
   const [activePlanetPosition, setActivePlanetPosition] = useState({ x: 50, y: 50 })
 
+
   const handlePlanetClick = (planetData: { top: string; left: string; title: string; description: string }) => {
     const isCurrentlyActive = activePlanet === planetData.title
     
     if (isCurrentlyActive) {
-      // Zoom out if clicking the same planet
-      setActivePlanet(null)
-      setHoveredPlanet({
-        isHovered: false,
-        top: "50%",
-        left: "50%",
-        title: "",
-        description: "",
-      })
-      
-      if (onHoverChange) {
-        onHoverChange(false, { x: 50, y: 50 })
+      // If already zoomed in, navigate to planet page
+      if (planetData.title === "DEATH BOOTY") {
+        window.location.href = "/deathbooty"
+      } else {
+        setShowPlanetPage(true)
       }
     } else {
       // Zoom in to new planet
@@ -80,6 +75,22 @@ export default function CosmicHero({
           y: Number.parseFloat(planetData.top),
         })
       }
+    }
+  }
+
+  const handleBackToMain = () => {
+    setShowPlanetPage(false)
+    setActivePlanet(null)
+    setHoveredPlanet({
+      isHovered: false,
+      top: "50%",
+      left: "50%",
+      title: "",
+      description: "",
+    })
+    
+    if (onHoverChange) {
+      onHoverChange(false, { x: 50, y: 50 })
     }
   }
 
@@ -126,6 +137,88 @@ export default function CosmicHero({
     const translateY = (50 - topPercent) * 2
 
     return `translate(${translateX}vw, ${translateY}vh) scale(3)`
+  }
+
+  // Planet page component
+  const PlanetPage = () => {
+    if (!activePlanet) return null
+    
+    const getPlanetConfig = (title: string) => {
+      const configs = {
+        "Aqua Nexus": {
+          color: "from-cyan-400 via-blue-500 to-purple-600",
+          glowColor: "rgba(59, 130, 246, 0.8)",
+          description: "A crystalline world where liquid starlight flows through quantum channels.",
+        },
+        "DEATH BOOTY": {
+          color: "from-red-500 via-pink-500 to-red-600",
+          glowColor: "rgba(236, 72, 153, 0.8)",
+          description: "A hardcore skating brand with a metal and grunge aesthetic.",
+        },
+        "Verdant Sphere": {
+          color: "from-emerald-400 via-green-500 to-teal-600",
+          glowColor: "rgba(16, 185, 129, 0.8)",
+          description: "An ancient sanctuary where the universe's heartbeat resonates through crystalline forests.",
+        },
+        "Void Prism": {
+          color: "from-violet-400 via-purple-500 to-indigo-600",
+          glowColor: "rgba(139, 92, 246, 0.8)",
+          description: "A mysterious realm where thoughts become reality and dimensions dissolve.",
+        }
+      }
+      return configs[title as keyof typeof configs] || configs["Aqua Nexus"]
+    }
+
+    const config = getPlanetConfig(activePlanet)
+
+    // Default planet page
+    return (
+      <div className="fixed inset-0 z-50 bg-black">
+        {/* Background gradient */}
+        <div 
+          className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-20`}
+        />
+        
+        {/* Back button */}
+        <button
+          onClick={handleBackToMain}
+          className="fixed top-8 left-8 z-50 flex items-center space-x-2 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 hover:bg-black/70 transition-all duration-300 text-white"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="text-sm font-medium">Back to Nexuz</span>
+        </button>
+
+        {/* Planet page content */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center max-w-4xl mx-auto px-8">
+            <h1 
+              className="text-6xl md:text-8xl font-bold mb-8 tracking-wide"
+              style={{
+                background: `linear-gradient(45deg, ${config.color})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow: `0 0 40px ${config.glowColor}`,
+              }}
+            >
+              {activePlanet}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed">
+              {config.description}
+            </p>
+            <div className="text-gray-400">
+              <p className="text-lg">Planet details and content coming soon...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (showPlanetPage) {
+    return <PlanetPage />
   }
 
   return (
@@ -178,7 +271,7 @@ export default function CosmicHero({
         {mounted && (
           <>
             <Planet
-              size={60}
+              size={80}
               color="bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600"
               glowColor="rgba(59, 130, 246, 0.8)"
               title="Aqua Nexus"
@@ -192,21 +285,21 @@ export default function CosmicHero({
             />
 
             <Planet
-              size={55}
-              color="bg-gradient-to-br from-orange-400 via-red-500 to-pink-600"
-              glowColor="rgba(239, 68, 68, 0.8)"
-              title="Ember Core"
-              description="The forge of creation where stellar flames dance with primordial energy."
+              size={85}
+              color="bg-gradient-to-br from-red-500 via-pink-500 to-red-600"
+              glowColor="rgba(236, 72, 153, 0.8)"
+              title="DEATH BOOTY"
+              description="HARDCORE SKATEBOARDING WHERE ITS RIDE OR DIE"
               onClick={handlePlanetClick}
               orbitRadius={450}
               orbitSpeed={0.45}
               orbitOffset={Math.PI / 2}
-              isActive={activePlanet === "Ember Core"}
+              isActive={activePlanet === "DEATH BOOTY"}
               onPositionUpdate={handlePlanetPositionUpdate}
             />
 
             <Planet
-              size={65}
+              size={85}
               color="bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600"
               glowColor="rgba(16, 185, 129, 0.8)"
               title="Verdant Sphere"
@@ -220,7 +313,7 @@ export default function CosmicHero({
             />
 
             <Planet
-              size={45}
+              size={70}
               color="bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600"
               glowColor="rgba(139, 92, 246, 0.8)"
               title="Void Prism"
@@ -266,7 +359,7 @@ export default function CosmicHero({
                   animation: "gradient-shift 8s ease-in-out infinite",
                 }}
               >
-                THE NEXUS
+                THE NEXUZ
               </h1>
             </div>
             {/* Animated underline */}

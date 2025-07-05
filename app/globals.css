@@ -214,3 +214,95 @@ body {
 .bg-gradient-radial {
   background: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
+
+/* Custom animations for blood drips */
+@keyframes drip {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 200px;
+  }
+}
+
+.animate-drip {
+  animation: drip 3s ease-in-out infinite alternate;
+}
+
+/* Grunge texture effect */
+.grunge-texture {
+  background-image: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.3) 0%, transparent 50%);
+}
+
+/* Blood splatter animation */
+@keyframes splatter {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+.animate-splatter {
+  animation: splatter 4s ease-in-out infinite;
+}
+
+/* Metal font styling */
+.metal-text {
+  font-family: "Brush Script MT", "Chiller", "Impact", "Arial Black", sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+.caution-text {
+  font-family: "Impact", "Arial Black", sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+/* Spike border effect */
+.spike-border {
+  position: relative;
+}
+
+.spike-border::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  background: linear-gradient(45deg, transparent 35%, #7f1d1d 35%, #7f1d1d 65%, transparent 65%),
+              linear-gradient(-45deg, transparent 35%, #7f1d1d 35%, #7f1d1d 65%, transparent 65%);
+  background-size: 12px 12px;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.spike-border::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: 
+    radial-gradient(circle at 30% 30%, #7f1d1d 1px, transparent 1px),
+    radial-gradient(circle at 70% 30%, #7f1d1d 1px, transparent 1px),
+    radial-gradient(circle at 30% 70%, #7f1d1d 1px, transparent 1px),
+    radial-gradient(circle at 70% 70%, #7f1d1d 1px, transparent 1px);
+  background-size: 6px 6px;
+  z-index: -1;
+  opacity: 0.5;
+}
+

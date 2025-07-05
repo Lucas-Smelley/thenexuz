@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import CosmicHero from "@/components/cosmic-hero"
+import NexuzHero from "@/components/nexuz-hero"
 import Particles from "@/components/particles"
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="relative">
-      <CosmicHero onHoverChange={handleHoverChange} />
+      <NexuzHero onHoverChange={handleHoverChange} />
       <Particles isZoomed={hoverState.isHovered} zoomCenter={hoverState.center} />
     </div>
   )
