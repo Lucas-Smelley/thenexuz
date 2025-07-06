@@ -158,22 +158,22 @@ export default function MembersPage() {
                 scale = 1
                 opacity = 1
               } else if (isNext) {
-                translateX = window.innerWidth < 768 ? 30 : 50  // Smaller offset on mobile
-                translateY = window.innerWidth < 768 ? 5 : 10
+                translateX = 40  // Optimized for both mobile and desktop
+                translateY = 8
                 zIndex = 20
-                scale = window.innerWidth < 768 ? 0.98 : 0.95  // Less scaling on mobile
+                scale = 0.96  // Balanced scaling
                 opacity = 0.7
               } else if (isPrev) {
-                translateX = window.innerWidth < 768 ? -30 : -50  // Smaller offset on mobile
-                translateY = window.innerWidth < 768 ? 5 : 10
+                translateX = -40  // Optimized for both mobile and desktop
+                translateY = 8
                 zIndex = 10
-                scale = window.innerWidth < 768 ? 0.98 : 0.95  // Less scaling on mobile
+                scale = 0.96  // Balanced scaling
                 opacity = 0.5
               } else {
-                translateX = (index - currentMember) * (window.innerWidth < 768 ? 60 : 100)  // Smaller spread on mobile
-                translateY = window.innerWidth < 768 ? 10 : 20
+                translateX = (index - currentMember) * 80  // Balanced spread
+                translateY = 15
                 zIndex = 1
-                scale = window.innerWidth < 768 ? 0.95 : 0.9
+                scale = 0.92
                 opacity = 0.1  // Lower opacity for hidden cards
               }
               
