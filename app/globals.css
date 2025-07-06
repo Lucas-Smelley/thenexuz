@@ -134,7 +134,8 @@ body {
 }
 
 .animate-twinkle {
-  animation: twinkle 4s ease-in-out infinite;
+  animation: twinkle 6s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 @keyframes pulse-slow {

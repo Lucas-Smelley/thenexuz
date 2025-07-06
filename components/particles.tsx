@@ -29,7 +29,8 @@ const Particles = ({
 
     const createParticles = () => {
       const newParticles = []
-      for (let i = 0; i < 100; i++) {
+      // Reduced from 100 to 50 particles for better performance
+      for (let i = 0; i < 50; i++) {
         newParticles.push({
           id: i,
           x: Math.random() * window.innerWidth,
@@ -67,7 +68,7 @@ const Particles = ({
         }))
 
         // Add new particles from different edges to maintain variety
-        const particlesNeeded = 100 - movedParticles.length
+        const particlesNeeded = 50 - movedParticles.length
         const newParticles = []
         
         for (let i = 0; i < particlesNeeded; i++) {
@@ -86,7 +87,8 @@ const Particles = ({
       })
     }
 
-    const interval = setInterval(animateParticles, 16)
+    // Reduced animation frequency from 16ms to 32ms (30fps instead of 60fps)
+    const interval = setInterval(animateParticles, 32)
     return () => clearInterval(interval)
   }, [mounted])
 
@@ -102,7 +104,8 @@ const Particles = ({
           ? `translate(${(50 - zoomCenter.x) * 2}vw, ${(50 - zoomCenter.y) * 2}vh) scale(3)`
           : "translate(0, 0) scale(1)",
         transformOrigin: "center center",
-        transition: "transform 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
+        transition: "transform 800ms ease-out",
+        willChange: isZoomed ? "transform" : "auto",
       }}
     >
       {particles.map((particle) => (
@@ -115,7 +118,8 @@ const Particles = ({
             width: `${particle.size}px`,
             height: `${particle.size}px`,
             opacity: isZoomed ? 0.2 : 0.4,
-            transition: "opacity 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
+            transition: "opacity 800ms ease-out",
+            willChange: "transform",
           }}
         />
       ))}

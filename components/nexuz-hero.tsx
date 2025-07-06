@@ -32,10 +32,11 @@ export default function NexuzHero({
     setMounted(true)
   }, [])
 
-  // Generate more varied stars (memoized to prevent position changes)
+  // Generate fewer stars for better performance (memoized to prevent position changes)
   const stars = useMemo(() => {
     if (!mounted) return []
-    return Array.from({ length: 200 }, (_, i) => ({
+    // Reduced from 200 to 75 stars for better performance
+    return Array.from({ length: 75 }, (_, i) => ({
       id: i,
       size: Math.random() * 2.5 + 0.5,
       top: `${Math.random() * 100}%`,
@@ -235,7 +236,8 @@ export default function NexuzHero({
             ? `translate(${(50 - Number.parseFloat(hoveredPlanet.left)) * 0.3}vw, ${(50 - Number.parseFloat(hoveredPlanet.top)) * 0.3}vh) scale(1.5)`
             : "translate(0, 0) scale(1)",
           transformOrigin: "center center",
-          transition: "transform 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
+          transition: "transform 800ms ease-out",
+          willChange: hoveredPlanet.isHovered ? "transform" : "auto",
         }}
       >
         {/* Enhanced Starfield Background */}
@@ -264,7 +266,8 @@ export default function NexuzHero({
         style={{
           transform: getTransform(),
           transformOrigin: "center center",
-          transition: "transform 1000ms cubic-bezier(0.2, 0, 0.8, 1)",
+          transition: "transform 800ms ease-out",
+          willChange: hoveredPlanet.isHovered ? "transform" : "auto",
         }}
       >
         {/* Orbiting Planets */}
