@@ -406,7 +406,6 @@ export default function MembersPage() {
                 <ChevronRight size={20} className="md:w-6 md:h-6" />
               </button>
             </div>
-            })}
           </div>
 
           {/* Member counter */}
