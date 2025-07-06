@@ -13,9 +13,9 @@ const members = [
     age: 18,
     stance: "NORMAL",
     hometown: "THE TRENCHES",
-    crimes: ["RAIL DESTRUCTION", "OVERWEIGHT", "GRAVITY DEFIANCE"],
+    crimes: ["SKATING DESTRUCTION", "OVERWEIGHT", "PUBLIC INDECENCY"],
     mugshot: "/media/death-booty/images/mugshots/braden-mugshot.jpg",
-    bio: "Known for his bone-crushing rail grinds and death-defying drops. Wanted in 12 states for destruction of public property.",
+    bio: "He is Boner Snapper. He is Leader. He is Ultimate. ",
     arrestDate: "06.66.2023",
     prisonId: "DB-001"
   },
@@ -25,20 +25,20 @@ const members = [
     alias: "Lil Jit Abel",
     age: 18,
     stance: "GOOFY",
-    hometown: "HELL'S KITCHEN, NY",
-    crimes: ["BOWL CARNAGE", "VERT RAMP TERROR", "SPEED DEMON"],
+    hometown: "ST. LOUIS STREETS",
+    crimes: ["TOO SICK", "1 MILLION WHEEL SPINS", "HAS A GF"],
     mugshot: "/media/death-booty/images/mugshots/abel-mugshot.jpg",
-    bio: "Master of bowl riding and vert destruction. Known for breaking more than just bones - he breaks the laws of physics.",
+    bio: "Ofter regarded as the steeziest skater, he is known for his sick tricks and even sicker style. He has a girlfriend, which is illegal in DEATH BOOTY.",
     arrestDate: "13.13.2023",
     prisonId: "DB-002"
   },
   {
     id: 3,
     name: "ACHILLIUS NUCLETORIUS",
-    alias: "FALON",
+    alias: "FALCON",
     age: 18,
     stance: "NORMAL",
-    hometown: "CEMETERY HILLS, TX",
+    hometown: "O'BLOCK",
     crimes: ["EVILNESS SPREADING", "MIDNIGHT 'SESSIONS'", "PRANKING"],
     mugshot: "/media/death-booty/images/mugshots/lucas-mugshot.jpg",
     bio: "Likes cute cats and evil skateboarding. If you see him at night, run. He’s known for his deadly pranks and midnight sessions.",
@@ -120,7 +120,7 @@ export default function MembersPage() {
         {/* Page title - desktop only */}
         <div className="text-center mb-6 md:mb-12 hidden md:block">
           <h1 className="text-4xl md:text-8xl font-black text-red-500 mb-2 md:mb-4 metal-text transform -rotate-1">
-            DEATH SQUAD
+            DEATH BOOTY SQUAD
           </h1>
           <div className="text-red-400 text-sm md:text-xl font-bold tracking-widest caution-text">
             WANTED • DANGEROUS • ARMED WITH BOARDS
@@ -130,10 +130,10 @@ export default function MembersPage() {
         {/* Mugshot carousel - stacked cards */}
         <div className="max-w-5xl mx-auto">
           <div className="relative h-[700px] md:h-[600px] md:overflow-visible overflow-y-auto overflow-x-hidden">
-            {/* Page title - mobile only, scrollable */}
-            <div className="text-center mb-6 block md:hidden">
+            {/* Page title - mobile only, scrollable - HIDDEN */}
+            <div className="text-center mb-6 hidden">
               <h1 className="text-4xl font-black text-red-500 mb-2 metal-text transform -rotate-1">
-                DEATH SQUAD
+                DEATH BOOTY SQUAD
               </h1>
               <div className="text-red-400 text-sm font-bold tracking-widest caution-text">
                 WANTED • DANGEROUS • ARMED WITH BOARDS
@@ -215,7 +215,7 @@ export default function MembersPage() {
                     {/* Prison header */}
                     <div className="text-center mb-4 border-b-2 border-red-600 pb-3">
                       <div className="text-red-500 font-black text-xl metal-text mb-1">
-                        DEATH VALLEY STATE PENITENTIARY
+                        DEATH BOOTY PENITENTIARY
                       </div>
                       <div className="text-yellow-400 font-bold caution-text text-sm">
                         PRISONER IDENTIFICATION CARD
