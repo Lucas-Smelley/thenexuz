@@ -27,9 +27,20 @@ export default function NexuzHero({
   const [activePlanet, setActivePlanet] = useState<string | null>(null)
   const [showPlanetPage, setShowPlanetPage] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    
+    // Check if mobile on mount
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   // Generate fewer stars for better performance (memoized to prevent position changes)
@@ -280,7 +291,7 @@ export default function NexuzHero({
               title="Aqua Nexus"
               description="A crystalline world where liquid starlight flows through quantum channels."
               onClick={handlePlanetClick}
-              orbitRadius={600}
+              orbitRadius={isMobile ? 300 : 600}
               orbitSpeed={0.3}
               orbitOffset={0}
               isActive={activePlanet === "Aqua Nexus"}
@@ -294,7 +305,7 @@ export default function NexuzHero({
               title="DEATH BOOTY"
               description="HARDCORE SKATEBOARDING WHERE ITS RIDE OR DIE"
               onClick={handlePlanetClick}
-              orbitRadius={450}
+              orbitRadius={isMobile ? 200 : 450}
               orbitSpeed={0.45}
               orbitOffset={Math.PI / 2}
               isActive={activePlanet === "DEATH BOOTY"}
@@ -308,7 +319,7 @@ export default function NexuzHero({
               title="Verdant Sphere"
               description="An ancient sanctuary where the universe's heartbeat resonates through crystalline forests."
               onClick={handlePlanetClick}
-              orbitRadius={750}
+              orbitRadius={isMobile ? 350 : 750}
               orbitSpeed={0.2}
               orbitOffset={Math.PI}
               isActive={activePlanet === "Verdant Sphere"}
@@ -322,7 +333,7 @@ export default function NexuzHero({
               title="Void Prism"
               description="A mysterious realm where thoughts become reality and dimensions dissolve."
               onClick={handlePlanetClick}
-              orbitRadius={520}
+              orbitRadius={isMobile ? 250 : 520}
               orbitSpeed={0.35}
               orbitOffset={3 * Math.PI / 2}
               isActive={activePlanet === "Void Prism"}
