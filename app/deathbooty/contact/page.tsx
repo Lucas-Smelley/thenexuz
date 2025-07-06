@@ -40,7 +40,7 @@ export default function ContactPage() {
         <div className="text-center text-white">
           <div className="mb-6">
             <div className="text-red-400 text-lg mb-4 caution-text tracking-wider">
-              REACH THE DEATH SQUAD
+              DEATH BOOTY
             </div>
           </div>
           <div className="text-3xl mb-6 metal-text" style={{
@@ -48,14 +48,14 @@ export default function ContactPage() {
             textShadow: '0 0 8px #ff0000, 0 0 16px #ff0000, 2px 2px 4px rgba(0,0,0,0.8)',
             letterSpacing: '2px'
           }}>
-            (555) 666-DEATH
+            (314) 536-3751
           </div>
           <div className="text-3xl metal-text" style={{
             fontFamily: 'Nosifer, "Metal Mania", UnifrakturCook, fantasy',
             textShadow: '0 0 8px #ff0000, 0 0 16px #ff0000, 2px 2px 4px rgba(0,0,0,0.8)',
             letterSpacing: '2px'
           }}>
-            @deathbooty
+            @death.booty
           </div>
         </div>
       </div>

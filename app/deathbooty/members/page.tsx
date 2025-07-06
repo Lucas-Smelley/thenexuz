@@ -8,13 +8,13 @@ import { ChevronLeft, ChevronRight, Skull, AlertTriangle, User } from "lucide-re
 const members = [
   {
     id: 1,
-    name: "SKULL CRUSHER",
-    alias: "THE REAPER",
-    age: 24,
-    stance: "GOOFY",
-    hometown: "DEATH VALLEY, CA",
-    crimes: ["RAIL DESTRUCTION", "STAIR MASSACRE", "GRAVITY DEFIANCE"],
-    mugshot: "/media/death-booty/mugshots/skull-crusher.jpg",
+    name: "BONER SNAPPER",
+    alias: "BUZZCUT",
+    age: 18,
+    stance: "NORMAL",
+    hometown: "THE TRENCHES",
+    crimes: ["RAIL DESTRUCTION", "OVERWEIGHT", "GRAVITY DEFIANCE"],
+    mugshot: "/media/death-booty/images/mugshots/braden-mugshot.jpg",
     bio: "Known for his bone-crushing rail grinds and death-defying drops. Wanted in 12 states for destruction of public property.",
     arrestDate: "06.66.2023",
     prisonId: "DB-001"
@@ -22,39 +22,39 @@ const members = [
   {
     id: 2,
     name: "BONE BREAKER",
-    alias: "THE DESTROYER",
-    age: 22,
-    stance: "REGULAR",
+    alias: "Lil Jit Abel",
+    age: 18,
+    stance: "GOOFY",
     hometown: "HELL'S KITCHEN, NY",
     crimes: ["BOWL CARNAGE", "VERT RAMP TERROR", "SPEED DEMON"],
-    mugshot: "/media/death-booty/mugshots/bone-breaker.jpg",
+    mugshot: "/media/death-booty/images/mugshots/abel-mugshot.jpg",
     bio: "Master of bowl riding and vert destruction. Known for breaking more than just bones - he breaks the laws of physics.",
     arrestDate: "13.13.2023",
     prisonId: "DB-002"
   },
   {
     id: 3,
-    name: "GRAVE DIGGER",
-    alias: "THE PHANTOM",
-    age: 26,
-    stance: "SWITCH",
+    name: "ACHILLIUS NUCLETORIUS",
+    alias: "FALON",
+    age: 18,
+    stance: "NORMAL",
     hometown: "CEMETERY HILLS, TX",
-    crimes: ["STREET HAUNTING", "MIDNIGHT SESSIONS", "GHOST TRICKS"],
-    mugshot: "/media/death-booty/mugshots/grave-digger.jpg",
-    bio: "Emerges only at night to terrorize empty pools and abandoned spots. Some say he's already dead.",
+    crimes: ["EVILNESS SPREADING", "MIDNIGHT 'SESSIONS'", "PRANKING"],
+    mugshot: "/media/death-booty/images/mugshots/lucas-mugshot.jpg",
+    bio: "Likes cute cats and evil skateboarding. If you see him at night, run. He’s known for his deadly pranks and midnight sessions.",
     arrestDate: "31.10.2023",
     prisonId: "DB-003"
   },
   {
     id: 4,
-    name: "BLOOD HOUND",
-    alias: "THE HUNTER",
-    age: 21,
+    name: "BRASS SPINDLE",
+    alias: "BOMBACLAT NATHANIEL",
+    age: 30,
     stance: "GOOFY",
-    hometown: "RAZOR CITY, FL",
-    crimes: ["SPOT HUNTING", "LEDGE SLAYING", "GAP JUMPING"],
-    mugshot: "/media/death-booty/mugshots/blood-hound.jpg",
-    bio: "Can sniff out the gnarliest spots from miles away. Never backs down from a challenge, no matter how deadly.",
+    hometown: "CHICAGO SUBWAY",
+    crimes: ["AGGRAVATED PRANKING", "CHINESE MIDDLE FINGERING THE GOVERNMENT", "VIOLATING PAROL", "GAY"],
+    mugshot: "/media/death-booty/images/mugshots/nathaniel-mugshot.jpg",
+    bio: "He comes from a long line of good-for-nothing bottom of the barrel no ceiling having never apologizing absolute street trash. Streets killed him 🤷. He has found inspiration in pranking and is attempting to rewrite his story to one of using pranks for good. Various pranking activities include: not stopping the skateboard, bumping into people. etc. Currently on Day 9 and is attempting to break ground in animal related skateboard techniques.",
     arrestDate: "07.07.2023",
     prisonId: "DB-004"
   }
@@ -117,19 +117,28 @@ export default function MembersPage() {
 
       {/* Main content */}
       <div className="relative z-20 pt-24 pb-16 px-4">
-        {/* Page title */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl md:text-8xl font-black text-red-500 mb-4 metal-text transform -rotate-1">
+        {/* Page title - desktop only */}
+        <div className="text-center mb-6 md:mb-12 hidden md:block">
+          <h1 className="text-4xl md:text-8xl font-black text-red-500 mb-2 md:mb-4 metal-text transform -rotate-1">
             DEATH SQUAD
           </h1>
-          <div className="text-red-400 text-xl font-bold tracking-widest caution-text">
+          <div className="text-red-400 text-sm md:text-xl font-bold tracking-widest caution-text">
             WANTED • DANGEROUS • ARMED WITH BOARDS
           </div>
         </div>
 
         {/* Mugshot carousel - stacked cards */}
         <div className="max-w-5xl mx-auto">
-          <div className="relative h-[700px] md:h-[600px] overflow-y-auto overflow-x-hidden">
+          <div className="relative h-[700px] md:h-[600px] md:overflow-visible overflow-y-auto overflow-x-hidden">
+            {/* Page title - mobile only, scrollable */}
+            <div className="text-center mb-6 block md:hidden">
+              <h1 className="text-4xl font-black text-red-500 mb-2 metal-text transform -rotate-1">
+                DEATH SQUAD
+              </h1>
+              <div className="text-red-400 text-sm font-bold tracking-widest caution-text">
+                WANTED • DANGEROUS • ARMED WITH BOARDS
+              </div>
+            </div>
             {members.map((memberData, index) => {
               const isActive = index === currentMember
               const isNext = index === (currentMember + 1) % members.length
@@ -149,33 +158,34 @@ export default function MembersPage() {
                 scale = 1
                 opacity = 1
               } else if (isNext) {
-                translateX = 50
-                translateY = 10
+                translateX = window.innerWidth < 768 ? 30 : 50  // Smaller offset on mobile
+                translateY = window.innerWidth < 768 ? 5 : 10
                 zIndex = 20
-                scale = 0.95
+                scale = window.innerWidth < 768 ? 0.98 : 0.95  // Less scaling on mobile
                 opacity = 0.7
               } else if (isPrev) {
-                translateX = -50
-                translateY = 10
+                translateX = window.innerWidth < 768 ? -30 : -50  // Smaller offset on mobile
+                translateY = window.innerWidth < 768 ? 5 : 10
                 zIndex = 10
-                scale = 0.95
+                scale = window.innerWidth < 768 ? 0.98 : 0.95  // Less scaling on mobile
                 opacity = 0.5
               } else {
-                translateX = (index - currentMember) * 100
-                translateY = 20
+                translateX = (index - currentMember) * (window.innerWidth < 768 ? 60 : 100)  // Smaller spread on mobile
+                translateY = window.innerWidth < 768 ? 10 : 20
                 zIndex = 1
-                scale = 0.9
-                opacity = 0.2
+                scale = window.innerWidth < 768 ? 0.95 : 0.9
+                opacity = 0.1  // Lower opacity for hidden cards
               }
               
               return (
                 <div
                   key={memberData.id}
-                  className={`absolute inset-0 transition-all duration-500 ease-out cursor-pointer ${isActive ? 'overflow-y-auto overflow-x-hidden' : ''}`}
+                  className={`absolute inset-0 transition-all duration-300 ease-out cursor-pointer ${isActive ? 'md:overflow-visible overflow-y-auto overflow-x-hidden' : ''}`}
                   style={{
                     transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
                     zIndex: zIndex,
                     opacity: opacity,
+                    willChange: 'transform, opacity',
                   }}
                   onClick={() => {
                     if (isNext) {
@@ -243,14 +253,33 @@ export default function MembersPage() {
 
                           {/* Mugshot photo area */}
                           <div className={`
-                            ml-6 aspect-[3/4] flex items-center justify-center border-2
+                            ml-6 aspect-[3/4] relative border-2 overflow-hidden
                             ${index === 0 ? 'bg-gradient-to-b from-gray-700 to-gray-900 border-gray-600' : ''}
                             ${index === 1 ? 'bg-gradient-to-b from-red-900 to-black border-red-700' : ''}
                             ${index === 2 ? 'bg-gradient-to-b from-gray-600 to-black border-gray-500' : ''}
                             ${index === 3 ? 'bg-gradient-to-b from-black to-red-950 border-red-800' : ''}
                           `}>
-                            <User size={isActive ? 80 : 60} className="text-red-500" />
-                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black text-white px-1 py-1 text-xs font-bold">
+                            {memberData.mugshot ? (
+                              <Image
+                                src={memberData.mugshot}
+                                alt={`${memberData.name} mugshot`}
+                                fill
+                                className="object-cover"
+                                onError={(e) => {
+                                  // Fallback to User icon if image fails to load
+                                  e.currentTarget.style.display = 'none'
+                                }}
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <User size={isActive ? 80 : 60} className="text-red-500" />
+                              </div>
+                            )}
+                            {/* Fallback User icon (hidden by default, shown if image fails) */}
+                            <div className="absolute inset-0 flex items-center justify-center" style={{ display: 'none' }}>
+                              <User size={isActive ? 80 : 60} className="text-red-500" />
+                            </div>
+                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black text-white px-1 py-1 text-xs font-bold z-10">
                               {memberData.prisonId}
                             </div>
                           </div>
@@ -377,16 +406,17 @@ export default function MembersPage() {
                 <ChevronRight size={20} className="md:w-6 md:h-6" />
               </button>
             </div>
+            })}
           </div>
 
           {/* Member counter */}
-          <div className="text-center mt-8">
+          <div className="text-center mt-4 md:mt-8">
             <div className="inline-flex space-x-2">
               {members.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentMember(index)}
-                  className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${
+                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full border-2 transition-all duration-300 ${
                     index === currentMember
                       ? 'bg-red-600 border-red-400'
                       : 'bg-black border-red-600 hover:bg-red-900'
@@ -394,7 +424,7 @@ export default function MembersPage() {
                 />
               ))}
             </div>
-            <div className="text-red-400 text-sm mt-2 font-bold">
+            <div className="text-red-400 text-xs md:text-sm mt-1 md:mt-2 font-bold">
               SUSPECT {currentMember + 1} OF {members.length}
             </div>
           </div>
@@ -402,10 +432,10 @@ export default function MembersPage() {
       </div>
 
       {/* Warning footer */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center text-yellow-400 text-sm font-black caution-text">
-        <AlertTriangle size={20} className="mr-2" />
+      <div className="absolute bottom-4 md:bottom-10 left-1/2 transform -translate-x-1/2 flex items-center text-yellow-400 text-xs md:text-sm font-black caution-text">
+        <AlertTriangle size={16} className="mr-1 md:mr-2 md:w-5 md:h-5" />
         <span>APPROACH WITH EXTREME CAUTION</span>
-        <AlertTriangle size={20} className="ml-2" />
+        <AlertTriangle size={16} className="ml-1 md:ml-2 md:w-5 md:h-5" />
       </div>
 
       {/* Bottom crime scene tape */}
