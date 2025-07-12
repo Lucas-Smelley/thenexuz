@@ -227,6 +227,61 @@ export default function EpicRngWorldPage() {
           </div>
         </div>
 
+        {/* INSANE game categories - Arc layout above jackpot */}
+        <div className="relative w-full max-w-7xl mx-auto mb-12 px-4" style={{height: '300px'}}>
+          {/* WHEEL - Far Left */}
+          <div className="absolute cursor-pointer group" style={{top: '140px', left: '8%', width: '160px', transform: 'rotate(-20deg)', zIndex: 15}}>
+            <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400/40 to-pink-400/40 rounded-full animate-pulse"></div>
+            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-yellow-400 p-5 rounded-full hover:border-pink-400 transition-colors shadow-2xl shadow-yellow-400/60 group-hover:shadow-pink-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 bg-yellow-400/15 rounded-full group-hover:bg-pink-400/15 transition-colors"></div>
+              <div className="relative text-center">
+                <Shuffle className="w-10 h-10 text-yellow-400 mx-auto mb-2 group-hover:animate-spin group-hover:text-pink-400 transition-colors drop-shadow-xl" />
+                <div className="text-yellow-400 font-mono font-black text-base group-hover:text-pink-400 transition-colors mb-1">WHEEL</div>
+                <div className="text-yellow-300 text-xs font-mono font-bold group-hover:text-pink-300 transition-colors">💥 SPIN 💥</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* SLOTS - Center Left */}
+          <div className="absolute cursor-pointer group" style={{top: '20px', left: '28%', width: '180px', transform: 'rotate(-8deg)', zIndex: 15}}>
+            <div className="absolute -inset-4 bg-gradient-to-r from-pink-400/40 to-cyan-400/40 rounded-3xl animate-pulse"></div>
+            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-pink-400 p-6 rounded-3xl hover:border-cyan-400 transition-colors shadow-2xl shadow-pink-400/60 group-hover:shadow-cyan-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 bg-pink-400/15 rounded-3xl group-hover:bg-cyan-400/15 transition-colors"></div>
+              <div className="relative text-center">
+                <Gem className="w-11 h-11 text-pink-400 mx-auto mb-2 group-hover:animate-pulse group-hover:text-cyan-400 transition-colors drop-shadow-xl" />
+                <div className="text-pink-400 font-mono font-black text-base group-hover:text-cyan-400 transition-colors mb-1">SLOTS</div>
+                <div className="text-pink-300 text-xs font-mono font-bold group-hover:text-cyan-300 transition-colors">💎 777 💎</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* DICE - Center Right */}
+          <div className="absolute cursor-pointer group" style={{top: '20px', right: '28%', width: '180px', transform: 'rotate(8deg)', zIndex: 15}}>
+            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/40 to-green-400/40 rounded-3xl animate-pulse"></div>
+            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-cyan-400 p-6 rounded-3xl hover:border-green-400 transition-colors shadow-2xl shadow-cyan-400/60 group-hover:shadow-green-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 bg-cyan-400/15 rounded-3xl group-hover:bg-green-400/15 transition-colors"></div>
+              <div className="relative text-center">
+                <Coins className="w-11 h-11 text-cyan-400 mx-auto mb-2 group-hover:animate-bounce group-hover:text-green-400 transition-colors drop-shadow-xl" />
+                <div className="text-cyan-400 font-mono font-black text-base group-hover:text-green-400 transition-colors mb-1">DICE</div>
+                <div className="text-cyan-300 text-xs font-mono font-bold group-hover:text-green-300 transition-colors">🎲 ROLL 🎲</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* CRASH - Far Right */}
+          <div className="absolute cursor-pointer group" style={{top: '140px', right: '8%', width: '160px', transform: 'rotate(20deg)', zIndex: 15}}>
+            <div className="absolute -inset-3 bg-gradient-to-r from-green-400/40 to-purple-400/40 rounded-full animate-pulse"></div>
+            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-green-400 p-5 rounded-full hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/60 group-hover:shadow-purple-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 bg-green-400/15 rounded-full group-hover:bg-purple-400/15 transition-colors"></div>
+              <div className="relative text-center">
+                <Star className="w-10 h-10 text-green-400 mx-auto mb-2 group-hover:animate-pulse group-hover:text-purple-400 transition-colors drop-shadow-xl" />
+                <div className="text-green-400 font-mono font-black text-base group-hover:text-purple-400 transition-colors mb-1">CRASH</div>
+                <div className="text-green-300 text-xs font-mono font-bold group-hover:text-purple-300 transition-colors">🚀 UP 🚀</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* SPECTACULAR live jackpot counter */}
         <div className="relative mb-12 transform hover:scale-105 transition-transform duration-300 px-4 max-w-4xl mx-auto">
           <div className="absolute -inset-8 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
@@ -262,57 +317,6 @@ export default function EpicRngWorldPage() {
                      textShadow: '0 0 20px #06b6d4'
                    }}>
                 🔥🔴 LIVE • UPDATING • EXPLODING 🔴🔥
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* INSANE game categories */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-16 w-full max-w-6xl px-4">
-          <div className="relative transform hover:scale-110 transition-transform duration-300 cursor-pointer group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-yellow-400/50 to-pink-400/50 rounded-2xl animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 border-yellow-400 p-6 sm:p-8 rounded-2xl hover:border-pink-400 transition-colors shadow-2xl shadow-yellow-400/70 group-hover:shadow-pink-400/70 overflow-hidden">
-              <div className="absolute inset-0 bg-yellow-400/20 rounded-2xl group-hover:bg-pink-400/20 transition-colors"></div>
-              <div className="relative text-center">
-                <Shuffle className="w-12 h-12 sm:w-16 sm:h-16 text-yellow-400 mx-auto mb-4 group-hover:animate-spin group-hover:text-pink-400 transition-colors drop-shadow-2xl" />
-                <div className="text-yellow-400 font-mono font-black text-xl sm:text-2xl group-hover:text-pink-400 transition-colors mb-2">WHEEL</div>
-                <div className="text-yellow-300 text-sm sm:text-base font-mono font-bold group-hover:text-pink-300 transition-colors">💥 SPIN TO WIN 💥</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative transform hover:scale-110 transition-transform duration-300 cursor-pointer group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-pink-400/50 to-cyan-400/50 rounded-2xl animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 border-pink-400 p-6 sm:p-8 rounded-2xl hover:border-cyan-400 transition-colors shadow-2xl shadow-pink-400/70 group-hover:shadow-cyan-400/70 overflow-hidden">
-              <div className="absolute inset-0 bg-pink-400/20 rounded-2xl group-hover:bg-cyan-400/20 transition-colors"></div>
-              <div className="relative text-center">
-                <Gem className="w-12 h-12 sm:w-16 sm:h-16 text-pink-400 mx-auto mb-4 group-hover:animate-pulse group-hover:text-cyan-400 transition-colors drop-shadow-2xl" />
-                <div className="text-pink-400 font-mono font-black text-xl sm:text-2xl group-hover:text-cyan-400 transition-colors mb-2">SLOTS</div>
-                <div className="text-pink-300 text-sm sm:text-base font-mono font-bold group-hover:text-cyan-300 transition-colors">💎 777 JACKPOT 💎</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative transform hover:scale-110 transition-transform duration-300 cursor-pointer group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/50 to-green-400/50 rounded-2xl animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 border-cyan-400 p-6 sm:p-8 rounded-2xl hover:border-green-400 transition-colors shadow-2xl shadow-cyan-400/70 group-hover:shadow-green-400/70 overflow-hidden">
-              <div className="absolute inset-0 bg-cyan-400/20 rounded-2xl group-hover:bg-green-400/20 transition-colors"></div>
-              <div className="relative text-center">
-                <Coins className="w-12 h-12 sm:w-16 sm:h-16 text-cyan-400 mx-auto mb-4 group-hover:animate-bounce group-hover:text-green-400 transition-colors drop-shadow-2xl" />
-                <div className="text-cyan-400 font-mono font-black text-xl sm:text-2xl group-hover:text-green-400 transition-colors mb-2">DICE</div>
-                <div className="text-cyan-300 text-sm sm:text-base font-mono font-bold group-hover:text-green-300 transition-colors">🎲 ROLL LUCKY 🎲</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative transform hover:scale-110 transition-transform duration-300 cursor-pointer group">
-            <div className="absolute -inset-4 bg-gradient-to-r from-green-400/50 to-purple-400/50 rounded-2xl animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 border-green-400 p-6 sm:p-8 rounded-2xl hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/70 group-hover:shadow-purple-400/70 overflow-hidden">
-              <div className="absolute inset-0 bg-green-400/20 rounded-2xl group-hover:bg-purple-400/20 transition-colors"></div>
-              <div className="relative text-center">
-                <Star className="w-12 h-12 sm:w-16 sm:h-16 text-green-400 mx-auto mb-4 group-hover:animate-pulse group-hover:text-purple-400 transition-colors drop-shadow-2xl" />
-                <div className="text-green-400 font-mono font-black text-xl sm:text-2xl group-hover:text-purple-400 transition-colors mb-2">CRASH</div>
-                <div className="text-green-300 text-sm sm:text-base font-mono font-bold group-hover:text-purple-300 transition-colors">🚀 ROCKET UP 🚀</div>
               </div>
             </div>
           </div>
