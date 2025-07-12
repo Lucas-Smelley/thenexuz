@@ -32,6 +32,8 @@ const Planet = ({
   const [isHovered, setIsHovered] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 })
   const [frozenPosition, setFrozenPosition] = useState<{ x: number; y: number; z: number } | null>(null)
+  const [wheelRotation, setWheelRotation] = useState(0)
+  const [isSpinning, setIsSpinning] = useState(false)
   const startTimeRef = useRef(Date.now() * 0.001)
 
   useEffect(() => {
@@ -115,6 +117,18 @@ const Planet = ({
         onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => {
           e.stopPropagation()
+          
+          // Special handling for EPIC RNG WORLD - spin the wheel
+          if (title === "EPIC RNG WORLD") {
+            setIsSpinning(true)
+            const randomRotation = 360 * 3 + Math.random() * 360 // 3+ full rotations
+            setWheelRotation(prev => prev + randomRotation)
+            
+            setTimeout(() => {
+              setIsSpinning(false)
+            }, 2000)
+          }
+          
           onClick({ 
             top: `${currentY}%`, 
             left: `${currentX}%`, 
@@ -186,6 +200,126 @@ const Planet = ({
               }}
             />
           )}
+          {/* EPIC RNG WORLD specific content */}
+          {title === "EPIC RNG WORLD" && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* Animated border rings */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background: `
+                    conic-gradient(
+                      from 0deg,
+                      #FFD700 0deg, #FFA500 45deg, #FFD700 90deg,
+                      #FF8C00 135deg, #FFD700 180deg, #FFA500 225deg,
+                      #FFD700 270deg, #FF8C00 315deg, #FFD700 360deg
+                    )
+                  `,
+                  mask: `radial-gradient(circle, transparent ${size * 0.44}px, black ${size * 0.46}px, black ${size * 0.48}px, transparent ${size * 0.5}px)`,
+                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.44}px, black ${size * 0.46}px, black ${size * 0.48}px, transparent ${size * 0.5}px)`,
+                  animation: 'spin 8s linear infinite',
+                  filter: 'drop-shadow(0 0 8px #FFD700)',
+                }}
+              />
+              
+              {/* Outer tech border */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background: `
+                    repeating-conic-gradient(
+                      from 0deg,
+                      transparent 0deg,
+                      #FFD700 2deg,
+                      #000000 4deg,
+                      #FFA500 6deg,
+                      transparent 8deg
+                    )
+                  `,
+                  mask: `radial-gradient(circle, transparent ${size * 0.47}px, black ${size * 0.48}px, black ${size * 0.5}px, transparent ${size * 0.51}px)`,
+                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.47}px, black ${size * 0.48}px, black ${size * 0.5}px, transparent ${size * 0.51}px)`,
+                  animation: 'spin 12s linear infinite reverse',
+                  filter: 'drop-shadow(0 0 6px #FFD700)',
+                }}
+              />
+
+              {/* Main spin wheel */}
+              <div
+                className="absolute inset-2 rounded-full bg-black border-2 border-yellow-400"
+                style={{
+                  transform: `rotate(${wheelRotation}deg)`,
+                  transition: isSpinning ? 'transform 2s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
+                  background: `
+                    conic-gradient(
+                      from 0deg,
+                      #FFD700 0deg, #000000 30deg,
+                      #FFA500 60deg, #000000 90deg,
+                      #FFD700 120deg, #000000 150deg,
+                      #FF8C00 180deg, #000000 210deg,
+                      #FFD700 240deg, #000000 270deg,
+                      #FFA500 300deg, #000000 330deg
+                    )
+                  `,
+                  boxShadow: 'inset 0 0 20px rgba(255, 215, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5)',
+                }}
+              >
+                {/* Wheel segments with numbers */}
+                <div className="absolute inset-0 rounded-full">
+                  {[1, 2, 5, 10, 25, 50, 100, 500, 1000, 'RNG', '💎', '⚡'].map((value, index) => (
+                    <div
+                      key={index}
+                      className="absolute text-black font-bold font-mono"
+                      style={{
+                        fontSize: `${size * 0.08}px`,
+                        top: '50%',
+                        left: '50%',
+                        transform: `rotate(${index * 30}deg) translateY(-${size * 0.3}px) rotate(-${index * 30}deg)`,
+                        transformOrigin: '0 0',
+                        textShadow: '0 0 2px #FFD700',
+                      }}
+                    >
+                      {value}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Center hub */}
+                <div
+                  className="absolute top-1/2 left-1/2 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 border-2 border-black"
+                  style={{
+                    width: `${size * 0.2}px`,
+                    height: `${size * 0.2}px`,
+                    transform: 'translate(-50%, -50%)',
+                    boxShadow: '0 0 10px rgba(255, 215, 0, 0.8)',
+                  }}
+                >
+                  <div className="absolute inset-1 rounded-full bg-black flex items-center justify-center">
+                    <span
+                      className="text-yellow-400 font-bold font-mono"
+                      style={{ fontSize: `${size * 0.06}px` }}
+                    >
+                      RNG
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wheel pointer */}
+              <div
+                className="absolute top-0 left-1/2 transform -translate-x-1/2"
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: `${size * 0.06}px solid transparent`,
+                  borderRight: `${size * 0.06}px solid transparent`,
+                  borderTop: `${size * 0.12}px solid #FFD700`,
+                  filter: 'drop-shadow(0 0 4px #FFD700)',
+                  zIndex: 10,
+                }}
+              />
+            </div>
+          )}
+
           {/* Death Booty specific content */}
           {title === "DEATH BOOTY" && (
             <div className="absolute inset-0 flex items-center justify-center">

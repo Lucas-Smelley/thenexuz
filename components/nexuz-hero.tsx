@@ -70,6 +70,8 @@ export default function NexuzHero({
       // If already zoomed in, navigate to planet page
       if (planetData.title === "DEATH BOOTY") {
         window.location.href = "/deathbooty"
+      } else if (planetData.title === "EPIC RNG WORLD") {
+        window.location.href = "/epicrngworld"
       } else {
         setShowPlanetPage(true)
       }
@@ -172,10 +174,10 @@ export default function NexuzHero({
           glowColor: "rgba(16, 185, 129, 0.8)",
           description: "An ancient sanctuary where the universe's heartbeat resonates through crystalline forests.",
         },
-        "Void Prism": {
-          color: "from-violet-400 via-purple-500 to-indigo-600",
-          glowColor: "rgba(139, 92, 246, 0.8)",
-          description: "A mysterious realm where thoughts become reality and dimensions dissolve.",
+        "EPIC RNG WORLD": {
+          color: "from-yellow-400 via-amber-500 to-yellow-600",
+          glowColor: "rgba(251, 191, 36, 0.8)",
+          description: "A quantum realm where luck is amplified and fortune favors the bold.",
         }
       }
       return configs[title as keyof typeof configs] || configs["Aqua Nexus"]
@@ -328,15 +330,15 @@ export default function NexuzHero({
 
             <Planet
               size={70}
-              color="bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600"
-              glowColor="rgba(139, 92, 246, 0.8)"
-              title="Void Prism"
-              description="A mysterious realm where thoughts become reality and dimensions dissolve."
+              color="bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600"
+              glowColor="rgba(251, 191, 36, 0.8)"
+              title="EPIC RNG WORLD"
+              description="A quantum realm where luck is amplified and fortune favors the bold."
               onClick={handlePlanetClick}
               orbitRadius={isMobile ? 250 : 520}
               orbitSpeed={0.35}
               orbitOffset={3 * Math.PI / 2}
-              isActive={activePlanet === "Void Prism"}
+              isActive={activePlanet === "EPIC RNG WORLD"}
               onPositionUpdate={handlePlanetPositionUpdate}
             />
           </>
