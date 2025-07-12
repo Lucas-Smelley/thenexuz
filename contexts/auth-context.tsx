@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('id', userId)
         .single()
 
-      if (error) throw error
+      if (error && error.message !== 'Supabase not configured') throw error
       return data as UserProfile
     } catch (error) {
       console.error('Error fetching profile:', error)
