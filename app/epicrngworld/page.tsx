@@ -11,6 +11,11 @@ export default function EpicRngWorldPage() {
   const [cryptoPrice, setCryptoPrice] = useState(42069.42)
   const [jackpot, setJackpot] = useState(1337420.69)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [hiddenAds, setHiddenAds] = useState<string[]>([])
+
+  const hideAd = (adId: string) => {
+    setHiddenAds(prev => [...prev, adId])
+  }
 
   useEffect(() => {
     let tickCount = 0
@@ -347,6 +352,266 @@ export default function EpicRngWorldPage() {
           </div>
         </div>
 
+        {/* OBNOXIOUS SATIRICAL ADVERTISEMENTS */}
+        
+        {/* Crazy Deal Banner - Top Left */}
+        <div className="hidden md:block absolute top-20 left-4 z-30">
+          <div className="bg-gradient-to-r from-red-500 to-pink-500 border-4 border-yellow-400 rounded-xl p-4 animate-bounce shadow-2xl shadow-red-500/70 transform rotate-12 max-w-64">
+            <div className="text-white text-center font-mono font-black">
+              <div className="text-2xl text-yellow-300 mb-2">🔥 HOT DEAL 🔥</div>
+              <div className="text-xl mb-1">DEPOSIT $1</div>
+              <div className="text-3xl font-black text-yellow-400">WIN $1,000,000*</div>
+              <div className="text-xs text-red-200 mt-1">*in monopoly money</div>
+              <div className="text-lg mt-2 animate-pulse">LIMITED TIME!**</div>
+              <div className="text-xs text-red-200">**forever</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Big Win Testimonial - Top Right */}
+        <div className="hidden lg:block absolute top-32 right-4 z-30">
+          <div className="bg-gradient-to-l from-green-500 to-lime-400 border-4 border-white rounded-2xl p-5 animate-pulse shadow-2xl shadow-green-500/70 transform -rotate-6 max-w-72">
+            <div className="text-black text-center font-mono font-black">
+              <div className="text-2xl mb-2">💰 MEGA WINNER 💰</div>
+              <div className="text-lg mb-2">"I WON BIG!"</div>
+              <div className="text-2xl font-black">$999,999,999</div>
+              <div className="text-sm mb-2">- TotallyRealUser420</div>
+              <div className="text-xs text-green-800">*results not typical</div>
+              <div className="text-xs text-green-800">**user may be fictional</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Warning Banner - Left Side */}
+        {!hiddenAds.includes('warning-banner') && (
+          <div className="hidden xl:block absolute top-1/3 left-8 z-20">
+            <div className="bg-gradient-to-br from-orange-500 to-red-500 border-4 border-yellow-400 rounded-2xl p-4 animate-pulse shadow-2xl shadow-orange-500/50 transform rotate-3 max-w-64 relative">
+              <button 
+                onClick={() => hideAd('warning-banner')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black">
+                <div className="text-yellow-300 font-black mb-2 text-xl">⚠️ WARNING ⚠️</div>
+                <div className="mb-2 text-sm">GAMBLING MAY CAUSE:</div>
+                <div className="text-xs mb-1">• Empty wallet syndrome</div>
+                <div className="text-xs mb-1">• Broken dreams</div>
+                <div className="text-xs mb-1">• Questioning life choices</div>
+                <div className="text-xs mb-2">• Addiction to losing</div>
+                <div className="text-yellow-300 text-xs">But hey, you might win!*</div>
+                <div className="text-xs">*you won't</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Achievement Badge - Right Side */}
+        {!hiddenAds.includes('achievement-badge') && (
+          <div className="hidden xl:block absolute top-1/4 right-12 z-20">
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 border-4 border-yellow-400 rounded-full p-6 animate-spin shadow-2xl shadow-purple-500/70 relative" style={{animationDuration: '10s'}}>
+              <button 
+                onClick={() => hideAd('achievement-badge')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black leading-tight">
+                <div className="text-lg">🏆 WINNER 🏆</div>
+                <div className="text-sm">PARTICIPATION</div>
+                <div className="text-sm">TROPHY</div>
+                <div className="text-yellow-300 text-xs mt-1">you tried!</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Floating Promo Badges */}
+        {!hiddenAds.includes('promo-special') && (
+          <div className="absolute bottom-1/3 left-16 z-20 hidden lg:block">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 border-4 border-red-500 rounded-xl p-3 animate-bounce shadow-2xl shadow-yellow-500/70 transform -rotate-12 relative">
+              <button 
+                onClick={() => hideAd('promo-special')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-black text-center font-mono font-black">
+                <div className="text-lg">🎰 SPECIAL 🎰</div>
+                <div className="text-sm">LOSE FASTER!</div>
+                <div className="text-sm">PREMIUM LOSSES</div>
+                <div className="text-xs text-red-600 mt-1">Now with extra regret!</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('vip-deluxe') && (
+          <div className="absolute bottom-1/4 right-20 z-20 hidden lg:block">
+            <div className="bg-gradient-to-l from-pink-500 to-purple-500 border-4 border-cyan-400 rounded-full p-4 animate-pulse shadow-2xl shadow-pink-500/70 transform rotate-12 relative">
+              <button 
+                onClick={() => hideAd('vip-deluxe')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black leading-tight">
+                <div className="text-lg">💎 VIP 💎</div>
+                <div className="text-sm">DELUXE</div>
+                <div className="text-sm">BANKRUPTCY</div>
+                <div className="text-cyan-300 text-xs mt-1">members only</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Trending Banner - Top Center */}
+        {!hiddenAds.includes('trending-banner') && (
+          <div className="hidden md:block absolute top-16 left-1/2 transform -translate-x-1/2 z-10">
+            <div className="bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 border-4 border-white rounded-2xl px-8 py-3 shadow-2xl shadow-red-500/70 animate-pulse relative">
+              <button 
+                onClick={() => hideAd('trending-banner')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-lg font-mono font-bold flex items-center">
+                <Star className="w-6 h-6 mr-3 animate-spin" />
+                TRENDING: BANKRUPTCY +200% | TEARS +150% | REGRET +999%
+                <Star className="w-6 h-6 ml-3 animate-spin" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Corner Achievement Badges */}
+        {!hiddenAds.includes('level-badge') && (
+          <div className="absolute top-2/3 left-4 hidden md:block z-20">
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 border-3 border-yellow-400 rounded-full p-3 animate-bounce shadow-xl shadow-blue-500/50 transform rotate-6 relative">
+              <button 
+                onClick={() => hideAd('level-badge')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center leading-tight">
+                <div>🏅 LEVEL 1 🏅</div>
+                <div>MONEY</div>
+                <div>BURNER</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('stonks-expert') && (
+          <div className="absolute top-3/4 right-8 hidden lg:block z-20">
+            <div className="bg-gradient-to-l from-green-500 to-teal-500 border-3 border-orange-400 rounded-lg p-3 animate-pulse shadow-xl shadow-green-500/50 transform -rotate-6 relative">
+              <button 
+                onClick={() => hideAd('stonks-expert')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>📈 STONKS 📈</div>
+                <div>EXPERT</div>
+                <div className="text-red-300 text-[8px]">(going down)</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('addiction-warning') && (
+          <div className="absolute bottom-1/2 left-2 hidden xl:block z-20">
+            <div className="bg-gradient-to-r from-red-500 to-pink-500 border-3 border-white rounded-full p-3 animate-spin shadow-xl shadow-red-500/50 relative" style={{animationDuration: '8s'}}>
+              <button 
+                onClick={() => hideAd('addiction-warning')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center leading-tight">
+                <div>🚨 WARNING 🚨</div>
+                <div>ADDICTED</div>
+                <div>TO LOSING</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('speedrun-bankruptcy') && (
+          <div className="absolute bottom-1/3 right-4 hidden md:block z-20">
+            <div className="bg-gradient-to-br from-purple-500 to-indigo-500 border-3 border-yellow-400 rounded-lg p-3 animate-bounce shadow-xl shadow-purple-500/50 transform rotate-3 relative">
+              <button 
+                onClick={() => hideAd('speedrun-bankruptcy')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>🎆 SPECIAL 🎆</div>
+                <div>BANKRUPTCY</div>
+                <div>SPEEDRUN</div>
+                <div className="text-yellow-300 text-[8px]">WR: 3 mins</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Testimonials */}
+        {!hiddenAds.includes('mobile-testimonial') && (
+          <div className="block md:hidden absolute bottom-32 left-4 right-4 z-20">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-2 border-yellow-400 rounded-lg p-3 animate-pulse shadow-lg shadow-purple-500/50 relative">
+              <button 
+                onClick={() => hideAd('mobile-testimonial')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-mono text-center">
+                <div className="text-yellow-300 font-black mb-1">★★★★★ "AMAZING!"</div>
+                <div>"Lost everything but gained life experience!"</div>
+                <div className="text-yellow-300 text-[10px] mt-1">- DefinitelyNotFakeReview</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Deal */}
+        {!hiddenAds.includes('mobile-deal') && (
+          <div className="block md:hidden absolute top-1/4 right-4 z-20">
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 border-2 border-yellow-400 rounded-lg p-2 animate-pulse shadow-lg shadow-orange-500/50 relative">
+              <button 
+                onClick={() => hideAd('mobile-deal')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>📱 MOBILE 📱</div>
+                <div>BANKRUPTCY</div>
+                <div>EDITION</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Diagonal Breaking News Banner - Bottom Left Corner */}
+        {!hiddenAds.includes('breaking-news') && (
+          <div className="hidden lg:block absolute bottom-0 left-0 w-[600px] h-16 bg-gradient-to-r from-red-600 via-black to-red-600 border-4 border-yellow-400 z-30 transform -rotate-12 origin-bottom-left overflow-hidden">
+            <button 
+              onClick={() => hideAd('breaking-news')}
+              className="absolute top-1 right-2 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200 transform rotate-12"
+            >
+              ×
+            </button>
+            <div className="flex items-center h-full px-4 text-white font-mono font-black text-sm animate-pulse overflow-hidden">
+              <div className="whitespace-nowrap animate-scroll">
+                🚨 BREAKING: Local man discovers house always wins • Student loans now accepted as payment • New study shows 100% of gamblers are "totally going to win it back" • Casino CEO buys 47th yacht with your losses 🚨
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* EXPLOSIVE CTA button */}
         <div className="relative mb-16 px-4">
@@ -459,6 +724,13 @@ export default function EpicRngWorldPage() {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
+        }
+        @keyframes scroll {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        .animate-scroll {
+          animation: scroll 20s linear infinite;
         }
       `}</style>
 
