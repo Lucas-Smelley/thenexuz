@@ -180,21 +180,15 @@ export default function EpicRngWorldPage() {
         {/* Main logo/title with rainbow glitch effect */}
         <div className="text-center mb-12 px-4">
           <div className="relative">
-            <div className="absolute inset-0 animate-ping">
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-pink-400/50 mb-4 font-mono tracking-wider">
+            <div className="absolute inset-0 animate-ping opacity-30">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-pink-400 mb-4 font-mono tracking-wider">
                 <span className="inline-block">{glitchText}</span>
               </h1>
             </div>
-            <h1 className="relative text-4xl sm:text-6xl md:text-8xl font-black mb-4 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300"
+            <h1 className="relative text-4xl sm:text-6xl md:text-8xl font-black mb-4 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300 text-yellow-400 drop-shadow-2xl"
                 style={{
-                  background: 'linear-gradient(45deg, #ec4899, #06b6d4, #10b981, #f59e0b, #8b5cf6, #ef4444)',
-                  backgroundSize: '200% 200%',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  color: 'transparent',
-                  animation: 'rainbow 3s ease-in-out infinite',
-                  textShadow: '0 0 30px #ec4899, 0 0 60px #06b6d4, 0 0 90px #10b981',
-                  filter: 'drop-shadow(0 0 20px rgba(236, 72, 153, 0.5))'
+                  filter: 'blur(0.5px)',
+                  textShadow: '0 0 8px rgba(255, 255, 0, 0.8), 0 0 16px rgba(255, 255, 0, 0.4)'
                 }}>
               <span className="inline-block animate-pulse">{glitchText}</span>
             </h1>
@@ -227,10 +221,10 @@ export default function EpicRngWorldPage() {
           </div>
         </div>
 
-        {/* INSANE game categories - Arc layout above jackpot */}
-        <div className="relative w-full max-w-7xl mx-auto mb-12 px-4" style={{height: '300px'}}>
-          {/* WHEEL - Far Left */}
-          <div className="absolute cursor-pointer group" style={{top: '140px', left: '8%', width: '160px', transform: 'rotate(-20deg)', zIndex: 15}}>
+        {/* INSANE game categories - Balanced Arc layout */}
+        <div className="relative w-full max-w-6xl mx-auto mb-8 px-4" style={{height: '450px'}}>
+          {/* WHEEL - Left */}
+          <div className="absolute cursor-pointer group" style={{top: '280px', left: '8%', width: '160px', transform: 'rotate(-30deg)', zIndex: 15}}>
             <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400/40 to-pink-400/40 rounded-full animate-pulse"></div>
             <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-yellow-400 p-5 rounded-full hover:border-pink-400 transition-colors shadow-2xl shadow-yellow-400/60 group-hover:shadow-pink-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
               <div className="absolute inset-0 bg-yellow-400/15 rounded-full group-hover:bg-pink-400/15 transition-colors"></div>
@@ -242,8 +236,8 @@ export default function EpicRngWorldPage() {
             </div>
           </div>
           
-          {/* SLOTS - Center Left */}
-          <div className="absolute cursor-pointer group" style={{top: '20px', left: '28%', width: '180px', transform: 'rotate(-8deg)', zIndex: 15}}>
+          {/* SLOTS - Top Left */}
+          <div className="absolute cursor-pointer group" style={{top: '20px', left: '20%', width: '170px', transform: 'rotate(-15deg)', zIndex: 15}}>
             <div className="absolute -inset-4 bg-gradient-to-r from-pink-400/40 to-cyan-400/40 rounded-3xl animate-pulse"></div>
             <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-pink-400 p-6 rounded-3xl hover:border-cyan-400 transition-colors shadow-2xl shadow-pink-400/60 group-hover:shadow-cyan-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
               <div className="absolute inset-0 bg-pink-400/15 rounded-3xl group-hover:bg-cyan-400/15 transition-colors"></div>
@@ -255,8 +249,8 @@ export default function EpicRngWorldPage() {
             </div>
           </div>
           
-          {/* DICE - Center Right */}
-          <div className="absolute cursor-pointer group" style={{top: '20px', right: '28%', width: '180px', transform: 'rotate(8deg)', zIndex: 15}}>
+          {/* DICE - Top Right */}
+          <div className="absolute cursor-pointer group" style={{top: '20px', right: '20%', width: '170px', transform: 'rotate(15deg)', zIndex: 15}}>
             <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/40 to-green-400/40 rounded-3xl animate-pulse"></div>
             <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-cyan-400 p-6 rounded-3xl hover:border-green-400 transition-colors shadow-2xl shadow-cyan-400/60 group-hover:shadow-green-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
               <div className="absolute inset-0 bg-cyan-400/15 rounded-3xl group-hover:bg-green-400/15 transition-colors"></div>
@@ -268,8 +262,8 @@ export default function EpicRngWorldPage() {
             </div>
           </div>
           
-          {/* CRASH - Far Right */}
-          <div className="absolute cursor-pointer group" style={{top: '140px', right: '8%', width: '160px', transform: 'rotate(20deg)', zIndex: 15}}>
+          {/* CRASH - Right */}
+          <div className="absolute cursor-pointer group" style={{top: '280px', right: '8%', width: '160px', transform: 'rotate(30deg)', zIndex: 15}}>
             <div className="absolute -inset-3 bg-gradient-to-r from-green-400/40 to-purple-400/40 rounded-full animate-pulse"></div>
             <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-green-400 p-5 rounded-full hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/60 group-hover:shadow-purple-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
               <div className="absolute inset-0 bg-green-400/15 rounded-full group-hover:bg-purple-400/15 transition-colors"></div>
@@ -280,47 +274,48 @@ export default function EpicRngWorldPage() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* SPECTACULAR live jackpot counter */}
-        <div className="relative mb-12 transform hover:scale-105 transition-transform duration-300 px-4 max-w-4xl mx-auto">
-          <div className="absolute -inset-8 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
-          <div className="absolute -inset-4 border-4 border-yellow-400 border-dashed rounded-3xl animate-ping"></div>
-          <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-6 border-pink-400 p-8 sm:p-12 lg:p-16 rounded-3xl overflow-hidden shadow-2xl shadow-pink-400/70">
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-pink-400/30 to-cyan-400/20 animate-pulse"></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 animate-ping"></div>
-            
-            <div className="relative z-10 text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-black font-mono mb-6 flex items-center justify-center"
-                   style={{
-                     background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
-                     backgroundSize: '200% 200%',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     animation: 'rainbow 3s ease-in-out infinite',
-                     textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
-                   }}>
-                <Crown className="w-8 h-8 sm:w-12 sm:h-12 mr-4 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
-                MEGA JACKPOT
-                <Crown className="w-8 h-8 sm:w-12 sm:h-12 ml-4 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
-              </div>
-              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl">
-                ${jackpot.toFixed(2)}
-              </div>
-              <div className="text-xl sm:text-2xl font-black font-mono mt-4 animate-bounce"
-                   style={{
-                     background: 'linear-gradient(45deg, #06b6d4, #10b981, #f59e0b)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     textShadow: '0 0 20px #06b6d4'
-                   }}>
-                🔥🔴 LIVE • UPDATING • EXPLODING 🔴🔥
+          
+          {/* SPECTACULAR live jackpot counter - INSIDE the balanced arc */}
+          <div className="absolute top-32 left-1/2 transform -translate-x-1/2 px-4 max-w-2xl mx-auto z-10">
+            <div className="absolute -inset-6 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
+            <div className="absolute -inset-3 border-4 border-yellow-400 border-dashed rounded-3xl animate-ping"></div>
+            <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-6 border-pink-400 p-6 sm:p-8 lg:p-10 rounded-3xl overflow-hidden shadow-2xl shadow-pink-400/70">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-pink-400/30 to-cyan-400/20 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 animate-ping"></div>
+              
+              <div className="relative z-10 text-center">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black font-mono mb-4 flex items-center justify-center"
+                     style={{
+                       background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
+                       backgroundSize: '200% 200%',
+                       backgroundClip: 'text',
+                       WebkitBackgroundClip: 'text',
+                       color: 'transparent',
+                       animation: 'rainbow 3s ease-in-out infinite',
+                       textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
+                     }}>
+                  <Crown className="w-6 h-6 sm:w-8 sm:h-8 mr-3 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
+                  MEGA JACKPOT
+                  <Crown className="w-6 h-6 sm:w-8 sm:h-8 ml-3 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
+                </div>
+                <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl">
+                  ${jackpot.toFixed(2)}
+                </div>
+                <div className="text-lg sm:text-xl font-black font-mono mt-3 animate-bounce"
+                     style={{
+                       background: 'linear-gradient(45deg, #06b6d4, #10b981, #f59e0b)',
+                       backgroundClip: 'text',
+                       WebkitBackgroundClip: 'text',
+                       color: 'transparent',
+                       textShadow: '0 0 20px #06b6d4'
+                     }}>
+                  🔥🔴 LIVE • UPDATING • EXPLODING 🔴🔥
+                </div>
               </div>
             </div>
           </div>
         </div>
+
 
         {/* EXPLOSIVE CTA button */}
         <div className="relative mb-16 px-4">
