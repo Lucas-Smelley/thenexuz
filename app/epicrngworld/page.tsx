@@ -13,13 +13,17 @@ export default function EpicRngWorldPage() {
   const [showAuthModal, setShowAuthModal] = useState(false)
 
   useEffect(() => {
+    let tickCount = 0
+    
     const interval = setInterval(() => {
-      setCryptoPrice(prev => prev + (Math.random() - 0.5) * 100)
-      setJackpot(prev => prev + Math.random() * 10)
+      tickCount++
+      setCryptoPrice(prev => prev + (((tickCount * 0.7) % 2) - 1) * 100)
+      setJackpot(prev => prev + ((tickCount * 0.3) % 1) * 10)
     }, 2000)
 
     const glitchInterval = setInterval(() => {
-      if (Math.random() < 0.1) {
+      tickCount++
+      if ((tickCount * 0.1) % 1 < 0.1) {
         setGlitchText("3P1C RN6 W0RLD")
         setTimeout(() => setGlitchText("EPIC RNG WORLD"), 150)
       }
@@ -41,8 +45,8 @@ export default function EpicRngWorldPage() {
               key={i}
               className="border border-yellow-400/20 animate-pulse"
               style={{
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 2}s`
+                animationDelay: `${(i * 0.01) % 2}s`,
+                animationDuration: `${2 + (i * 0.005) % 2}s`
               }}
             />
           ))}
@@ -65,12 +69,12 @@ export default function EpicRngWorldPage() {
             key={i}
             className="absolute text-yellow-400 font-mono text-xs animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`
+              left: `${(i * 7.3) % 100}%`,
+              top: `${(i * 11.7) % 100}%`,
+              animationDelay: `${(i * 0.06) % 3}s`
             }}
           >
-            {Math.random().toString(36).substring(7)}
+            {`${['$', '¥', '€', '₿', '💎', '⚡', '🔥', '💰', '🚀', '⭐'][i % 10]}${Math.floor(i * 123.456)}`}
           </div>
         ))}
       </div>
