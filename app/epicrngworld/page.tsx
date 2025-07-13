@@ -4,26 +4,60 @@ import { useState, useEffect } from "react"
 import { Zap, Coins, TrendingUp, Shuffle, ArrowLeft, Crown, Gem, Star, User, LogOut } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import AuthModal from "@/components/auth/auth-modal"
+import { createClient } from "@/lib/supabase"
 
 export default function EpicRngWorldPage() {
   const { user, profile, loading, signOut } = useAuth()
   const [glitchText, setGlitchText] = useState("EPIC RNG WORLD")
   const [cryptoPrice, setCryptoPrice] = useState(42069.42)
-  const [jackpot, setJackpot] = useState(1337420.69)
+  const [jackpot, setJackpot] = useState<number | null>(null) // Loading state
+  const [isJackpotLoading, setIsJackpotLoading] = useState(true)
+  const [showJackpotExplosion, setShowJackpotExplosion] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [hiddenAds, setHiddenAds] = useState<string[]>([])
+  const supabase = createClient()
 
   const hideAd = (adId: string) => {
     setHiddenAds(prev => [...prev, adId])
   }
 
+  // Fetch jackpot value from Supabase
+  const fetchJackpot = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('prizes')
+        .select('value')
+        .eq('id', 'epic_mega_jackpot')
+        .eq('is_active', true)
+        .single()
+
+      if (data && !error) {
+        setJackpot(data.value)
+        setIsJackpotLoading(false)
+        // Trigger explosion effect when loaded
+        setShowJackpotExplosion(true)
+        setTimeout(() => setShowJackpotExplosion(false), 1000)
+      }
+    } catch (error) {
+      console.error('Error fetching jackpot:', error)
+      // Set a fallback value if fetch fails
+      setJackpot(100000)
+      setIsJackpotLoading(false)
+      setShowJackpotExplosion(true)
+      setTimeout(() => setShowJackpotExplosion(false), 1000)
+    }
+  }
+
   useEffect(() => {
+    // Fetch initial jackpot value
+    fetchJackpot()
+
     let tickCount = 0
     
+    // Only animate crypto price, not jackpot
     const interval = setInterval(() => {
       tickCount++
       setCryptoPrice(prev => prev + (((tickCount * 0.7) % 2) - 1) * 100)
-      setJackpot(prev => prev + ((tickCount * 0.3) % 1) * 10)
     }, 2000)
 
     const glitchInterval = setInterval(() => {
@@ -34,11 +68,18 @@ export default function EpicRngWorldPage() {
       }
     }, 1000)
 
+    // Refresh jackpot every 30 seconds to get updates
+    const jackpotInterval = setInterval(() => {
+      fetchJackpot()
+    }, 30000)
+
     return () => {
       clearInterval(interval)
       clearInterval(glitchInterval)
+      clearInterval(jackpotInterval)
     }
   }, [])
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
@@ -336,8 +377,31 @@ export default function EpicRngWorldPage() {
                   <span className="sm:hidden text-sm">JACKPOT</span>
                   <Crown className="w-3 h-3 sm:w-6 sm:h-6 lg:w-8 lg:h-8 ml-1 sm:ml-3 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
                 </div>
-                <div className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl">
-                  ${jackpot.toFixed(2)}
+                <div className={`text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl relative transition-all duration-500 ${
+                  isJackpotLoading ? 'blur-sm' : 'blur-0'
+                } ${showJackpotExplosion ? 'scale-150' : 'scale-100'}`}>
+                  {isJackpotLoading ? '...' : `$${jackpot?.toLocaleString()}`}
+                  
+                  {/* Explosion effect */}
+                  {showJackpotExplosion && (
+                    <div className="absolute inset-0 pointer-events-none">
+                      {/* Multiple colorful explosion particles */}
+                      {Array.from({length: 8}).map((_, i) => (
+                        <div
+                          key={i}
+                          className="absolute w-2 h-2 rounded-full animate-ping"
+                          style={{
+                            background: ['#FF69B4', '#00FFFF', '#FFD700', '#FF1493', '#00FF00', '#FF4500', '#9370DB', '#FF6347'][i],
+                            left: '50%',
+                            top: '50%',
+                            transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-30px)`,
+                            animationDelay: `${i * 0.1}s`,
+                            animationDuration: '0.8s'
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="text-xs sm:text-lg lg:text-xl font-black font-mono mt-1 sm:mt-3 animate-bounce"
                      style={{

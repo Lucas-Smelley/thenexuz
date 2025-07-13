@@ -118,3 +118,34 @@ INSERT INTO public.gorbz (id, name, description, rarity, style_data, price_epic_
 -- RayOfSunshine Gorbz (ultra rare)
 ('universe_heart', 'Universe Heart', 'The beating heart of reality', 'RayOfSunshine', '{"colors": ["#800080", "#FF1493", "#FFD700"], "effects": ["universe", "heartbeat"]}', null, 0.00010),
 ('rng_god_avatar', 'RNG God Avatar', 'Avatar of the RNG Gods', 'RayOfSunshine', '{"colors": ["#FFD700", "#FFFFFF", "#FF69B4"], "effects": ["divine", "rng_blessing"]}', null, 0.00005);
+
+-- Create prizes table for tracking jackpots and other prizes
+CREATE TABLE public.prizes (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  value BIGINT NOT NULL, -- Prize value in EpicCoins or other currency
+  currency TEXT DEFAULT 'epic_coins', -- Type of currency (epic_coins, cash, etc.)
+  is_active BOOLEAN DEFAULT true,
+  display_order INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS for prizes
+ALTER TABLE public.prizes ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policy for prizes (everyone can read)
+CREATE POLICY "Anyone can view active prizes" ON public.prizes
+  FOR SELECT USING (is_active = true);
+
+-- Apply updated_at trigger to prizes
+CREATE TRIGGER update_prizes_updated_at
+  BEFORE UPDATE ON public.prizes
+  FOR EACH ROW EXECUTE PROCEDURE public.update_updated_at_column();
+
+-- Insert initial prizes
+INSERT INTO public.prizes (id, name, description, value, currency, display_order) VALUES
+('epic_mega_jackpot', 'Epic Mega Jackpot', 'The ultimate jackpot prize that grows with every game played', 100000, 'epic_coins', 1),
+('daily_bonus', 'Daily Login Bonus', 'Bonus coins for logging in daily', 100, 'epic_coins', 2),
+('weekly_challenge', 'Weekly Challenge Prize', 'Prize for completing weekly challenges', 1000, 'epic_coins', 3);
