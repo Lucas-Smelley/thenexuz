@@ -45,7 +45,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
       if (error) throw error
 
-      setSuccess('Account created! Welcome to the RNG Matrix!')
+      setSuccess('Account created! Welcome to the Epic RNG World!')
       setTimeout(() => {
         onSuccess()
         onClose()
@@ -78,7 +78,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
 
       if (error) throw error
 
-      setSuccess('Welcome back to the RNG Matrix!')
+      setSuccess('Welcome back to the Epic RNG World!')
       setTimeout(() => {
         onSuccess()
         onClose()
@@ -179,7 +179,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   type="email"
                   required
                   className="bg-gradient-to-r from-black via-purple-900 to-black border-2 border-pink-400 text-pink-400 font-mono placeholder:text-pink-400/50 focus:border-cyan-400 focus:text-cyan-400 transition-all duration-300 shadow-lg shadow-pink-400/20"
-                  placeholder="🌟 Enter your quantum email..."
+                  placeholder="🌟 Enter your lil ol email thing..."
                 />
               </div>
               
@@ -191,7 +191,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                          WebkitBackgroundClip: 'text',
                          color: 'transparent'
                        }}>
-                  🔐 SECRET PASSWORD 🔐
+                  🔐 THE PASSWORD THING🔐
                 </Label>
                 <Input
                   id="password"
@@ -199,7 +199,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   type="password"
                   required
                   className="bg-gradient-to-r from-black via-purple-900 to-black border-2 border-cyan-400 text-cyan-400 font-mono placeholder:text-cyan-400/50 focus:border-green-400 focus:text-green-400 transition-all duration-300 shadow-lg shadow-cyan-400/20"
-                  placeholder="🚀 Enter your access code..."
+                  placeholder="🚀 Enter your code (very safe)..."
                 />
               </div>
 
@@ -222,7 +222,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 }}
               >
                 <span className="relative z-10 whitespace-nowrap">
-                  {isLoading ? "🎰 ACCESSING MATRIX... 🎰" : "💥 ENTER THE RNG WORLD 💥"}
+                  {isLoading ? "🎰 ACCESSING... 🎰" : "💥 ENTER THE EPIC RNG WORLD 💥"}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
               </Button>
@@ -273,7 +273,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   type="text"
                   required
                   className="bg-gradient-to-r from-black via-orange-900 to-black border-2 border-yellow-400 text-yellow-400 font-mono placeholder:text-yellow-400/50 focus:border-orange-400 focus:text-orange-400 transition-all duration-300 shadow-lg shadow-yellow-400/20"
-                  placeholder="🌟 Your legendary handle..."
+                  placeholder="🌟 Your Epic awesome anme..."
                 />
               </div>
 
@@ -285,7 +285,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                          WebkitBackgroundClip: 'text',
                          color: 'transparent'
                        }}>
-                  📧 QUANTUM EMAIL 📧
+                  📧 LIL OL EMAIL 📧
                 </Label>
                 <Input
                   id="email"
@@ -293,7 +293,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   type="email"
                   required
                   className="bg-gradient-to-r from-black via-pink-900 to-black border-2 border-pink-400 text-pink-400 font-mono placeholder:text-pink-400/50 focus:border-cyan-400 focus:text-cyan-400 transition-all duration-300 shadow-lg shadow-pink-400/20"
-                  placeholder="💫 quantum.rng@epicworld.com"
+                  placeholder="💫 EPICNESS.rng@epicworld.com"
                 />
               </div>
               
@@ -305,7 +305,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                          WebkitBackgroundClip: 'text',
                          color: 'transparent'
                        }}>
-                  🛡️ ULTRA SECURE PASSWORD 🛡️
+                  🛡️ VERY SECRET PASSWORD 🛡️
                 </Label>
                 <Input
                   id="password"
@@ -314,7 +314,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                   required
                   minLength={6}
                   className="bg-gradient-to-r from-black via-cyan-900 to-black border-2 border-cyan-400 text-cyan-400 font-mono placeholder:text-cyan-400/50 focus:border-green-400 focus:text-green-400 transition-all duration-300 shadow-lg shadow-cyan-400/20"
-                  placeholder="🔐 Ultra secure quantum code..."
+                  placeholder="🔐 TYPE IT HERE PLEASE..."
                 />
               </div>
 
@@ -337,7 +337,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 }}
               >
                 <span className="relative z-10 whitespace-nowrap">
-                  {isLoading ? "🎆 CREATING EPIC ACCOUNT... 🎆" : "🚀 JOIN THE RNG REVOLUTION 🚀"}
+                  {isLoading ? "🎆 CREATING EPIC ACCOUNT... 🎆" : "🚀 JOIN THE PITFALL OF YOUR LIFE 🚀"}
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
               </Button>
@@ -384,7 +384,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                color: 'transparent',
                animation: 'rainbow 4s ease-in-out infinite'
              }}>
-          ⚡🔮 POWERED BY QUANTUM AUTHENTICATION 🔮⚡
+          ⚡🔮 POWERED BY THE FALCON 🔮⚡
         </div>
         </div>
       </DialogContent>

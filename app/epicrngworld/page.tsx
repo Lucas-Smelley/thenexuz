@@ -202,10 +202,11 @@ export default function EpicRngWorldPage() {
         ) : (
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-col sm:flex-row">
             {/* Crypto ticker for non-users */}
-            <div className="bg-gradient-to-r from-black via-purple-900 to-black border-2 sm:border-3 border-yellow-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm">
-              <div className="flex items-center space-x-1 sm:space-x-2">
-                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 animate-pulse" />
-                <span className="text-xs sm:text-sm lg:text-base font-black text-yellow-400">RNG: ${cryptoPrice.toFixed(2)}</span>
+            <div className="bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border-2 sm:border-3 border-yellow-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm hover:border-orange-400 transition-colors overflow-hidden">
+              <div className="absolute inset-0 bg-yellow-400/15 animate-pulse"></div>
+              <div className="relative flex items-center space-x-1 sm:space-x-2">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 animate-pulse drop-shadow-xl" />
+                <span className="text-xs sm:text-sm lg:text-base font-black text-yellow-400 drop-shadow-xl">RNG: ${cryptoPrice.toFixed(2)}</span>
               </div>
             </div>
             
@@ -263,7 +264,7 @@ export default function EpicRngWorldPage() {
                      color: 'transparent',
                      textShadow: '0 0 15px #f59e0b'
                    }}>
-                {">>>"} PROBABILITY AMPLIFIED {"<<<"}
+                {">>>"} MAKE YOUR DREAMS COME TRUE {"<<<"}
               </div>
             </div>
           </div>
@@ -448,7 +449,7 @@ export default function EpicRngWorldPage() {
                         textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
                       }}>
                   <Zap className="mr-2 sm:mr-4 lg:mr-6 text-yellow-400 w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 animate-pulse" />
-                  <span className="font-black text-center whitespace-nowrap">{user ? "🎮🔥 MY GORBZ 🔥🎮" : "💥🎆 ENTER THE MATRIX 🎆💥"}</span>
+                  <span className="font-black text-center whitespace-nowrap">{user ? "🎮🔥 MY GORBZ 🔥🎮" : "💥🎆 JOIN NOW 🎆💥"}</span>
                   <Zap className="ml-2 sm:ml-4 lg:ml-6 text-yellow-400 w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 animate-pulse" />
                 </span>
               </button>
