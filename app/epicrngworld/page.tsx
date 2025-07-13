@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react"
 import { Zap, Coins, TrendingUp, Shuffle, ArrowLeft, Crown, Gem, Star, User, LogOut } from "lucide-react"
@@ -180,10 +180,11 @@ export default function EpicRngWorldPage() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-20 min-h-screen px-4">
         
-        {/* Main logo/title with rainbow glitch effect */}
-        <div className="text-center mb-12 px-4">
+        {/* TOP THIRD - Main logo/title with rainbow glitch effect */}
+        <div className="flex items-center justify-center h-1/3">
+          <div className="text-center px-4">
           <div className="relative">
             <div className="absolute inset-0 animate-ping opacity-30">
               <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-pink-400 mb-4 font-mono tracking-wider">
@@ -200,11 +201,10 @@ export default function EpicRngWorldPage() {
           </div>
           <div className="h-2 w-48 sm:w-64 md:w-80 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 via-green-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl shadow-pink-400/50"></div>
           <div className="h-1 w-32 sm:w-48 md:w-64 bg-gradient-to-r from-purple-500 via-red-400 to-orange-400 mx-auto animate-pulse rounded-full mt-2 shadow-xl shadow-purple-400/50"></div>
-        </div>
-
-        {/* Colorful tagline */}
-        <div className="text-center mb-12 px-4">
-          <div className="text-xl sm:text-2xl md:text-3xl font-black tracking-widest mb-4 font-mono transform hover:scale-105 transition-transform"
+          
+          {/* Colorful tagline */}
+          <div className="text-center mt-4 px-4">
+          <div className="text-xl sm:text-2xl md:text-3xl font-black tracking-widest mb-1 font-mono transform hover:scale-105 transition-transform"
                style={{
                  background: 'linear-gradient(90deg, #10b981, #06b6d4, #ec4899, #f59e0b)',
                  backgroundClip: 'text',
@@ -224,14 +224,17 @@ export default function EpicRngWorldPage() {
                }}>
             {">>>"} PROBABILITY AMPLIFIED {"<<<"}
           </div>
+          </div>
+          </div>
         </div>
 
-        {/* INSANE game categories - Mobile-Optimized Arc layout */}
-        <div className="relative w-full max-w-6xl mx-auto mb-8 px-4" style={{height: 'clamp(350px, 55vw, 450px)'}}>
+        {/* MIDDLE THIRD - INSANE game categories - Mobile-Optimized Arc layout */}
+        <div className="flex items-center justify-center h-1/3">
+          <div className="relative w-full max-w-6xl mx-auto px-4" style={{height: 'clamp(300px, 45vw, 380px)'}}>
           {/* WHEEL - Left */}
           <div className="absolute cursor-pointer group" 
                style={{
-                 top: 'clamp(250px, 42vw, 280px)', 
+                 top: 'clamp(150px, 25vw, 180px)', 
                  left: 'clamp(1%, 5vw, 8%)', 
                  width: 'clamp(100px, 18vw, 160px)', 
                  transform: 'rotate(clamp(-45deg, -35deg, -30deg))', 
@@ -291,7 +294,7 @@ export default function EpicRngWorldPage() {
           {/* CRASH - Right */}
           <div className="absolute cursor-pointer group" 
                style={{
-                 top: 'clamp(250px, 42vw, 280px)', 
+                 top: 'clamp(150px, 25vw, 180px)', 
                  right: 'clamp(1%, 5vw, 8%)', 
                  width: 'clamp(100px, 18vw, 160px)', 
                  transform: 'rotate(clamp(30deg, 35deg, 45deg))', 
@@ -310,7 +313,7 @@ export default function EpicRngWorldPage() {
           
           {/* SPECTACULAR live jackpot counter - INSIDE the mobile-optimized arc */}
           <div className="absolute left-1/2 transform -translate-x-1/2 px-2 sm:px-4 max-w-xs sm:max-w-xl lg:max-w-2xl mx-auto z-10" 
-               style={{top: 'clamp(110px, 20vw, 128px)'}}>
+               style={{top: 'clamp(50px, 10vw, 70px)'}}>
             <div className="absolute -inset-3 sm:-inset-6 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
             <div className="absolute -inset-1 sm:-inset-3 border-2 sm:border-4 border-yellow-400 border-dashed rounded-3xl animate-ping"></div>
             <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 sm:border-6 border-pink-400 p-3 sm:p-6 lg:p-10 rounded-3xl overflow-hidden shadow-2xl shadow-pink-400/70">
@@ -350,6 +353,7 @@ export default function EpicRngWorldPage() {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* OBNOXIOUS SATIRICAL ADVERTISEMENTS */}
@@ -465,24 +469,6 @@ export default function EpicRngWorldPage() {
           </div>
         )}
 
-        {/* Trending Banner - Top Center */}
-        {!hiddenAds.includes('trending-banner') && (
-          <div className="hidden md:block absolute top-16 left-1/2 transform -translate-x-1/2 z-10">
-            <div className="bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 border-4 border-white rounded-2xl px-8 py-3 shadow-2xl shadow-red-500/70 animate-pulse relative">
-              <button 
-                onClick={() => hideAd('trending-banner')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-lg font-mono font-bold flex items-center">
-                <Star className="w-6 h-6 mr-3 animate-spin" />
-                TRENDING: BANKRUPTCY +200% | TEARS +150% | REGRET +999%
-                <Star className="w-6 h-6 ml-3 animate-spin" />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Corner Achievement Badges */}
         {!hiddenAds.includes('level-badge') && (
@@ -597,8 +583,9 @@ export default function EpicRngWorldPage() {
         )}
 
 
-        {/* EXPLOSIVE CTA button */}
-        <div className="relative mb-16 px-4">
+        {/* BOTTOM THIRD - EXPLOSIVE CTA button */}
+        <div className="flex items-center justify-center h-1/3">
+          <div className="relative px-4">
           <div className="absolute -inset-8 border-4 border-yellow-400 border-dashed animate-pulse rounded-3xl opacity-60"></div>
           <div className="absolute -inset-4 bg-gradient-to-r from-pink-500/30 via-yellow-400/40 via-cyan-500/30 to-green-500/30 rounded-3xl animate-ping"></div>
           
@@ -650,20 +637,8 @@ export default function EpicRngWorldPage() {
             ⚡🚀 LUCK AMPLIFIED TO THE MAX 🚀⚡
           </div>
         </div>
-
-        {/* Bottom tech info */}
-        <div className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 flex items-center text-lg sm:text-xl font-black font-mono px-4"
-             style={{
-               background: 'linear-gradient(45deg, #f59e0b, #06b6d4, #10b981)',
-               backgroundClip: 'text',
-               WebkitBackgroundClip: 'text',
-               color: 'transparent',
-               textShadow: '0 0 20px #f59e0b'
-             }}>
-          <Zap className="mr-2 text-yellow-400 w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
-          <span className="whitespace-nowrap">🔥 POWERED BY BLOCKCHAIN RNG 🔥</span>
-          <Zap className="ml-2 text-yellow-400 w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
         </div>
+
       </div>
 
       {/* Enhanced scanning line effects */}
@@ -699,24 +674,6 @@ export default function EpicRngWorldPage() {
         ))}
       </div>
 
-      <style jsx>{`
-        @keyframes scan {
-          0% { top: 0%; }
-          100% { top: 100%; }
-        }
-        @keyframes rainbow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes scroll {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        .animate-scroll {
-          animation: scroll 20s linear infinite;
-        }
-      `}</style>
 
       {/* Auth Modal */}
       <AuthModal
