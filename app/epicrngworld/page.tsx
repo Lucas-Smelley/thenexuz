@@ -87,7 +87,6 @@ export default function EpicRngWorldPage() {
           filter: 'id=eq.epic_mega_jackpot'
         },
         (payload) => {
-          console.log('Jackpot updated:', payload)
           if (payload.new && payload.new.value !== jackpot) {
             setJackpot(payload.new.value)
             setShowJackpotExplosion(true)

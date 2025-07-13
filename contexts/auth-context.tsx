@@ -70,7 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true
-    let subscription: any = null
+    let authSubscription: any = null
+    let profileSubscription: any = null
 
     // Initialize auth with proper timing
     const initializeAuth = async () => {
@@ -88,6 +89,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           
           if (mounted) {
             setProfile(profileData)
+          }
+
+          // Set up real-time subscription for user profile changes
+          if (mounted) {
+            profileSubscription = supabase
+              .channel(`user-profile-${session.user.id}`)
+              .on(
+                'postgres_changes',
+                {
+                  event: 'UPDATE',
+                  schema: 'public',
+                  table: 'users',
+                  filter: `id=eq.${session.user.id}`
+                },
+                (payload) => {
+                  if (mounted && payload.new) {
+                    setProfile(payload.new as UserProfile)
+                  }
+                }
+              )
+              .subscribe()
           }
         } else {
           setUser(null)
@@ -108,14 +130,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 setUser(session.user)
                 const profileData = await fetchProfile(session.user.id)
                 setProfile(profileData)
+
+                // Set up profile subscription for new user
+                if (profileSubscription) {
+                  profileSubscription.unsubscribe()
+                }
+                
+                profileSubscription = supabase
+                  .channel(`user-profile-${session.user.id}`)
+                  .on(
+                    'postgres_changes',
+                    {
+                      event: 'UPDATE',
+                      schema: 'public',
+                      table: 'users',
+                      filter: `id=eq.${session.user.id}`
+                    },
+                    (payload) => {
+                      if (mounted && payload.new) {
+                        setProfile(payload.new as UserProfile)
+                      }
+                    }
+                  )
+                  .subscribe()
               } else if (event === 'SIGNED_OUT') {
                 setUser(null)
                 setProfile(null)
+                
+                // Clean up profile subscription
+                if (profileSubscription) {
+                  profileSubscription.unsubscribe()
+                  profileSubscription = null
+                }
               }
             }
           )
           
-          subscription = data.subscription
+          authSubscription = data.subscription
         }
         
       } catch (error) {
@@ -130,8 +181,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       mounted = false
-      if (subscription) {
-        subscription.unsubscribe()
+      if (authSubscription) {
+        authSubscription.unsubscribe()
+      }
+      if (profileSubscription) {
+        profileSubscription.unsubscribe()
       }
     }
   }, [])
