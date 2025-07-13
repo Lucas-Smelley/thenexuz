@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react"
-import { Zap, Coins, TrendingUp, Shuffle, ArrowLeft, Crown, Gem, Star, User, LogOut } from "lucide-react"
+import { Zap, Coins, TrendingUp, Shuffle, ArrowLeft, Crown, Gem, Star, User, LogOut, ChevronDown } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import AuthModal from "@/components/auth/auth-modal"
 import { createClient } from "@/lib/supabase"
@@ -14,6 +14,7 @@ export default function EpicRngWorldPage() {
   const [isJackpotLoading, setIsJackpotLoading] = useState(true)
   const [showJackpotExplosion, setShowJackpotExplosion] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const [hiddenAds, setHiddenAds] = useState<string[]>([])
   const supabase = createClient()
 
@@ -108,6 +109,24 @@ export default function EpicRngWorldPage() {
       supabase.removeChannel(jackpotSubscription)
     }
   }, [])
+
+  // Handle click outside user menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (showUserMenu && !target.closest('[data-user-menu]')) {
+        setShowUserMenu(false)
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserMenu])
 
 
   return (
@@ -205,31 +224,54 @@ export default function EpicRngWorldPage() {
       {/* User info / Auth */}
       <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-30">
         {user && profile ? (
-          <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-col sm:flex-row">
-            {/* User EpicCoins */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Epic Coins Display */}
             <div className="bg-gradient-to-r from-black via-purple-900 to-black border-2 sm:border-3 border-green-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-green-400/50 backdrop-blur-sm">
               <div className="flex items-center space-x-1 sm:space-x-2">
                 <Coins className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-green-400 animate-pulse" />
-                <span className="text-xs sm:text-sm lg:text-base font-black text-green-400">{profile.epic_coins.toLocaleString()} EC</span>
+                <span className="text-xs sm:text-sm lg:text-base font-black text-green-400">{profile.epic_coins.toLocaleString()}EC</span>
               </div>
             </div>
             
-            {/* User menu */}
-            <div className="bg-gradient-to-r from-black via-purple-900 to-black border-2 sm:border-3 border-cyan-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm">
-              <div className="flex items-center space-x-1 sm:space-x-2">
-                <User className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-cyan-400" />
-                <span className="text-xs sm:text-sm lg:text-base font-black text-cyan-400">{profile.username}</span>
-                <button
-                  onClick={signOut}
-                  className="ml-1 sm:ml-2 lg:ml-3 hover:text-red-400 transition-colors transform hover:scale-110"
-                >
-                  <LogOut className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-red-400" />
-                </button>
-              </div>
+            {/* User Menu Button */}
+            <div className="relative" data-user-menu>
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="bg-gradient-to-r from-black via-purple-900 to-black border-2 sm:border-3 border-cyan-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
+              >
+                <div className="flex items-center space-x-1 sm:space-x-2">
+                  <User className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-cyan-400" />
+                  <span className="text-xs sm:text-sm lg:text-base font-black text-cyan-400">{profile.username}</span>
+                  <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                </div>
+              </button>
+              
+              {/* Dropdown Menu */}
+              {showUserMenu && (
+                <div className="absolute right-0 top-full mt-2 bg-gradient-to-r from-black via-purple-900 to-black border-2 border-cyan-400 rounded-md shadow-2xl shadow-cyan-400/50 backdrop-blur-sm min-w-[160px] z-50">
+                  <div className="p-2">
+                    <div className="px-3 py-2 border-b border-cyan-400/30">
+                      <div className="text-xs text-cyan-300 font-mono">Signed in as</div>
+                      <div className="text-sm font-black text-cyan-400 font-mono">{profile.username}</div>
+                      <div className="text-xs text-cyan-300 font-mono">{user.email}</div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        signOut()
+                        setShowUserMenu(false)
+                      }}
+                      className="w-full px-3 py-2 mt-2 flex items-center space-x-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded transition-colors font-mono text-sm"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-col sm:flex-row">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Crypto ticker for non-users */}
             <div className="bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border-2 sm:border-3 border-yellow-400 px-2 sm:px-4 lg:px-6 py-1 sm:py-2 lg:py-3 font-mono rounded-md sm:rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm hover:border-orange-400 transition-colors overflow-hidden">
               <div className="absolute inset-0 bg-yellow-400/15 animate-pulse"></div>
@@ -253,16 +295,16 @@ export default function EpicRngWorldPage() {
       {/* Main content */}
       <div className="relative z-20 min-h-screen px-4 flex flex-col">
         
-        {/* TITLE SECTION - Top with margin */}
-        <div className="pt-16 pb-2">
+        {/* TITLE SECTION - Compact top section with space from auth buttons */}
+        <div className="pt-16 pb-4">
           <div className="text-center px-4">
             <div className="relative">
               <div className="absolute inset-0 animate-ping opacity-30">
-                <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-pink-400 mb-4 font-mono tracking-wider">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-pink-400 mb-2 font-mono tracking-wider">
                   <span className="inline-block">{glitchText}</span>
                 </h1>
               </div>
-              <h1 className="relative text-4xl sm:text-6xl md:text-8xl font-black mb-4 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300 text-yellow-400 drop-shadow-2xl"
+              <h1 className="relative text-3xl sm:text-5xl md:text-7xl font-black mb-2 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300 text-yellow-400 drop-shadow-2xl"
                   style={{
                     filter: 'blur(0.5px)',
                     textShadow: '0 0 8px rgba(255, 255, 0, 0.8), 0 0 16px rgba(255, 255, 0, 0.4)'
@@ -270,12 +312,12 @@ export default function EpicRngWorldPage() {
                 <span className="inline-block animate-pulse">{glitchText}</span>
               </h1>
             </div>
-            <div className="h-2 w-48 sm:w-64 md:w-80 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 via-green-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl shadow-pink-400/50"></div>
-            <div className="h-1 w-32 sm:w-48 md:w-64 bg-gradient-to-r from-purple-500 via-red-400 to-orange-400 mx-auto animate-pulse rounded-full mt-2 shadow-xl shadow-purple-400/50"></div>
+            <div className="h-1.5 w-32 sm:w-48 md:w-64 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 via-green-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl shadow-pink-400/50"></div>
+            <div className="h-1 w-24 sm:w-32 md:w-48 bg-gradient-to-r from-purple-500 via-red-400 to-orange-400 mx-auto animate-pulse rounded-full mt-1 shadow-xl shadow-purple-400/50"></div>
             
-            {/* Colorful tagline */}
-            <div className="text-center mt-4 px-4">
-              <div className="text-xl sm:text-2xl md:text-3xl font-black tracking-widest mb-1 font-mono transform hover:scale-105 transition-transform"
+            {/* Compact tagline */}
+            <div className="text-center mt-2 px-4">
+              <div className="text-sm sm:text-lg md:text-xl font-black tracking-widest mb-1 font-mono transform hover:scale-105 transition-transform"
                    style={{
                      background: 'linear-gradient(90deg, #10b981, #06b6d4, #ec4899, #f59e0b)',
                      backgroundClip: 'text',
@@ -283,9 +325,9 @@ export default function EpicRngWorldPage() {
                      color: 'transparent',
                      textShadow: '0 0 20px #10b981, 0 0 40px #06b6d4'
                    }}>
-                <span className="block mb-2 animate-pulse">QUANTUM LUCK PROTOCOL</span>
+                <span className="block animate-pulse">QUANTUM LUCK PROTOCOL</span>
               </div>
-              <div className="text-lg sm:text-xl md:text-2xl font-black font-mono"
+              <div className="text-xs sm:text-base md:text-lg font-black font-mono"
                    style={{
                      background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
                      backgroundClip: 'text',
@@ -299,8 +341,8 @@ export default function EpicRngWorldPage() {
           </div>
         </div>
 
-        {/* MIDDLE SECTION - Jackpot and Games positioned higher on mobile/skinny screens */}
-        <div className="flex-1 flex items-start justify-center pt-8 sm:pt-16 md:items-center md:pt-0">
+        {/* GAMES SECTION - Positioned much higher in the middle of remaining space */}
+        <div className="flex-1 flex items-start justify-center pt-8">
           <div className="relative w-full max-w-6xl mx-auto px-4" style={{height: 'clamp(300px, 45vw, 380px)'}}>
             {/* WHEEL - Left */}
             <div className="absolute cursor-pointer group" 
