@@ -68,7 +68,29 @@ export default function EpicRngWorldPage() {
       }
     }, 1000)
 
-    // Refresh jackpot every 30 seconds to get updates
+    // Set up real-time subscription for jackpot updates
+    const jackpotSubscription = supabase
+      .channel('prizes-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'prizes',
+          filter: 'id=eq.epic_mega_jackpot'
+        },
+        (payload) => {
+          console.log('Jackpot updated:', payload)
+          if (payload.new && payload.new.value !== jackpot) {
+            setJackpot(payload.new.value)
+            setShowJackpotExplosion(true)
+            setTimeout(() => setShowJackpotExplosion(false), 1000)
+          }
+        }
+      )
+      .subscribe()
+
+    // Fallback: refresh jackpot every 30 seconds in case real-time fails
     const jackpotInterval = setInterval(() => {
       fetchJackpot()
     }, 30000)
@@ -77,6 +99,7 @@ export default function EpicRngWorldPage() {
       clearInterval(interval)
       clearInterval(glitchInterval)
       clearInterval(jackpotInterval)
+      supabase.removeChannel(jackpotSubscription)
     }
   }, [])
 
@@ -206,7 +229,7 @@ export default function EpicRngWorldPage() {
               <div className="absolute inset-0 bg-yellow-400/15 animate-pulse"></div>
               <div className="relative flex items-center space-x-1 sm:space-x-2">
                 <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-yellow-400 animate-pulse drop-shadow-xl" />
-                <span className="text-xs sm:text-sm lg:text-base font-black text-yellow-400 drop-shadow-xl">RNG: ${cryptoPrice.toFixed(2)}</span>
+                <span className="text-xs sm:text-sm lg:text-base font-black text-yellow-400 drop-shadow-xl">RNG: {Math.floor(cryptoPrice).toLocaleString()}EC</span>
               </div>
             </div>
             
@@ -380,7 +403,7 @@ export default function EpicRngWorldPage() {
                   <div className={`text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl relative transition-all duration-500 ${
                     isJackpotLoading ? 'blur-sm' : 'blur-0'
                   } ${showJackpotExplosion ? 'scale-150' : 'scale-100'}`}>
-                    {isJackpotLoading ? '...' : `$${jackpot?.toLocaleString()}`}
+                    {isJackpotLoading ? '...' : `${jackpot?.toLocaleString()}EC`}
                     
                     {/* Explosion effect */}
                     {showJackpotExplosion && (
@@ -485,8 +508,8 @@ export default function EpicRngWorldPage() {
           <div className="bg-gradient-to-r from-red-500 to-pink-500 border-4 border-yellow-400 rounded-xl p-4 animate-bounce shadow-2xl shadow-red-500/70 transform rotate-12 max-w-64">
             <div className="text-white text-center font-mono font-black">
               <div className="text-2xl text-yellow-300 mb-2">🔥 HOT DEAL 🔥</div>
-              <div className="text-xl mb-1">DEPOSIT $1</div>
-              <div className="text-3xl font-black text-yellow-400">WIN $1,000,000*</div>
+              <div className="text-xl mb-1">DEPOSIT 1EC</div>
+              <div className="text-3xl font-black text-yellow-400">WIN 1,000,000EC*</div>
               <div className="text-xs text-red-200 mt-1">*in monopoly money</div>
               <div className="text-lg mt-2 animate-pulse">LIMITED TIME!**</div>
               <div className="text-xs text-red-200">**forever</div>
@@ -500,7 +523,7 @@ export default function EpicRngWorldPage() {
             <div className="text-black text-center font-mono font-black">
               <div className="text-2xl mb-2">💰 MEGA WINNER 💰</div>
               <div className="text-lg mb-2">"I WON BIG!"</div>
-              <div className="text-2xl font-black">$999,999,999</div>
+              <div className="text-2xl font-black">999,999,999EC</div>
               <div className="text-sm mb-2">- TotallyRealUser420</div>
               <div className="text-xs text-green-800">*results not typical</div>
               <div className="text-xs text-green-800">**user may be fictional</div>
