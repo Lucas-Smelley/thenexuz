@@ -37,6 +37,12 @@ export default function EpicRngWorldPage() {
         // Trigger explosion effect when loaded
         setShowJackpotExplosion(true)
         setTimeout(() => setShowJackpotExplosion(false), 1000)
+      } else {
+        // Set a fallback value if fetch fails
+        setJackpot(100000)
+        setIsJackpotLoading(false)
+        setShowJackpotExplosion(true)
+        setTimeout(() => setShowJackpotExplosion(false), 1000)
       }
     } catch (error) {
       console.error('Error fetching jackpot:', error)
