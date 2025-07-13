@@ -358,10 +358,10 @@ const Planet = ({
                 
                 {/* Death Booty image - in front of background */}
                 <Image
-                  src="/media/death-booty/images/death-booty-icon.png"
+                  src="/media/death-booty/images/death-booty.png"
                   alt="Death Booty"
-                  width={size * 0.7}
-                  height={size * 0.7}
+                  width={size * 4}
+                  height={size * 4}
                   className="object-contain relative z-10"
                   style={{
                     filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9)) brightness(1.3) contrast(1.3)',

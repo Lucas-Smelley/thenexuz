@@ -596,22 +596,6 @@ export default function EpicRngWorldPage() {
           </div>
         )}
 
-        {/* Diagonal Breaking News Banner - Bottom Left Corner */}
-        {!hiddenAds.includes('breaking-news') && (
-          <div className="hidden lg:block absolute bottom-0 left-0 w-[600px] h-16 bg-gradient-to-r from-red-600 via-black to-red-600 border-4 border-yellow-400 z-30 transform -rotate-12 origin-bottom-left overflow-hidden">
-            <button 
-              onClick={() => hideAd('breaking-news')}
-              className="absolute top-1 right-2 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200 transform rotate-12"
-            >
-              ×
-            </button>
-            <div className="flex items-center h-full px-4 text-white font-mono font-black text-sm animate-pulse overflow-hidden">
-              <div className="whitespace-nowrap animate-scroll">
-                🚨 BREAKING: Local man discovers house always wins • Student loans now accepted as payment • New study shows 100% of gamblers are "totally going to win it back" • Casino CEO buys 47th yacht with your losses 🚨
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* EXPLOSIVE CTA button */}
         <div className="relative mb-16 px-4">
