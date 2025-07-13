@@ -611,7 +611,7 @@ export default function EpicRngWorldPage() {
                     textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
                   }}>
               <Zap className="mr-4 sm:mr-6 text-yellow-400 w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
-              <span className="whitespace-nowrap font-black">{user ? "💥🎆 START GAMING 🎆💥" : "💥🎆 ENTER THE MATRIX 🎆💥"}</span>
+              <span className="whitespace-nowrap font-black">{user ? "🎮🔥 MY GORBZ 🔥🎮" : "💥🎆 ENTER THE MATRIX 🎆💥"}</span>
               <Zap className="ml-4 sm:ml-6 text-yellow-400 w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
             </span>
           </button>
