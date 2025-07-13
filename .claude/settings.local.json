@@ -9,7 +9,8 @@
       "Bash(npm run build:*)",
       "Bash(npx next:*)",
       "Bash(npx tsc:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(timeout 300 npm run build)"
     ],
     "deny": []
   }
