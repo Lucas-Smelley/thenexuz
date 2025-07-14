@@ -17,11 +17,32 @@ const wheelSegments = [
 export default function WheelPage() {
   const [rotation, setRotation] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
+  const [showCelebration, setShowCelebration] = useState(false)
+  const [selectedSegment, setSelectedSegment] = useState<any>(null)
+
+  // Calculate which segment is currently selected by the indicator
+  const getCurrentSegment = (rotationDegrees: number) => {
+    const normalizedRotation = ((rotationDegrees % 360) + 360) % 360
+    const segmentAngle = 360 / wheelSegments.length
+    // Triangle is at 3 o'clock (0 degrees/2π radians on unit circle)
+    // Segments start at 12 o'clock and go clockwise, so we need to offset by 90 degrees
+    const adjustedRotation = (360 - normalizedRotation + 90) % 360
+    const segmentIndex = Math.floor(adjustedRotation / segmentAngle) % wheelSegments.length
+    return wheelSegments[segmentIndex]
+  }
 
   const spinWheel = () => {
     if (isSpinning) return
 
     setIsSpinning(true)
+    // Only hide celebration, don't reset other states if we're already celebrating
+    if (showCelebration) {
+      setShowCelebration(false)
+      setSelectedSegment(null)
+    } else {
+      setShowCelebration(false)
+      setSelectedSegment(null)
+    }
 
     // Random rotation between 2520 and 3600 degrees (7-10 full spins)
     const randomRotation = Math.floor(Math.random() * 1080) + 2520
@@ -32,7 +53,15 @@ export default function WheelPage() {
     // Stop spinning after 10 seconds
     setTimeout(() => {
       setIsSpinning(false)
+      const finalSegment = getCurrentSegment(newRotation)
+      setSelectedSegment(finalSegment)
+      setShowCelebration(true)
     }, 10000)
+  }
+
+  const hideCelebration = () => {
+    setShowCelebration(false)
+    setSelectedSegment(null)
   }
 
   return (
@@ -78,8 +107,18 @@ export default function WheelPage() {
         </a>
       </div>
 
+      {/* Background blur overlay when spinning or celebrating */}
+      {(isSpinning || showCelebration) && (
+        <div 
+          className="absolute inset-0 bg-black/50 backdrop-blur-md z-10 transition-all duration-1000" 
+          onClick={showCelebration && !isSpinning ? hideCelebration : undefined}
+        />
+      )}
+
       {/* Main content */}
-      <div className="relative z-20 min-h-screen flex flex-col justify-center items-center px-4">
+      <div className={`relative min-h-screen flex flex-col justify-center items-center px-4 transition-all duration-1000 ${
+        (isSpinning || showCelebration) ? 'z-30' : 'z-20'
+      }`}>
         
         {/* Title */}
         <div className="text-center mb-12">
@@ -96,15 +135,20 @@ export default function WheelPage() {
         <div className="relative">
           {/* Wheel with Segments */}
           <div 
-            className="w-96 h-96 rounded-full border-8 border-yellow-400 shadow-2xl shadow-yellow-400/50 relative overflow-hidden"
+            className={`rounded-full border-8 border-yellow-400 shadow-2xl shadow-yellow-400/50 relative overflow-hidden transition-all duration-1000 ${
+              isSpinning || showCelebration ? 'w-[500px] h-[500px]' : 'w-96 h-96'
+            }`}
             style={{
               transform: `rotate(${rotation}deg)`,
-              transition: isSpinning ? 'transform 10s cubic-bezier(0.1, 0.57, 0.1, 1)' : 'none'
+              transition: isSpinning ? 'transform 10s cubic-bezier(0.1, 0.57, 0.1, 1), width 1s ease-out, height 1s ease-out' : 'width 1s ease-out, height 1s ease-out'
             }}
           >
             {wheelSegments.map((segment, index) => {
               const startAngle = (360 / wheelSegments.length) * index
               const endAngle = (360 / wheelSegments.length) * (index + 1)
+              
+              // Check if this is the selected segment
+              const isSelected = showCelebration && selectedSegment && selectedSegment.text === segment.text
               
               // Create smooth circular segments using multiple points
               const points = ['50% 50%'] // Center point
@@ -121,10 +165,14 @@ export default function WheelPage() {
               return (
                 <div
                   key={index}
-                  className="absolute w-full h-full"
+                  className={`absolute w-full h-full transition-all duration-500 ${
+                    isSelected ? 'animate-pulse' : ''
+                  }`}
                   style={{
                     clipPath: `polygon(${points.join(', ')})`,
-                    backgroundColor: segment.color
+                    backgroundColor: segment.color,
+                    boxShadow: isSelected ? `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color}` : 'none',
+                    filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
                   }}
                 >
                   {/* Segment text */}
@@ -154,14 +202,88 @@ export default function WheelPage() {
         <button
           onClick={spinWheel}
           disabled={isSpinning}
-          className={`mt-8 px-12 py-6 text-2xl font-black font-mono rounded-2xl transition-all duration-300 transform ${
+          className={`mt-8 px-12 py-6 text-2xl font-black font-mono rounded-2xl transition-all duration-300 transform z-50 relative ${
             isSpinning
               ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-pink-500 to-purple-500 border-4 border-yellow-400 text-white hover:scale-110 hover:shadow-2xl shadow-pink-500/50'
           }`}
         >
-          {isSpinning ? '🔥 SPINNING 🔥' : '💫 SPIN THE WHEEL 💫'}
+          {isSpinning ? '🔥 SPINNING 🔥' : showCelebration ? '🎯 SPIN AGAIN 🎯' : '💫 SPIN THE WHEEL 💫'}
         </button>
+
+        {/* Celebration Display */}
+        {showCelebration && selectedSegment && (
+          <div className="fixed inset-0 flex items-center justify-center z-40 pointer-events-auto" onClick={hideCelebration}>
+            {/* Fireworks Effect */}
+            <div className="absolute inset-0">
+              {Array.from({ length: 20 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute animate-ping"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${1 + Math.random()}s`
+                  }}
+                >
+                  <div className={`w-4 h-4 rounded-full ${
+                    i % 4 === 0 ? 'bg-pink-400' :
+                    i % 4 === 1 ? 'bg-yellow-400' :
+                    i % 4 === 2 ? 'bg-cyan-400' : 'bg-purple-400'
+                  } shadow-2xl`} />
+                </div>
+              ))}
+            </div>
+
+            {/* Main Celebration Text */}
+            <div className="text-center animate-bounce" onClick={(e) => e.stopPropagation()}>
+              <div className="mb-8">
+                <h2 className="text-6xl font-black font-mono text-yellow-400 mb-4 animate-pulse"
+                    style={{
+                      textShadow: '0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.8)'
+                    }}>
+                  🎉 WINNER! 🎉
+                </h2>
+                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black px-6 py-4 rounded-2xl border-4 border-white"
+                     style={{
+                       color: selectedSegment.color,
+                       textShadow: `0 0 40px ${selectedSegment.color}, 0 0 80px ${selectedSegment.color}`
+                     }}>
+                  {selectedSegment.text}
+                </div>
+                <div className="text-2xl font-bold text-white animate-pulse">
+                  🌟 CONGRATULATIONS! 🌟
+                </div>
+              </div>
+            </div>
+
+            {/* Particle Explosion */}
+            <div className="absolute inset-0">
+              {Array.from({ length: 50 }).map((_, i) => (
+                <div
+                  key={`particle-${i}`}
+                  className="absolute animate-bounce"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                    transform: `translate(-50%, -50%) rotate(${i * 7.2}deg) translateY(-${50 + Math.random() * 200}px)`,
+                    animationDelay: `${Math.random() * 0.5}s`,
+                    animationDuration: `${0.8 + Math.random() * 0.4}s`
+                  }}
+                >
+                  <div className={`w-2 h-2 rounded-full ${
+                    i % 6 === 0 ? 'bg-pink-400' :
+                    i % 6 === 1 ? 'bg-yellow-400' :
+                    i % 6 === 2 ? 'bg-cyan-400' :
+                    i % 6 === 3 ? 'bg-green-400' :
+                    i % 6 === 4 ? 'bg-purple-400' : 'bg-red-400'
+                  } animate-ping`} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
