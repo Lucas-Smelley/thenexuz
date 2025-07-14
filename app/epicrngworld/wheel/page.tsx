@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Coins, User, LogOut, ChevronDown } from "lucide-react"
+import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@/lib/supabase"
 
 const wheelSegments = [
   { text: "100 EC", color: "#EF4444" }, // red
@@ -15,10 +17,15 @@ const wheelSegments = [
 ]
 
 export default function WheelPage() {
+  const { user, profile, signOut, refreshProfile } = useAuth()
   const [rotation, setRotation] = useState(0)
   const [isSpinning, setIsSpinning] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
   const [selectedSegment, setSelectedSegment] = useState<any>(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
+  const supabase = createClient()
+
+  const SPIN_COST = 200
 
   // Calculate which segment is currently selected by the indicator
   const getCurrentSegment = (rotationDegrees: number) => {
@@ -31,8 +38,46 @@ export default function WheelPage() {
     return wheelSegments[segmentIndex]
   }
 
-  const spinWheel = () => {
+  const spinWheel = async () => {
     if (isSpinning) return
+
+    // Check if user is logged in and has enough coins
+    if (!user || !profile) {
+      alert('Please log in to spin the wheel!')
+      return
+    }
+
+    if (profile.epic_coins < SPIN_COST) {
+      alert(`Not enough Epic Coins! You need ${SPIN_COST} EC to spin.`)
+      return
+    }
+
+    // Deduct coins before spinning
+    try {
+      console.log('Attempting to deduct coins:', SPIN_COST, 'from user:', user.id)
+      console.log('Current profile coins:', profile.epic_coins)
+      
+      const { data, error } = await supabase
+        .from('users')
+        .update({ epic_coins: profile.epic_coins - SPIN_COST })
+        .eq('id', user.id)
+        .select()
+
+      if (error) {
+        console.error('Supabase error details:', error)
+        alert(`Error processing payment: ${error.message}. Please try again.`)
+        return
+      }
+
+      console.log('Successfully deducted coins, updated profile:', data)
+      
+      // Refresh profile to update UI
+      await refreshProfile()
+    } catch (error) {
+      console.error('Catch block error:', error)
+      alert(`Error processing payment: ${error}. Please try again.`)
+      return
+    }
 
     setIsSpinning(true)
     // Only hide celebration, don't reset other states if we're already celebrating
@@ -51,11 +96,39 @@ export default function WheelPage() {
     setRotation(newRotation)
 
     // Stop spinning after 10 seconds
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsSpinning(false)
       const finalSegment = getCurrentSegment(newRotation)
       setSelectedSegment(finalSegment)
       setShowCelebration(true)
+
+      // Award winnings if applicable
+      if (finalSegment.text !== 'BANKRUPT' && finalSegment.text !== 'LOSE ALL') {
+        const winAmount = parseInt(finalSegment.text.replace(' EC', ''))
+        if (winAmount) {
+          try {
+            // Get current coins to avoid race conditions
+            const { data: currentProfile } = await supabase
+              .from('users')
+              .select('epic_coins')
+              .eq('id', user.id)
+              .single()
+
+            if (currentProfile) {
+              const { error } = await supabase
+                .from('users')
+                .update({ epic_coins: currentProfile.epic_coins + winAmount })
+                .eq('id', user.id)
+
+              if (!error) {
+                await refreshProfile()
+              }
+            }
+          } catch (error) {
+            console.error('Error awarding winnings:', error)
+          }
+        }
+      }
     }, 10000)
   }
 
@@ -105,6 +178,64 @@ export default function WheelPage() {
           <ArrowLeft className="w-5 h-5 text-pink-400" />
           <span className="text-sm font-mono font-black text-pink-400">BACK TO RNG WORLD</span>
         </a>
+      </div>
+
+      {/* User info / Epic Coins */}
+      <div className="absolute top-4 right-4 z-30">
+        {user && profile ? (
+          <div className="flex items-center gap-3">
+            {/* Epic Coins Display */}
+            <div className="bg-black/80 border-2 border-green-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-green-400/50 backdrop-blur-sm">
+              <div className="flex items-center space-x-2">
+                <Coins className="w-5 h-5 text-green-400 animate-pulse" />
+                <span className="text-sm font-black text-green-400">{profile.epic_coins.toLocaleString()}EC</span>
+              </div>
+            </div>
+            
+            {/* User Menu Button */}
+            <div className="relative">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="bg-black/80 border-2 border-cyan-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
+              >
+                <div className="flex items-center space-x-2">
+                  <User className="w-5 h-5 text-cyan-400" />
+                  <span className="text-sm font-black text-cyan-400">{profile.username}</span>
+                  <ChevronDown className={`w-4 h-4 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                </div>
+              </button>
+              
+              {/* Dropdown Menu */}
+              {showUserMenu && (
+                <div className="absolute right-0 top-full mt-2 bg-black/90 border-2 border-cyan-400 rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm min-w-[160px] z-50">
+                  <div className="p-2">
+                    <div className="px-3 py-2 border-b border-cyan-400/30">
+                      <div className="text-xs text-cyan-300 font-mono">Signed in as</div>
+                      <div className="text-sm font-black text-cyan-400 font-mono">{profile.username}</div>
+                      <div className="text-xs text-cyan-300 font-mono">{user.email}</div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        signOut()
+                        setShowUserMenu(false)
+                      }}
+                      className="w-full px-3 py-2 mt-2 flex items-center space-x-2 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded transition-colors font-mono text-sm"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-black/80 border-2 border-yellow-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-black text-yellow-400">🎲 SPIN TO WIN EC! 🎲</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Background blur overlay when spinning or celebrating */}
@@ -157,8 +288,8 @@ export default function WheelPage() {
               for (let i = 0; i <= numPoints; i++) {
                 const currentAngle = startAngle + ((endAngle - startAngle) * i / numPoints)
                 const radians = (currentAngle - 90) * Math.PI / 180
-                const x = 50 + 50 * Math.cos(radians)
-                const y = 50 + 50 * Math.sin(radians)
+                const x = Math.round((50 + 50 * Math.cos(radians)) * 100) / 100
+                const y = Math.round((50 + 50 * Math.sin(radians)) * 100) / 100
                 points.push(`${x}% ${y}%`)
               }
               
@@ -201,14 +332,27 @@ export default function WheelPage() {
         {/* Spin Button */}
         <button
           onClick={spinWheel}
-          disabled={isSpinning}
+          disabled={isSpinning || (!user || (profile && profile.epic_coins < SPIN_COST))}
           className={`mt-8 px-12 py-6 text-2xl font-black font-mono rounded-2xl transition-all duration-300 transform z-50 relative ${
             isSpinning
+              ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+              : (!user || (profile && profile.epic_coins < SPIN_COST))
               ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-pink-500 to-purple-500 border-4 border-yellow-400 text-white hover:scale-110 hover:shadow-2xl shadow-pink-500/50'
           }`}
         >
-          {isSpinning ? '🔥 SPINNING 🔥' : showCelebration ? '🎯 SPIN AGAIN 🎯' : '💫 SPIN THE WHEEL 💫'}
+          <div className="flex flex-col items-center">
+            <span className="text-2xl">
+              {isSpinning ? '🔥 SPINNING 🔥' : showCelebration ? '🎯 SPIN AGAIN 🎯' : '💫 SPIN 💫'}
+            </span>
+            {!isSpinning && (
+              <span className="text-xs text-yellow-200 font-bold">
+                {!user ? 'LOGIN REQUIRED' : 
+                 profile && profile.epic_coins < SPIN_COST ? 'INSUFFICIENT FUNDS' : 
+                 `${SPIN_COST} EC`}
+              </span>
+            )}
+          </div>
         </button>
 
         {/* Celebration Display */}
