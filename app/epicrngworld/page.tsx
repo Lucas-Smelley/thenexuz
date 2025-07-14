@@ -344,7 +344,7 @@ export default function EpicRngWorldPage() {
         <div className="flex-1 flex items-start justify-center pt-8">
           <div className="relative w-full max-w-6xl mx-auto px-4" style={{height: 'clamp(300px, 45vw, 380px)'}}>
             {/* WHEEL - Left */}
-            <div className="absolute cursor-pointer group" 
+            <a href="/epicrngworld/wheel" className="absolute cursor-pointer group" 
                  style={{
                    top: 'clamp(150px, 25vw, 180px)', 
                    left: 'clamp(1%, 5vw, 8%)', 
@@ -361,7 +361,7 @@ export default function EpicRngWorldPage() {
                   <div className="text-yellow-300 text-xs font-mono font-bold group-hover:text-pink-300 transition-colors hidden sm:block">💥 SPIN 💥</div>
                 </div>
               </div>
-            </div>
+            </a>
             
             {/* SLOTS - Top Left */}
             <div className="absolute cursor-pointer group" 
