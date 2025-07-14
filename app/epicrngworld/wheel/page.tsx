@@ -37,7 +37,12 @@ export default function WheelPage() {
   const [showCelebration, setShowCelebration] = useState(false)
   const [selectedSegment, setSelectedSegment] = useState<any>(null)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [hiddenAds, setHiddenAds] = useState<string[]>([])
   const supabase = createClient()
+
+  const hideAd = (adId: string) => {
+    setHiddenAds(prev => [...prev, adId])
+  }
 
   const SPIN_COST = 200
 
@@ -489,6 +494,271 @@ export default function WheelPage() {
             </div>
           </div>
         )}
+
+        {/* OBNOXIOUS SATIRICAL ADVERTISEMENTS */}
+        
+        {/* Wheel Special Deal - Top Left */}
+        <div className="hidden md:block absolute top-20 left-4 z-30">
+          <div className="bg-gradient-to-r from-red-500 to-pink-500 border-4 border-yellow-400 rounded-xl p-4 animate-bounce shadow-2xl shadow-red-500/70 transform rotate-12 max-w-64">
+            <div className="text-white text-center font-mono font-black">
+              <div className="text-2xl text-yellow-300 mb-2">🎡 WHEEL DEAL 🎡</div>
+              <div className="text-xl mb-1">SPIN 10 TIMES</div>
+              <div className="text-3xl font-black text-yellow-400">GET 11TH SPIN*</div>
+              <div className="text-xs text-red-200 mt-1">*if you have coins left</div>
+              <div className="text-lg mt-2 animate-pulse">PREMIUM LOSING!</div>
+              <div className="text-xs text-red-200">**guaranteed bankrupt</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Winner Testimonial - Top Right */}
+        <div className="hidden lg:block absolute top-32 right-4 z-30">
+          <div className="bg-gradient-to-l from-green-500 to-lime-400 border-4 border-white rounded-2xl p-5 animate-pulse shadow-2xl shadow-green-500/70 transform -rotate-6 max-w-72">
+            <div className="text-black text-center font-mono font-black">
+              <div className="text-2xl mb-2">🎰 WHEEL WINNER 🎰</div>
+              <div className="text-lg mb-2">"I WON 150 EC!"</div>
+              <div className="text-2xl font-black">(Cost: 2000 EC)</div>
+              <div className="text-sm mb-2">- SpinAddict2024</div>
+              <div className="text-xs text-green-800">*technically still winning</div>
+              <div className="text-xs text-green-800">**math is optional</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Spin Strategy Guide - Left Side */}
+        {!hiddenAds.includes('spin-strategy') && (
+          <div className="hidden xl:block absolute top-1/3 left-8 z-20">
+            <div className="bg-gradient-to-br from-purple-500 to-indigo-500 border-4 border-cyan-400 rounded-2xl p-4 animate-pulse shadow-2xl shadow-purple-500/50 transform rotate-3 max-w-64 relative">
+              <button 
+                onClick={() => hideAd('spin-strategy')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black">
+                <div className="text-cyan-300 font-black mb-2 text-xl">📚 PRO TIPS 📚</div>
+                <div className="mb-2 text-sm">WINNING STRATEGIES:</div>
+                <div className="text-xs mb-1">• Spin harder for better luck</div>
+                <div className="text-xs mb-1">• Close eyes = can't lose</div>
+                <div className="text-xs mb-1">• Sacrifice your lunch money</div>
+                <div className="text-xs mb-2">• Pray to RNG gods</div>
+                <div className="text-cyan-300 text-xs">Works 0% of the time!</div>
+                <div className="text-xs">*every time</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Wheel Insurance - Right Side */}
+        {!hiddenAds.includes('wheel-insurance') && (
+          <div className="hidden xl:block absolute top-1/4 right-12 z-20">
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 border-4 border-yellow-400 rounded-2xl p-4 animate-spin shadow-2xl shadow-orange-500/70 relative" style={{animationDuration: '10s'}}>
+              <button 
+                onClick={() => hideAd('wheel-insurance')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black leading-tight">
+                <div className="text-lg">🛡️ INSURANCE 🛡️</div>
+                <div className="text-sm">PROTECT YOUR</div>
+                <div className="text-sm">LOSSES!</div>
+                <div className="text-yellow-300 text-xs mt-1">Only 500 EC!</div>
+                <div className="text-xs">*to lose 500 EC safely</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Floating Wheel Promos */}
+        {!hiddenAds.includes('spin-special') && (
+          <div className="absolute bottom-1/3 left-16 z-20 hidden lg:block">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 border-4 border-red-500 rounded-xl p-3 animate-bounce shadow-2xl shadow-yellow-500/70 transform -rotate-12 relative">
+              <button 
+                onClick={() => hideAd('spin-special')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-black text-center font-mono font-black">
+                <div className="text-lg">🎡 SPECIAL 🎡</div>
+                <div className="text-sm">DOUBLE LOSS!</div>
+                <div className="text-sm">PREMIUM SPINS</div>
+                <div className="text-xs text-red-600 mt-1">Lose twice as fast!</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('wheel-membership') && (
+          <div className="absolute bottom-1/4 right-20 z-20 hidden lg:block">
+            <div className="bg-gradient-to-l from-pink-500 to-purple-500 border-4 border-cyan-400 rounded-full p-4 animate-pulse shadow-2xl shadow-pink-500/70 transform rotate-12 relative">
+              <button 
+                onClick={() => hideAd('wheel-membership')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-center font-mono font-black leading-tight">
+                <div className="text-lg">💎 VIP 💎</div>
+                <div className="text-sm">WHEEL</div>
+                <div className="text-sm">MEMBERSHIP</div>
+                <div className="text-cyan-300 text-xs mt-1">exclusive losses</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Corner Achievement Badges */}
+        {!hiddenAds.includes('spin-master') && (
+          <div className="absolute top-2/3 left-4 hidden md:block z-20">
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 border-3 border-yellow-400 rounded-full p-3 animate-bounce shadow-xl shadow-blue-500/50 transform rotate-6 relative">
+              <button 
+                onClick={() => hideAd('spin-master')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center leading-tight">
+                <div>🎯 LEVEL 1 🎯</div>
+                <div>SPIN</div>
+                <div>MASTER</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('wheel-expert') && (
+          <div className="absolute top-3/4 right-8 hidden lg:block z-20">
+            <div className="bg-gradient-to-l from-green-500 to-teal-500 border-3 border-orange-400 rounded-lg p-3 animate-pulse shadow-xl shadow-green-500/50 transform -rotate-6 relative">
+              <button 
+                onClick={() => hideAd('wheel-expert')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>🎡 WHEEL 🎡</div>
+                <div>EXPERT</div>
+                <div className="text-red-300 text-[8px]">(still losing)</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('spin-addiction') && (
+          <div className="absolute bottom-1/2 left-2 hidden xl:block z-20">
+            <div className="bg-gradient-to-r from-red-500 to-pink-500 border-3 border-white rounded-full p-3 animate-spin shadow-xl shadow-red-500/50 relative" style={{animationDuration: '8s'}}>
+              <button 
+                onClick={() => hideAd('spin-addiction')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center leading-tight">
+                <div>🚨 WARNING 🚨</div>
+                <div>SPIN</div>
+                <div>ADDICTION</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!hiddenAds.includes('bankruptcy-speedrun') && (
+          <div className="absolute bottom-1/3 right-4 hidden md:block z-20">
+            <div className="bg-gradient-to-br from-purple-500 to-indigo-500 border-3 border-yellow-400 rounded-lg p-3 animate-bounce shadow-xl shadow-purple-500/50 transform rotate-3 relative">
+              <button 
+                onClick={() => hideAd('bankruptcy-speedrun')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>🏃 SPEEDRUN 🏃</div>
+                <div>BANKRUPTCY</div>
+                <div>CHALLENGE</div>
+                <div className="text-yellow-300 text-[8px]">WR: 3 spins</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Wheel Ads */}
+        {!hiddenAds.includes('mobile-wheel-tip') && (
+          <div className="block md:hidden absolute bottom-32 left-4 right-4 z-20">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-2 border-yellow-400 rounded-lg p-3 animate-pulse shadow-lg shadow-purple-500/50 relative">
+              <button 
+                onClick={() => hideAd('mobile-wheel-tip')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-mono text-center">
+                <div className="text-yellow-300 font-black mb-1">💡 PRO TIP 💡</div>
+                <div>"Spin with your phone upside down for better luck!"</div>
+                <div className="text-yellow-300 text-[10px] mt-1">- TotallyLegitGambler</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Wheel Deal */}
+        {!hiddenAds.includes('mobile-wheel-deal') && (
+          <div className="block md:hidden absolute top-1/4 right-4 z-20">
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 border-2 border-yellow-400 rounded-lg p-2 animate-pulse shadow-lg shadow-orange-500/50 relative">
+              <button 
+                onClick={() => hideAd('mobile-wheel-deal')}
+                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+              >
+                ×
+              </button>
+              <div className="text-white text-xs font-black font-mono text-center">
+                <div>📱 MOBILE 📱</div>
+                <div>WHEEL</div>
+                <div>EDITION</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Floating wheel segment icons */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/6 left-1/6 w-12 h-12 bg-yellow-400/20 rounded-full animate-bounce opacity-60 shadow-2xl shadow-yellow-400/50 flex items-center justify-center">
+            <span className="text-2xl">🎡</span>
+          </div>
+          <div className="absolute bottom-1/4 right-1/6 w-8 h-8 bg-pink-400/20 rounded-full animate-pulse opacity-70 shadow-xl shadow-pink-400/50 flex items-center justify-center">
+            <span className="text-lg">🎰</span>
+          </div>
+          <div className="absolute top-1/3 right-1/4 w-10 h-10 bg-cyan-400/20 rounded-full animate-bounce opacity-50 shadow-xl shadow-cyan-400/50 flex items-center justify-center">
+            <span className="text-xl">💰</span>
+          </div>
+          <div className="absolute bottom-1/3 left-1/8 w-6 h-6 bg-green-400/20 rounded-full animate-pulse opacity-60 shadow-lg shadow-green-400/50 flex items-center justify-center">
+            <span className="text-sm">🍀</span>
+          </div>
+        </div>
+
+        {/* Matrix-like falling wheel symbols */}
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          {Array.from({ length: 40 }).map((_, i) => (
+            <div
+              key={i}
+              className={`absolute font-mono text-sm font-bold animate-pulse ${
+                i % 5 === 0 ? 'text-yellow-400' :
+                i % 5 === 1 ? 'text-pink-400' :
+                i % 5 === 2 ? 'text-cyan-400' :
+                i % 5 === 3 ? 'text-green-400' : 'text-purple-400'
+              }`}
+              style={{
+                left: `${(i * 9.7) % 100}%`,
+                top: `${(i * 13.3) % 100}%`,
+                animationDelay: `${(i * 0.1) % 4}s`,
+                textShadow: '0 0 10px currentColor'
+              }}
+            >
+              {['🎡', '💰', '🎰', '🍀', '💎', '⚡', '🔥', '💸'][i % 8]}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
