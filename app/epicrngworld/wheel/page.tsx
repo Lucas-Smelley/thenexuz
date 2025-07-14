@@ -6,14 +6,28 @@ import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase"
 
 const wheelSegments = [
-  { text: "100 EC", color: "#EF4444" }, // red
-  { text: "500 EC", color: "#3B82F6" }, // blue
-  { text: "BANKRUPT", color: "#1F2937" }, // gray
-  { text: "1000 EC", color: "#10B981" }, // green
-  { text: "50 EC", color: "#F59E0B" }, // yellow
-  { text: "2000 EC", color: "#8B5CF6" }, // purple
-  { text: "LOSE ALL", color: "#1F2937" }, // gray
-  { text: "250 EC", color: "#EC4899" }, // pink
+  // Start with the MEGA JACKPOT at 12 o'clock
+  { text: "100000 EC", color: "rainbow", weight: 1 }, // rainbow - mega jackpot (top)
+  
+  // Right side descending (clockwise from top)
+  { text: "DOUBLE", color: "#8B5CF6", weight: 1.5 }, // violet - special but not too flashy
+  { text: "1000 EC", color: "#3B82F6", weight: 3 }, // blue - excellent win
+  { text: "600 EC", color: "#0EA5E9", weight: 4 }, // sky blue - good win
+  { text: "500 EC", color: "#10B981", weight: 5 }, // emerald - decent win
+  { text: "400 EC", color: "#059669", weight: 4 }, // green - small win
+  { text: "150 EC", color: "#84CC16", weight: 3 }, // lime - break even
+  { text: "-500 EC", color: "#EA580C", weight: 2 }, // orange - loss
+  
+  // Bottom - BIG LOSS directly opposite the mega jackpot (6 o'clock)
+  { text: "LOSE 5000", color: "#7F1D1D", weight: 1 }, // dark red - massive loss
+  
+  { text: "-500 EC", color: "#EA580C", weight: 2 }, // orange - loss
+  { text: "150 EC", color: "#84CC16", weight: 3 }, // lime - break even
+  { text: "400 EC", color: "#059669", weight: 4 }, // green - small win
+  { text: "500 EC", color: "#10B981", weight: 5 }, // emerald - decent win
+  { text: "600 EC", color: "#0EA5E9", weight: 4 }, // sky blue - good win
+  { text: "1000 EC", color: "#3B82F6", weight: 3 }, // blue - excellent win
+  { text: "DOUBLE", color: "#8B5CF6", weight: 1.5 }, // violet - special but not too flashy
 ]
 
 export default function WheelPage() {
@@ -27,15 +41,32 @@ export default function WheelPage() {
 
   const SPIN_COST = 200
 
+  // Calculate total weight and create cumulative segments
+  const totalWeight = wheelSegments.reduce((sum, segment) => sum + segment.weight, 0)
+  const cumulativeSegments = wheelSegments.reduce((acc, segment, index) => {
+    const startAngle = index === 0 ? 0 : acc[index - 1].endAngle
+    const segmentAngle = (segment.weight / totalWeight) * 360
+    const endAngle = startAngle + segmentAngle
+    acc.push({
+      ...segment,
+      startAngle,
+      endAngle,
+      segmentAngle
+    })
+    return acc
+  }, [] as Array<typeof wheelSegments[0] & { startAngle: number; endAngle: number; segmentAngle: number }>)
+
   // Calculate which segment is currently selected by the indicator
   const getCurrentSegment = (rotationDegrees: number) => {
     const normalizedRotation = ((rotationDegrees % 360) + 360) % 360
-    const segmentAngle = 360 / wheelSegments.length
-    // Triangle is at 3 o'clock (0 degrees/2π radians on unit circle)
-    // Segments start at 12 o'clock and go clockwise, so we need to offset by 90 degrees
+    // Triangle is at 3 o'clock (0 degrees), adjust for clockwise rotation
     const adjustedRotation = (360 - normalizedRotation + 90) % 360
-    const segmentIndex = Math.floor(adjustedRotation / segmentAngle) % wheelSegments.length
-    return wheelSegments[segmentIndex]
+    
+    // Find which segment contains this angle
+    const selectedSegment = cumulativeSegments.find(segment => 
+      adjustedRotation >= segment.startAngle && adjustedRotation < segment.endAngle
+    )
+    return selectedSegment || cumulativeSegments[0]
   }
 
   const spinWheel = async () => {
@@ -102,32 +133,53 @@ export default function WheelPage() {
       setSelectedSegment(finalSegment)
       setShowCelebration(true)
 
-      // Award winnings if applicable
-      if (finalSegment.text !== 'BANKRUPT' && finalSegment.text !== 'LOSE ALL') {
-        const winAmount = parseInt(finalSegment.text.replace(' EC', ''))
-        if (winAmount) {
-          try {
-            // Get current coins to avoid race conditions
-            const { data: currentProfile } = await supabase
+      // Award winnings/penalties based on result
+      try {
+        // Get current coins to avoid race conditions
+        const { data: currentProfile } = await supabase
+          .from('users')
+          .select('epic_coins')
+          .eq('id', user.id)
+          .single()
+
+        if (currentProfile) {
+          let newCoinAmount = currentProfile.epic_coins
+
+          if (finalSegment.text === 'BANKRUPT') {
+            // Already deducted 200 EC, no additional change needed
+            newCoinAmount = currentProfile.epic_coins
+          } else if (finalSegment.text === 'LOSE ALL') {
+            // Lose all coins
+            newCoinAmount = 0
+          } else if (finalSegment.text === 'LOSE 500') {
+            // Lose additional 500 EC (already lost 200 from spin cost)
+            newCoinAmount = Math.max(0, currentProfile.epic_coins - 500)
+          } else if (finalSegment.text === 'LOSE 5000') {
+            // Lose additional 5000 EC (already lost 200 from spin cost)
+            newCoinAmount = Math.max(0, currentProfile.epic_coins - 5000)
+          } else if (finalSegment.text === 'DOUBLE') {
+            // Double current coins (after spin cost was deducted)
+            newCoinAmount = currentProfile.epic_coins * 2
+          } else if (finalSegment.text.includes(' EC')) {
+            // Regular EC prize
+            const winAmount = parseInt(finalSegment.text.replace(' EC', ''))
+            newCoinAmount = currentProfile.epic_coins + winAmount
+          }
+
+          // Update coins if there's a change
+          if (newCoinAmount !== currentProfile.epic_coins) {
+            const { error } = await supabase
               .from('users')
-              .select('epic_coins')
+              .update({ epic_coins: newCoinAmount })
               .eq('id', user.id)
-              .single()
 
-            if (currentProfile) {
-              const { error } = await supabase
-                .from('users')
-                .update({ epic_coins: currentProfile.epic_coins + winAmount })
-                .eq('id', user.id)
-
-              if (!error) {
-                await refreshProfile()
-              }
+            if (!error) {
+              await refreshProfile()
             }
-          } catch (error) {
-            console.error('Error awarding winnings:', error)
           }
         }
+      } catch (error) {
+        console.error('Error processing winnings:', error)
       }
     }, 10000)
   }
@@ -274,16 +326,15 @@ export default function WheelPage() {
               transition: isSpinning ? 'transform 10s cubic-bezier(0.1, 0.57, 0.1, 1), width 1s ease-out, height 1s ease-out' : 'width 1s ease-out, height 1s ease-out'
             }}
           >
-            {wheelSegments.map((segment, index) => {
-              const startAngle = (360 / wheelSegments.length) * index
-              const endAngle = (360 / wheelSegments.length) * (index + 1)
+            {cumulativeSegments.map((segment, index) => {
+              const { startAngle, endAngle } = segment
               
-              // Check if this is the selected segment
-              const isSelected = showCelebration && selectedSegment && selectedSegment.text === segment.text
+              // Check if this is the selected segment (use index to avoid duplicate highlighting)
+              const isSelected = showCelebration && selectedSegment && selectedSegment === segment
               
               // Create smooth circular segments using multiple points
               const points = ['50% 50%'] // Center point
-              const numPoints = 20 // Points for smooth curve
+              const numPoints = Math.max(10, Math.round(segment.segmentAngle / 10)) // More points for larger segments
               
               for (let i = 0; i <= numPoints; i++) {
                 const currentAngle = startAngle + ((endAngle - startAngle) * i / numPoints)
@@ -301,19 +352,29 @@ export default function WheelPage() {
                   }`}
                   style={{
                     clipPath: `polygon(${points.join(', ')})`,
-                    backgroundColor: segment.color,
-                    boxShadow: isSelected ? `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color}` : 'none',
+                    background: segment.color === 'rainbow' 
+                      ? 'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)' 
+                      : segment.color,
+                    boxShadow: isSelected ? `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color === 'rainbow' ? '#FFD700' : segment.color}` : 
+                               segment.color === 'rainbow' ? '0 0 20px rgba(255, 215, 0, 0.4)' : 'none',
                     filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
                   }}
                 >
                   {/* Segment text */}
                   <div
-                    className="absolute text-white text-lg font-bold font-mono text-center"
+                    className={`absolute text-white font-bold font-mono text-center ${
+                      segment.segmentAngle < 20 ? 'text-xs' : 
+                      segment.segmentAngle < 30 ? 'text-sm' : 'text-base'
+                    }`}
                     style={{
-                      left: `${50 + 30 * Math.cos((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
-                      top: `${50 + 30 * Math.sin((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
+                      left: `${50 + 32 * Math.cos((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
+                      top: `${50 + 32 * Math.sin((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
                       transform: `translate(-50%, -50%) rotate(${startAngle + (endAngle - startAngle) / 2}deg)`,
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                      fontSize: segment.segmentAngle < 15 ? '0.65rem' : 
+                                segment.segmentAngle < 25 ? '0.8rem' : '1rem',
+                      maxWidth: `${Math.max(40, segment.segmentAngle * 2)}px`,
+                      lineHeight: segment.segmentAngle < 20 ? '1.1' : '1.2'
                     }}
                   >
                     {segment.text}
