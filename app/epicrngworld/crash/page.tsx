@@ -76,9 +76,26 @@ export default function CrashPage() {
   }
 
   const placeBetAndStart = async () => {
-    if (!user || !profile || hasBet || gameState !== 'waiting') return
+    console.log('placeBetAndStart called', { user: !!user, profile: !!profile, hasBet, gameState })
+    
+    if (!user || !profile) {
+      alert('Please log in to play!')
+      return
+    }
+    
+    if (hasBet) {
+      alert('You already have an active bet!')
+      return
+    }
+    
+    if (gameState !== 'waiting') {
+      alert(`Game is not in waiting state. Current state: ${gameState}`)
+      return
+    }
 
     const currentBet = getCurrentBetAmount()
+    console.log('Current bet amount:', currentBet)
+    
     if (currentBet <= 0) {
       alert('Please enter a valid bet amount!')
       return
@@ -90,6 +107,7 @@ export default function CrashPage() {
     }
 
     // Deduct coins
+    console.log('About to deduct coins, current balance:', profile.epic_coins)
     try {
       const { data, error } = await supabase
         .from('users')
@@ -97,15 +115,22 @@ export default function CrashPage() {
         .eq('id', user.id)
         .select()
 
+      console.log('Supabase response:', { data, error })
+
       if (error) {
+        console.error('Supabase error:', error)
         alert(`Error processing bet: ${error.message}. Please try again.`)
         return
       }
       
+      console.log('Refreshing profile...')
       await refreshProfile()
+      console.log('Setting game state to ready...')
       setHasBet(true)
       setGameState('ready')
+      console.log('Game should now be ready!')
     } catch (error) {
+      console.error('Catch block error:', error)
       alert(`Error processing bet: ${error}. Please try again.`)
       return
     }
@@ -321,214 +346,318 @@ export default function CrashPage() {
           )}
         </div>
 
-        {/* Main content */}
-        <div className="relative min-h-screen flex flex-col justify-center items-center px-4 z-20">
+        {/* Main content - TRADING FLOOR LAYOUT */}
+        <div className="relative min-h-screen z-20">
           
-          {/* Title */}
-          <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-2 sm:mb-4 font-mono tracking-wider text-red-400 drop-shadow-2xl animate-pulse whitespace-nowrap"
-                style={{
-                  textShadow: '0 0 20px rgba(239, 68, 68, 1), 0 0 40px rgba(239, 68, 68, 0.6)'
-                }}>
-              EPIC CRASH
-            </h1>
-            <div className="h-1 sm:h-2 w-32 sm:w-64 bg-gradient-to-r from-red-500 via-orange-400 via-yellow-400 to-gray-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
+          {/* Trading Floor Header - Stock Market Style */}
+          <div className="bg-gradient-to-r from-black via-red-900 to-black border-b-4 border-red-400 relative overflow-hidden">
+            {/* Market Ticker */}
+            <div className="bg-black/90 border-b-2 border-orange-400 py-2 relative overflow-hidden">
+              <div className="flex items-center animate-pulse">
+                <div className="text-red-400 font-mono text-xs sm:text-sm px-4 flex items-center space-x-4">
+                  <span className="flex items-center"><span className="w-2 h-2 bg-red-400 rounded-full animate-pulse mr-2"></span>LIVE</span>
+                  <span>📈 EPIC: {(42000 + Math.sin(multiplier) * 100).toFixed(2)}</span>
+                  <span>💥 CRASH: {(multiplier * 1000).toFixed(0)}</span>
+                  <span>🔥 VOL: HIGH</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Main Trading Floor Title */}
+            <div className="text-center py-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-orange-500/30 to-red-600/20 animate-pulse"></div>
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black font-mono tracking-wider text-red-400 drop-shadow-2xl relative z-10"
+                  style={{
+                    textShadow: '0 0 20px rgba(239, 68, 68, 1), 0 0 40px rgba(239, 68, 68, 0.6)'
+                  }}>
+                📈 EPIC CRASH TRADING 📉
+              </h1>
+              <div className="text-orange-400 font-mono text-sm sm:text-lg font-bold mt-2 relative z-10">
+                WALL STREET • VOLATILITY EXTREME • RISK: MAXIMUM
+              </div>
+            </div>
           </div>
 
-          {/* Game Display */}
-          <div className="bg-black/80 border-4 border-red-400 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-red-400/50 backdrop-blur-sm mb-6 sm:mb-8 max-w-4xl w-full">
+          {/* Trading Dashboard Layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 p-4 min-h-[calc(100vh-200px)]">
             
-            {/* Graph Area */}
-            <div className="bg-gradient-to-br from-gray-900 to-black border-4 border-orange-400 rounded-2xl p-4 sm:p-6 mb-6 h-64 sm:h-80 relative overflow-hidden">
-              {/* Graph Line */}
-              <div className="relative h-full">
-                <div 
-                  className={`absolute bottom-0 left-0 w-full transition-all duration-100 ${
-                    isCrashed ? 'bg-red-500/30' : 'bg-green-500/30'
-                  }`}
-                  style={{
-                    height: `${getGraphHeight()}%`,
-                    clipPath: isRising ? 'polygon(0 100%, 100% 0, 100% 100%)' : 'polygon(0 100%, 70% 0, 100% 100%)'
-                  }}
-                />
-                
-                {/* Multiplier Display */}
-                <div className="absolute top-4 left-4">
-                  <div className={`text-4xl sm:text-6xl md:text-8xl font-black font-mono ${getMultiplierColor()} transition-colors duration-300`}
-                       style={{
-                         textShadow: `0 0 20px currentColor, 0 0 40px currentColor`
-                       }}>
-                    {multiplier.toFixed(2)}x
+            {/* LEFT PANEL - Trading Chart (Main) */}
+            <div className="xl:col-span-3 space-y-4">
+              
+              {/* Chart Window */}
+              <div className="bg-black/95 border-4 border-green-400 rounded-lg shadow-2xl shadow-green-400/50 h-96 xl:h-full relative overflow-hidden">
+                {/* Chart Header */}
+                <div className="bg-gradient-to-r from-green-800 to-green-900 border-b-2 border-green-400 p-3 flex justify-between items-center">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-green-400 font-mono font-black text-lg">EPIC/CRASH</div>
+                    <div className="flex items-center space-x-2 text-xs">
+                      <div className={`w-2 h-2 rounded-full ${isRising ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
+                      <span className="text-green-300 font-mono">{isRising ? 'RISING' : isCrashed ? 'CRASHED' : 'WAITING'}</span>
+                    </div>
                   </div>
-                  {gameState === 'crashed' && (
-                    <div className="text-xl sm:text-2xl font-black text-red-400 animate-pulse">
-                      💥 CRASHED! 💥
-                    </div>
-                  )}
-                  {gameState === 'waiting' && (
-                    <div className="text-lg sm:text-xl font-black text-blue-400">
-                      🎯 PLACE BET TO START 🎯
-                    </div>
-                  )}
-                  {gameState === 'ready' && (
-                    <div className="text-lg sm:text-xl font-black text-yellow-400 animate-pulse">
-                      🚀 READY TO LAUNCH! 🚀
-                    </div>
-                  )}
+                  <div className="text-green-300 font-mono text-sm">
+                    {gameState === 'waiting' && '⏳ MARKET CLOSED'}
+                    {gameState === 'ready' && '🎯 READY TO TRADE'}
+                    {gameState === 'playing' && '🚀 TRADING ACTIVE'}
+                    {gameState === 'crashed' && '💥 MARKET CRASH'}
+                  </div>
                 </div>
-
-                {/* Rising indicator */}
-                {isRising && (
-                  <div className="absolute top-4 right-4">
-                    <TrendingUp className="w-8 h-8 sm:w-12 sm:h-12 text-green-400 animate-bounce" />
+                
+                {/* Chart Area */}
+                <div className="relative h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 p-4">
+                  {/* Grid Lines */}
+                  <div className="absolute inset-4 opacity-20">
+                    <div className="grid grid-cols-10 grid-rows-8 h-full w-full">
+                      {Array.from({length: 80}).map((_, i) => (
+                        <div key={i} className="border border-green-400/30" />
+                      ))}
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Price Chart */}
+                  <div className="relative h-full">
+                    <div 
+                      className={`absolute bottom-0 left-0 w-full transition-all duration-100 ${
+                        isCrashed ? 'bg-red-500/40' : 'bg-green-500/40'
+                      }`}
+                      style={{
+                        height: `${getGraphHeight()}%`,
+                        clipPath: isRising ? 'polygon(0 100%, 100% 0, 100% 100%)' : 'polygon(0 100%, 70% 0, 100% 100%)'
+                      }}
+                    />
+                    
+                    {/* Price Display */}
+                    <div className="absolute top-4 left-4">
+                      <div className={`text-4xl sm:text-6xl md:text-8xl font-black font-mono ${getMultiplierColor()} transition-colors duration-300 relative`}
+                           style={{
+                             textShadow: `0 0 20px currentColor, 0 0 40px currentColor`
+                           }}>
+                        {multiplier.toFixed(2)}x
+                        <div className="text-lg absolute -top-2 -right-16 text-green-400">
+                          ${(multiplier * 1000).toFixed(0)}
+                        </div>
+                      </div>
+                      {isCrashed && (
+                        <div className="text-xl sm:text-3xl font-black text-red-400 animate-pulse mt-2">
+                          💥 MARKET CRASH! 💥
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Rising indicator */}
+                    {isRising && (
+                      <div className="absolute top-4 right-4">
+                        <TrendingUp className="w-8 h-8 sm:w-12 sm:h-12 text-green-400 animate-bounce" />
+                        <div className="text-green-400 font-mono text-sm font-bold mt-1">BULL RUN</div>
+                      </div>
+                    )}
+                    
+                    {/* Market Status Indicators */}
+                    <div className="absolute bottom-4 left-4 flex space-x-4">
+                      <div className="bg-black/80 border border-green-400 rounded px-2 py-1">
+                        <div className="text-green-400 font-mono text-xs">24H HIGH</div>
+                        <div className="text-white font-mono font-bold">100.00x</div>
+                      </div>
+                      <div className="bg-black/80 border border-red-400 rounded px-2 py-1">
+                        <div className="text-red-400 font-mono text-xs">24H LOW</div>
+                        <div className="text-white font-mono font-bold">1.00x</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* RIGHT PANEL - Trading Controls */}
+            <div className="xl:col-span-1 space-y-4">
               
-              {/* Betting Controls */}
-              <div className="lg:col-span-1">
-                <h3 className="text-lg font-bold text-red-400 mb-4 font-mono">BET AMOUNT (EC)</h3>
-                <div className="space-y-2">
-                  {/* Toggle between preset and custom */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setUseCustomBet(false)}
-                      disabled={isRising}
-                      className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
-                        !useCustomBet 
-                          ? 'bg-red-500 border-red-400 text-white' 
-                          : 'bg-black/60 border-red-400 text-red-400 hover:bg-red-500/20'
-                      }`}
-                    >
-                      PRESET
-                    </button>
-                    <button
-                      onClick={() => setUseCustomBet(true)}
-                      disabled={isRising}
-                      className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
-                        useCustomBet 
-                          ? 'bg-orange-500 border-orange-400 text-white' 
-                          : 'bg-black/60 border-orange-400 text-orange-400 hover:bg-orange-500/20'
-                      }`}
-                    >
-                      CUSTOM
-                    </button>
+              {/* Combined Position & Trading Control */}
+              <div className="bg-black/95 border-4 border-blue-400 rounded-lg shadow-2xl shadow-blue-400/50">
+                <div className="bg-gradient-to-r from-blue-800 to-blue-900 border-b-2 border-blue-400 p-3">
+                  <h3 className="text-blue-400 font-mono font-black text-lg">
+                    {gameState === 'waiting' ? '💼 POSITION' :
+                     gameState === 'ready' ? '🚀 EXECUTE TRADE' :
+                     gameState === 'playing' ? '💰 CLOSE POSITION' :
+                     '🔄 NEW TRADE'}
+                  </h3>
+                </div>
+                <div className="p-4 space-y-4">
+                  {/* Position Size Controls */}
+                  <div>
+                    <label className="block text-blue-300 font-bold text-sm font-mono mb-2">POSITION SIZE (EC)</label>
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setUseCustomBet(false)}
+                          disabled={isRising}
+                          className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
+                            !useCustomBet 
+                              ? 'bg-blue-500 border-blue-400 text-white' 
+                              : 'bg-black/60 border-blue-400 text-blue-400 hover:bg-blue-500/20'
+                          }`}
+                        >
+                          QUICK
+                        </button>
+                        <button
+                          onClick={() => setUseCustomBet(true)}
+                          disabled={isRising}
+                          className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
+                            useCustomBet 
+                              ? 'bg-yellow-500 border-yellow-400 text-white' 
+                              : 'bg-black/60 border-yellow-400 text-yellow-400 hover:bg-yellow-500/20'
+                          }`}
+                        >
+                          CUSTOM
+                        </button>
+                      </div>
+
+                      {!useCustomBet ? (
+                        <select 
+                          value={betAmount} 
+                          onChange={(e) => setBetAmount(Number(e.target.value))}
+                          disabled={isRising}
+                          className="w-full bg-gray-900 border-2 border-blue-400 rounded px-2 py-2 text-blue-300 font-mono text-sm font-bold focus:border-cyan-400 focus:outline-none"
+                        >
+                          <option value={25}>💰 25 EC</option>
+                          <option value={50}>🎯 50 EC</option>
+                          <option value={100}>🔥 100 EC</option>
+                          <option value={250}>💎 250 EC</option>
+                          <option value={500}>💸 500 EC</option>
+                        </select>
+                      ) : (
+                        <input
+                          type="number"
+                          placeholder="Enter size..."
+                          value={customBetAmount}
+                          onChange={(e) => setCustomBetAmount(e.target.value)}
+                          disabled={isRising}
+                          min="1"
+                          max={profile?.epic_coins || 999999}
+                          className="w-full bg-gray-900 border-2 border-yellow-400 rounded px-2 py-2 text-yellow-300 font-mono text-sm font-bold focus:border-orange-400 focus:outline-none placeholder-yellow-500"
+                        />
+                      )}
+                    </div>
                   </div>
 
-                  {/* Preset dropdown or custom input */}
-                  {!useCustomBet ? (
-                    <select 
-                      value={betAmount} 
-                      onChange={(e) => setBetAmount(Number(e.target.value))}
-                      disabled={isRising}
-                      className="w-full bg-gradient-to-br from-gray-900 to-black border-2 border-red-400 rounded-lg px-3 py-2 text-red-300 font-mono text-center font-bold hover:border-orange-400 focus:border-yellow-400 focus:outline-none transition-colors"
-                    >
-                      <option value={25} className="bg-gray-900 text-red-300">💰 25 EC</option>
-                      <option value={50} className="bg-gray-900 text-red-300">🎯 50 EC</option>
-                      <option value={100} className="bg-gray-900 text-red-300">🔥 100 EC</option>
-                      <option value={250} className="bg-gray-900 text-red-300">💎 250 EC</option>
-                      <option value={500} className="bg-gray-900 text-red-300">💸 500 EC</option>
-                    </select>
-                  ) : (
-                    <input
-                      type="number"
-                      placeholder="Enter amount..."
-                      value={customBetAmount}
-                      onChange={(e) => setCustomBetAmount(e.target.value)}
-                      disabled={isRising}
-                      min="1"
-                      max={profile?.epic_coins || 999999}
-                      className="w-full bg-gradient-to-br from-gray-900 to-black border-2 border-orange-400 rounded-lg px-3 py-2 text-orange-300 font-mono text-center font-bold hover:border-yellow-400 focus:border-yellow-400 focus:outline-none transition-colors placeholder-orange-500"
-                    />
+                  {/* Main Action Button */}
+                  <button
+                    onClick={
+                      gameState === 'waiting' ? placeBetAndStart :
+                      gameState === 'ready' ? startGame :
+                      gameState === 'playing' ? cashOut :
+                      resetGame
+                    }
+                    disabled={
+                      gameState === 'waiting' && (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0) ||
+                      gameState === 'playing' && hasCashedOut
+                    }
+                    className={`w-full py-6 text-lg font-black font-mono rounded transition-all duration-300 transform ${
+                      // Waiting state - green for bet placement
+                      gameState === 'waiting' && (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
+                        ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                      : gameState === 'waiting'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-2 border-green-400 text-white hover:scale-105 shadow-green-500/50'
+                      // Ready state - yellow for start
+                      : gameState === 'ready'
+                        ? 'bg-gradient-to-r from-yellow-500 to-orange-500 border-2 border-yellow-400 text-white hover:scale-105 shadow-yellow-500/50 animate-pulse'
+                      // Playing state - red for cash out
+                      : gameState === 'playing' && !hasCashedOut
+                        ? 'bg-gradient-to-r from-red-500 to-red-600 border-4 border-yellow-400 text-white hover:scale-110 shadow-red-500/50 animate-pulse'
+                      // Crashed or cashed out - blue for reset
+                      : 'bg-gradient-to-r from-purple-500 to-blue-500 border-2 border-purple-400 text-white hover:scale-105 shadow-purple-500/50'
+                    }`}
+                  >
+                    {/* Button text based on game state */}
+                    {gameState === 'waiting' && (
+                      !user ? '🔐 LOGIN TO TRADE' :
+                      getCurrentBetAmount() <= 0 ? '📊 ENTER POSITION SIZE' :
+                      profile && profile.epic_coins < getCurrentBetAmount() ? '💸 INSUFFICIENT FUNDS' :
+                      `📈 LONG ${getCurrentBetAmount()} EC`
+                    )}
+                    {gameState === 'ready' && '🚀 EXECUTE TRADE! 🚀'}
+                    {gameState === 'playing' && (
+                      hasCashedOut ? `💰 CLOSED AT ${cashOutMultiplier.toFixed(2)}x` :
+                      `💰 CLOSE ${(getCurrentBetAmount() * multiplier).toFixed(0)} EC`
+                    )}
+                    {gameState === 'crashed' && '🔄 NEW POSITION'}
+                  </button>
+                  
+                  {/* P&L Display when playing */}
+                  {gameState === 'playing' && !hasCashedOut && (
+                    <div className="text-center bg-black/60 rounded p-3 border border-yellow-400/30">
+                      <div className="text-yellow-400 font-mono text-sm font-bold">UNREALIZED P&L</div>
+                      <div className={`font-mono font-black text-2xl ${
+                        (getCurrentBetAmount() * multiplier - getCurrentBetAmount()) > 0 ? 'text-green-400' : 'text-red-400'
+                      }`}>
+                        {(getCurrentBetAmount() * multiplier - getCurrentBetAmount()) > 0 ? '+' : ''}{(getCurrentBetAmount() * multiplier - getCurrentBetAmount()).toFixed(0)} EC
+                      </div>
+                      <div className="text-cyan-400 font-mono text-xs mt-1">
+                        {multiplier.toFixed(2)}x multiplier • {getCurrentBetAmount()} EC position
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Trade Status Info */}
+                  {gameState !== 'waiting' && (
+                    <div className="bg-black/40 rounded p-3 border border-blue-400/30">
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <div className="text-blue-300 font-mono">STATUS:</div>
+                          <div className={`font-mono font-bold ${
+                            gameState === 'ready' ? 'text-yellow-400' :
+                            gameState === 'playing' ? 'text-green-400' :
+                            'text-red-400'
+                          }`}>
+                            {gameState === 'ready' ? 'READY' :
+                             gameState === 'playing' ? 'ACTIVE' :
+                             'CRASHED'}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-blue-300 font-mono">POSITION:</div>
+                          <div className="text-white font-mono font-bold">{getCurrentBetAmount()} EC</div>
+                        </div>
+                        {gameState === 'playing' && (
+                          <>
+                            <div>
+                              <div className="text-blue-300 font-mono">MULTIPLIER:</div>
+                              <div className="text-yellow-400 font-mono font-bold">{multiplier.toFixed(2)}x</div>
+                            </div>
+                            <div>
+                              <div className="text-blue-300 font-mono">VALUE:</div>
+                              <div className="text-green-400 font-mono font-bold">{(getCurrentBetAmount() * multiplier).toFixed(0)} EC</div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {/* Bet/Start Buttons */}
-                {gameState === 'waiting' && (
-                  <button
-                    onClick={placeBetAndStart}
-                    disabled={!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0}
-                    className={`w-full mt-4 py-3 text-lg font-black font-mono rounded-xl transition-all duration-300 ${
-                      (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
-                        ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-red-500 to-orange-500 border-2 border-yellow-400 text-white hover:scale-105 hover:shadow-2xl shadow-red-500/50'
-                    }`}
-                  >
-                    {!user ? 'LOGIN REQUIRED' :
-                     getCurrentBetAmount() <= 0 ? 'ENTER VALID BET' :
-                     profile && profile.epic_coins < getCurrentBetAmount() ? 'INSUFFICIENT FUNDS' :
-                     `🎯 BET ${getCurrentBetAmount()} EC & START`}
-                  </button>
-                )}
-                
-                {gameState === 'ready' && (
-                  <button
-                    onClick={startGame}
-                    className="w-full mt-4 py-3 text-lg font-black font-mono rounded-xl transition-all duration-300 bg-gradient-to-r from-green-500 to-emerald-500 border-2 border-yellow-400 text-white hover:scale-105 hover:shadow-2xl shadow-green-500/50 animate-pulse"
-                  >
-                    🚀 START GAME! 🚀
-                  </button>
-                )}
-                
-                {(gameState === 'playing' || gameState === 'crashed') && (
-                  <button
-                    onClick={resetGame}
-                    disabled={gameState === 'playing'}
-                    className={`w-full mt-4 py-3 text-lg font-black font-mono rounded-xl transition-all duration-300 ${
-                      gameState === 'playing'
-                        ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-cyan-400 text-white hover:scale-105 hover:shadow-2xl shadow-blue-500/50'
-                    }`}
-                  >
-                    {gameState === 'playing' ? 
-                     `💰 BET ACTIVE (${getCurrentBetAmount()} EC)` : 
-                     '🔄 NEW GAME'}
-                  </button>
-                )}
               </div>
 
-              {/* Cash Out */}
-              <div className="lg:col-span-1 flex flex-col justify-center">
-                <button
-                  onClick={cashOut}
-                  disabled={gameState !== 'playing' || hasCashedOut}
-                  className={`w-full py-6 text-2xl font-black font-mono rounded-xl transition-all duration-300 transform ${
-                    gameState !== 'playing' || hasCashedOut
-                      ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-green-500 to-emerald-500 border-4 border-yellow-400 text-white hover:scale-110 hover:shadow-2xl shadow-green-500/50 animate-pulse'
-                  }`}
-                >
-                  {hasCashedOut ? `💰 CASHED OUT AT ${cashOutMultiplier.toFixed(2)}x` :
-                   gameState === 'waiting' ? '💸 PLACE BET FIRST' :
-                   gameState === 'ready' ? '⏳ START GAME FIRST' :
-                   gameState === 'crashed' ? '💥 GAME OVER' :
-                   `💰 CASH OUT ${(getCurrentBetAmount() * multiplier).toFixed(0)} EC`}
-                </button>
-              </div>
-
-              {/* Game History */}
-              <div className="lg:col-span-1">
-                <h3 className="text-lg font-bold text-orange-400 mb-4 font-mono">RECENT CRASHES</h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {gameHistory.map((crash, index) => (
-                    <div key={index} className={`p-2 rounded border font-mono text-center ${
-                      crash < 2 ? 'bg-red-500/20 border-red-400 text-red-300' :
-                      crash < 5 ? 'bg-yellow-500/20 border-yellow-400 text-yellow-300' :
-                      crash < 10 ? 'bg-green-500/20 border-green-400 text-green-300' :
-                      'bg-purple-500/20 border-purple-400 text-purple-300'
-                    }`}>
-                      {crash.toFixed(2)}x
-                    </div>
-                  ))}
-                  {gameHistory.length === 0 && (
-                    <div className="text-gray-500 text-center font-mono text-sm">
-                      No games yet...
-                    </div>
-                  )}
+              {/* Market History */}
+              <div className="bg-black/95 border-4 border-purple-400 rounded-lg shadow-2xl shadow-purple-400/50">
+                <div className="bg-gradient-to-r from-purple-800 to-purple-900 border-b-2 border-purple-400 p-3">
+                  <h3 className="text-purple-400 font-mono font-black text-lg">📊 TRADE HISTORY</h3>
+                </div>
+                <div className="p-4">
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {gameHistory.map((crash, index) => (
+                      <div key={index} className={`p-2 rounded border font-mono text-center text-xs ${
+                        crash < 2 ? 'bg-red-500/20 border-red-400 text-red-300' :
+                        crash < 5 ? 'bg-yellow-500/20 border-yellow-400 text-yellow-300' :
+                        crash < 10 ? 'bg-green-500/20 border-green-400 text-green-300' :
+                        'bg-purple-500/20 border-purple-400 text-purple-300'
+                      }`}>
+                        {crash.toFixed(2)}x {crash < 2 ? '📉' : crash > 10 ? '🚀' : '📈'}
+                      </div>
+                    ))}
+                    {gameHistory.length === 0 && (
+                      <div className="text-gray-500 text-center font-mono text-xs">
+                        No trades yet...
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

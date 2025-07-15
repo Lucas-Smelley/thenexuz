@@ -273,265 +273,315 @@ export default function DicePage() {
           />
         )}
 
-        {/* Main content */}
-        <div className={`relative min-h-screen flex flex-col justify-center items-center px-4 transition-all duration-1000 ${
+        {/* Main content - CASINO TABLE LAYOUT */}
+        <div className={`relative min-h-screen transition-all duration-1000 ${
           (isRolling || showCelebration) ? 'z-30' : 'z-20'
         }`}>
           
-          {/* Title */}
-          <div className="text-center mb-6 sm:mb-12">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-2 sm:mb-4 font-mono tracking-wider text-green-400 drop-shadow-2xl animate-pulse whitespace-nowrap"
+          {/* Casino Table Header */}
+          <div className="text-center py-8 bg-gradient-to-b from-black/80 to-transparent">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider text-green-400 drop-shadow-2xl"
                 style={{
                   textShadow: '0 0 20px rgba(34, 197, 94, 1), 0 0 40px rgba(34, 197, 94, 0.6)'
                 }}>
-              EPIC DICE
+              🎲 CRAPS TABLE 🎲
             </h1>
-            <div className="h-1 sm:h-2 w-32 sm:w-64 bg-gradient-to-r from-green-500 via-teal-400 via-cyan-400 to-blue-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
           </div>
-
-          {/* Dice Game */}
-          <div className="bg-black/80 border-4 border-teal-400 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-teal-400/50 backdrop-blur-sm mb-6 sm:mb-8 max-w-2xl w-full">
+          
+          {/* Casino Table Surface */}
+          <div className="max-w-7xl mx-auto px-4 py-8">
             
-            {/* Dice Display */}
-            <div className="bg-gradient-to-br from-gray-900 to-black border-4 border-green-400 rounded-2xl p-4 sm:p-6 mb-6">
-              <div className="flex justify-center items-center space-x-4 sm:space-x-8 mb-4">
-                {/* Dice 1 */}
-                <div className="relative">
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-teal-400 rounded-2xl p-4 sm:p-6 shadow-inner">
-                    <div className={`text-6xl sm:text-8xl md:text-9xl text-center transition-all duration-300 ${
-                      isRolling ? 'blur-sm animate-spin' : 'blur-0'
-                    } ${getDiceColor(dice1)}`}>
-                      {getDiceEmoji(dice1)}
+            {/* Dice Rolling Area - Center Stage */}
+            <div className="relative mb-8">
+              {/* Table Felt */}
+              <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-8 border-yellow-500 rounded-3xl p-8 shadow-2xl shadow-green-500/50 relative overflow-hidden">
+                
+                {/* Table Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="grid grid-cols-12 grid-rows-8 h-full w-full">
+                    {Array.from({length: 96}).map((_, i) => (
+                      <div key={i} className="border border-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Dice Area */}
+                <div className="relative z-10 text-center">
+                  <div className="bg-black/40 border-4 border-gold-400 rounded-2xl p-8 mb-6 max-w-2xl mx-auto">
+                    
+                    {/* Dice Display */}
+                    <div className="flex justify-center items-center space-x-8 mb-6">
+                      {/* Dice 1 */}
+                      <div className="relative">
+                        <div className={`bg-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform ${
+                          isRolling ? 'animate-bounce scale-110' : 'scale-100'
+                        }`}>
+                          <div className={`text-4xl sm:text-6xl ${getDiceColor(dice1)} transition-all duration-300 ${
+                            isRolling ? 'blur-sm' : 'blur-0'
+                          }`}>
+                            {getDiceEmoji(dice1)}
+                          </div>
+                        </div>
+                        <div className="text-green-300 font-mono text-sm font-bold mt-2">DIE 1</div>
+                      </div>
+
+                      {/* Plus Symbol */}
+                      <div className="text-6xl text-yellow-400 font-black animate-pulse">+</div>
+
+                      {/* Dice 2 */}
+                      <div className="relative">
+                        <div className={`bg-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform ${
+                          isRolling ? 'animate-bounce scale-110' : 'scale-100'
+                        }`}>
+                          <div className={`text-4xl sm:text-6xl ${getDiceColor(dice2)} transition-all duration-300 ${
+                            isRolling ? 'blur-sm' : 'blur-0'
+                          }`}>
+                            {getDiceEmoji(dice2)}
+                          </div>
+                        </div>
+                        <div className="text-green-300 font-mono text-sm font-bold mt-2">DIE 2</div>
+                      </div>
+
+                      {/* Equals Symbol */}
+                      <div className="text-6xl text-yellow-400 font-black animate-pulse">=</div>
+
+                      {/* Total */}
+                      <div className="relative">
+                        <div className="bg-gradient-to-br from-gold-400 to-yellow-600 border-4 border-yellow-300 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl">
+                          <div className={`text-4xl sm:text-6xl font-black text-black transition-all duration-300 ${
+                            isRolling ? 'blur-sm' : 'blur-0'
+                          }`}>
+                            {dice1 + dice2}
+                          </div>
+                        </div>
+                        <div className="text-yellow-400 font-mono text-sm font-bold mt-2">TOTAL</div>
+                      </div>
+                    </div>
+                    
+                    {/* Game Status */}
+                    <div className="text-center">
+                      {isRolling ? (
+                        <div className="text-yellow-400 font-black text-2xl font-mono animate-pulse">
+                          🎲 ROLLING DICE... 🎲
+                        </div>
+                      ) : (
+                        <div className="text-green-300 font-mono text-lg">
+                          Ready for next roll
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
-                    isRolling ? 'bg-green-400/20 animate-pulse' : 'bg-transparent'
-                  }`} />
                 </div>
+              </div>
+            </div>
 
-                {/* Plus Symbol */}
-                <div className="text-4xl sm:text-6xl text-cyan-400 font-black">+</div>
+            {/* Betting Board - Casino Style */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* Left Side - Betting Controls */}
+              <div className="lg:col-span-2 space-y-6">
+                
+                {/* Betting Amount Section */}
+                <div className="bg-gradient-to-br from-red-900 to-red-800 border-4 border-red-400 rounded-2xl p-6 shadow-2xl shadow-red-400/30">
+                  <div className="text-center mb-4">
+                    <h3 className="text-red-300 font-black text-xl font-mono border-b-2 border-red-400 pb-2">💰 PLACE YOUR BET 💰</h3>
+                  </div>
 
-                {/* Dice 2 */}
-                <div className="relative">
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-teal-400 rounded-2xl p-4 sm:p-6 shadow-inner">
-                    <div className={`text-6xl sm:text-8xl md:text-9xl text-center transition-all duration-300 ${
-                      isRolling ? 'blur-sm animate-spin' : 'blur-0'
-                    } ${getDiceColor(dice2)}`}>
-                      {getDiceEmoji(dice2)}
+                  {/* Chip Selection */}
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div>
+                      <div className="flex gap-2 mb-2">
+                        <button
+                          onClick={() => setUseCustomBet(false)}
+                          disabled={isRolling}
+                          className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
+                            !useCustomBet 
+                              ? 'bg-red-500 border-red-400 text-white' 
+                              : 'bg-black/60 border-red-400 text-red-400 hover:bg-red-500/20'
+                          }`}
+                        >
+                          CHIPS
+                        </button>
+                        <button
+                          onClick={() => setUseCustomBet(true)}
+                          disabled={isRolling}
+                          className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
+                            useCustomBet 
+                              ? 'bg-yellow-500 border-yellow-400 text-white' 
+                              : 'bg-black/60 border-yellow-400 text-yellow-400 hover:bg-yellow-500/20'
+                          }`}
+                        >
+                          CUSTOM
+                        </button>
+                      </div>
+
+                      {!useCustomBet ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          {[25, 50, 100, 200, 500, 1000].map((amount) => (
+                            <button
+                              key={amount}
+                              onClick={() => setBetAmount(amount)}
+                              disabled={isRolling}
+                              className={`p-3 rounded-full border-4 font-black text-xs transition-all ${
+                                betAmount === amount
+                                  ? 'bg-yellow-400 border-yellow-300 text-black scale-110'
+                                  : 'bg-red-600 border-red-400 text-white hover:scale-105'
+                              }`}
+                            >
+                              {amount}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <input
+                          type="number"
+                          placeholder="Enter bet..."
+                          value={customBetAmount}
+                          onChange={(e) => setCustomBetAmount(e.target.value)}
+                          disabled={isRolling}
+                          min="1"
+                          max={profile?.epic_coins || 999999}
+                          className="w-full bg-black/60 border-2 border-yellow-400 rounded-lg px-3 py-2 text-yellow-300 font-mono text-center font-bold focus:outline-none"
+                        />
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-red-300 font-bold text-sm font-mono mb-2">TARGET NUMBER</label>
+                      <div className="grid grid-cols-4 gap-1">
+                        {Array.from({length: 11}, (_, i) => i + 2).map(num => (
+                          <button
+                            key={num}
+                            onClick={() => setTargetNumber(num)}
+                            disabled={isRolling}
+                            className={`p-2 rounded border-2 font-black text-xs transition-all ${
+                              targetNumber === num
+                                ? 'bg-green-400 border-green-300 text-black'
+                                : 'bg-black/60 border-green-400 text-green-400 hover:bg-green-500/20'
+                            }`}
+                          >
+                            {num}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <div className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
-                    isRolling ? 'bg-green-400/20 animate-pulse' : 'bg-transparent'
-                  }`} />
                 </div>
 
-                {/* Equals Symbol */}
-                <div className="text-4xl sm:text-6xl text-cyan-400 font-black">=</div>
+                {/* Betting Board - Three Sections */}
+                <div className="grid grid-cols-3 gap-4">
+                  
+                  {/* UNDER Section */}
+                  <button
+                    onClick={() => setPrediction('under')}
+                    disabled={isRolling}
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                      prediction === 'under' 
+                        ? 'bg-blue-500 border-blue-300 text-white shadow-blue-400/50 shadow-2xl' 
+                        : 'bg-blue-900/50 border-blue-400 text-blue-300 hover:bg-blue-500/20'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">📉</div>
+                      <div className="text-lg font-mono">UNDER</div>
+                      <div className="text-3xl font-black">{targetNumber}</div>
+                      <div className="text-sm mt-2">
+                        {targetNumber >= 8 ? '1.5x' : targetNumber >= 6 ? '2x' : '3x'} PAYOUT
+                      </div>
+                    </div>
+                  </button>
+                  
+                  {/* EXACT Section */}
+                  <button
+                    onClick={() => setPrediction('exact')}
+                    disabled={isRolling}
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                      prediction === 'exact' 
+                        ? 'bg-yellow-500 border-yellow-300 text-black shadow-yellow-400/50 shadow-2xl' 
+                        : 'bg-yellow-900/50 border-yellow-400 text-yellow-300 hover:bg-yellow-500/20'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">🎯</div>
+                      <div className="text-lg font-mono">EXACT</div>
+                      <div className="text-3xl font-black">{targetNumber}</div>
+                      <div className="text-sm mt-2">
+                        {targetNumber === 7 ? '5x' : targetNumber === 6 || targetNumber === 8 ? '6x' : targetNumber === 5 || targetNumber === 9 ? '8x' : '10x'} PAYOUT
+                      </div>
+                    </div>
+                  </button>
+                  
+                  {/* OVER Section */}
+                  <button
+                    onClick={() => setPrediction('over')}
+                    disabled={isRolling}
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                      prediction === 'over' 
+                        ? 'bg-green-500 border-green-300 text-white shadow-green-400/50 shadow-2xl' 
+                        : 'bg-green-900/50 border-green-400 text-green-300 hover:bg-green-500/20'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">📈</div>
+                      <div className="text-lg font-mono">OVER</div>
+                      <div className="text-3xl font-black">{targetNumber}</div>
+                      <div className="text-sm mt-2">
+                        {targetNumber <= 6 ? '1.5x' : targetNumber <= 8 ? '2x' : '3x'} PAYOUT
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
 
-                {/* Total */}
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-cyan-400 rounded-2xl p-4 sm:p-6 shadow-inner">
-                  <div className={`text-6xl sm:text-8xl md:text-9xl text-center font-black transition-all duration-300 ${
-                    isRolling ? 'blur-sm' : 'blur-0'
-                  } text-cyan-400`}>
-                    {dice1 + dice2}
+              {/* Right Side - Action Center */}
+              <div className="lg:col-span-1">
+                
+                {/* Roll Button */}
+                <div className="bg-gradient-to-br from-black to-gray-900 border-4 border-gold-400 rounded-2xl p-6 shadow-2xl shadow-gold-400/30 text-center">
+                  <div className="mb-4">
+                    <h3 className="text-gold-400 font-black text-xl font-mono">🎲 ROLL EM! 🎲</h3>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Betting Controls */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              {/* Bet Amount */}
-              <div>
-                <label className="block text-sm font-bold text-teal-400 mb-2 font-mono">BET AMOUNT (EC)</label>
-                <div className="space-y-2">
-                  {/* Toggle between preset and custom */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setUseCustomBet(false)}
-                      disabled={isRolling}
-                      className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
-                        !useCustomBet 
-                          ? 'bg-green-500 border-green-400 text-white' 
-                          : 'bg-black/60 border-green-400 text-green-400 hover:bg-green-500/20'
-                      }`}
-                    >
-                      PRESET
-                    </button>
-                    <button
-                      onClick={() => setUseCustomBet(true)}
-                      disabled={isRolling}
-                      className={`flex-1 py-1 px-2 text-xs font-bold font-mono rounded border-2 transition-all ${
-                        useCustomBet 
-                          ? 'bg-teal-500 border-teal-400 text-white' 
-                          : 'bg-black/60 border-teal-400 text-teal-400 hover:bg-teal-500/20'
-                      }`}
-                    >
-                      CUSTOM
-                    </button>
-                  </div>
-
-                  {/* Preset dropdown or custom input */}
-                  {!useCustomBet ? (
-                    <select 
-                      value={betAmount} 
-                      onChange={(e) => setBetAmount(Number(e.target.value))}
-                      disabled={isRolling}
-                      className="w-full bg-gradient-to-br from-gray-900 to-black border-2 border-green-400 rounded-lg px-3 py-2 text-green-300 font-mono text-center font-bold hover:border-teal-400 focus:border-cyan-400 focus:outline-none transition-colors"
-                      style={{
-                        backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(17,24,39,0.9) 100%)'
-                      }}
-                    >
-                      <option value={25} className="bg-gray-900 text-green-300">💰 25 EC</option>
-                      <option value={50} className="bg-gray-900 text-green-300">💎 50 EC</option>
-                      <option value={100} className="bg-gray-900 text-green-300">🎯 100 EC</option>
-                      <option value={200} className="bg-gray-900 text-green-300">🔥 200 EC</option>
-                      <option value={500} className="bg-gray-900 text-green-300">💸 500 EC</option>
-                    </select>
-                  ) : (
-                    <input
-                      type="number"
-                      placeholder="Enter amount..."
-                      value={customBetAmount}
-                      onChange={(e) => setCustomBetAmount(e.target.value)}
-                      disabled={isRolling}
-                      min="1"
-                      max={profile?.epic_coins || 999999}
-                      className="w-full bg-gradient-to-br from-gray-900 to-black border-2 border-teal-400 rounded-lg px-3 py-2 text-teal-300 font-mono text-center font-bold hover:border-cyan-400 focus:border-cyan-400 focus:outline-none transition-colors placeholder-teal-500"
-                      style={{
-                        backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(17,24,39,0.9) 100%)'
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-
-              {/* Target Number */}
-              <div>
-                <label className="block text-sm font-bold text-teal-400 mb-2 font-mono">TARGET NUMBER</label>
-                <select 
-                  value={targetNumber} 
-                  onChange={(e) => setTargetNumber(Number(e.target.value))}
-                  disabled={isRolling}
-                  className="w-full bg-gradient-to-br from-gray-900 to-black border-2 border-green-400 rounded-lg px-3 py-2 text-green-300 font-mono text-center font-bold hover:border-teal-400 focus:border-cyan-400 focus:outline-none transition-colors mt-6"
-                  style={{
-                    backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(17,24,39,0.9) 100%)'
-                  }}
-                >
-                  {Array.from({length: 11}, (_, i) => i + 2).map(num => (
-                    <option key={num} value={num} className="bg-gray-900 text-green-300">
-                      {num === 2 ? '🎲 2 (rare)' :
-                       num === 3 ? '🎯 3 (hard)' :
-                       num === 4 ? '🔷 4 (tough)' :
-                       num === 5 ? '💫 5 (good)' :
-                       num === 6 ? '⭐ 6 (fair)' :
-                       num === 7 ? '🎰 7 (common)' :
-                       num === 8 ? '⭐ 8 (fair)' :
-                       num === 9 ? '💫 9 (good)' :
-                       num === 10 ? '🔷 10 (tough)' :
-                       num === 11 ? '🎯 11 (hard)' :
-                       '🎲 12 (rare)'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Prediction Buttons */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
-              <button
-                onClick={() => setPrediction('under')}
-                disabled={isRolling}
-                className={`py-2 sm:py-3 px-2 sm:px-4 font-black font-mono rounded-xl border-2 transition-all ${
-                  prediction === 'under' 
-                    ? 'bg-blue-500 border-blue-400 text-white' 
-                    : 'bg-black/60 border-blue-400 text-blue-400 hover:bg-blue-500/20'
-                }`}
-              >
-                <div className="text-sm sm:text-base whitespace-nowrap">UNDER {targetNumber}</div>
-                <div className="text-xs text-blue-200">
-                  {targetNumber >= 8 ? '1.5x' : targetNumber >= 6 ? '2x' : '3x'}
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setPrediction('exact')}
-                disabled={isRolling}
-                className={`py-2 sm:py-3 px-2 sm:px-4 font-black font-mono rounded-xl border-2 transition-all ${
-                  prediction === 'exact' 
-                    ? 'bg-yellow-500 border-yellow-400 text-white' 
-                    : 'bg-black/60 border-yellow-400 text-yellow-400 hover:bg-yellow-500/20'
-                }`}
-              >
-                <div className="text-sm sm:text-base whitespace-nowrap">EXACT {targetNumber}</div>
-                <div className="text-xs text-yellow-200">
-                  {targetNumber === 7 ? '5x' : targetNumber === 6 || targetNumber === 8 ? '6x' : targetNumber === 5 || targetNumber === 9 ? '8x' : '10x'}
-                </div>
-              </button>
-              
-              <button
-                onClick={() => setPrediction('over')}
-                disabled={isRolling}
-                className={`py-2 sm:py-3 px-2 sm:px-4 font-black font-mono rounded-xl border-2 transition-all ${
-                  prediction === 'over' 
-                    ? 'bg-green-500 border-green-400 text-white' 
-                    : 'bg-black/60 border-green-400 text-green-400 hover:bg-green-500/20'
-                }`}
-              >
-                <div className="text-sm sm:text-base whitespace-nowrap">OVER {targetNumber}</div>
-                <div className="text-xs text-green-200">
-                  {targetNumber <= 6 ? '1.5x' : targetNumber <= 8 ? '2x' : '3x'}
-                </div>
-              </button>
-            </div>
-
-            {/* Roll Button */}
-            <button
-              onClick={rollDice}
-              disabled={isRolling || (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)}
-              className={`w-full py-3 sm:py-4 text-lg sm:text-2xl font-black font-mono rounded-xl transition-all duration-300 transform ${
-                isRolling
-                  ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                  : (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
-                  ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-green-500 to-teal-500 border-2 sm:border-4 border-cyan-400 text-white hover:scale-105 hover:shadow-2xl shadow-green-500/50'
-              }`}
-            >
-              <div className="flex flex-col items-center">
-                <span className="whitespace-nowrap">
-                  {isRolling ? '🎲 ROLLING 🎲' : '🎯 ROLL DICE 🎯'}
-                </span>
-                {!isRolling && (
-                  <span className="text-xs text-cyan-200 font-bold whitespace-nowrap">
-                    {!user ? 'LOGIN REQUIRED' : 
-                     getCurrentBetAmount() <= 0 ? 'ENTER VALID BET' :
+                  
+                  <button
+                    onClick={rollDice}
+                    disabled={isRolling || (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)}
+                    className={`w-full py-8 text-2xl font-black font-mono rounded-xl transition-all duration-300 transform ${
+                      isRolling
+                        ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                        : (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
+                        ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                        : 'bg-gradient-to-br from-red-500 to-red-700 border-4 border-yellow-400 text-yellow-100 hover:scale-110 hover:shadow-2xl shadow-red-500/50 animate-pulse'
+                    }`}
+                  >
+                    {isRolling ? '🎲 ROLLING' : '🎯 ROLL DICE'}
+                  </button>
+                  
+                  <div className="mt-4 text-gold-300 font-mono text-sm">
+                    {!user ? 'LOGIN TO PLAY' : 
+                     getCurrentBetAmount() <= 0 ? 'PLACE YOUR BET' :
                      profile && profile.epic_coins < getCurrentBetAmount() ? 'INSUFFICIENT FUNDS' : 
-                     `Bet ${getCurrentBetAmount()} EC • ${prediction.toUpperCase()} ${targetNumber}`}
-                  </span>
-                )}
-              </div>
-            </button>
-          </div>
+                     `${getCurrentBetAmount()} EC • ${prediction.toUpperCase()} ${targetNumber}`}
+                  </div>
+                </div>
 
-          {/* Quick Stats */}
-          <div className="bg-black/60 border-2 border-green-400 rounded-2xl p-4 sm:p-6 backdrop-blur-sm max-w-2xl w-full">
-            <h3 className="text-lg sm:text-xl font-black font-mono text-green-400 mb-4 text-center">ODDS & PAYOUTS</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
-              <div className="bg-black/40 border border-blue-400 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-blue-400 font-black">UNDER</div>
-                <div className="text-gray-300">Higher number = Lower payout</div>
-                <div className="text-blue-300 font-bold">1.5x - 3x</div>
-              </div>
-              <div className="bg-black/40 border border-yellow-400 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-yellow-400 font-black">EXACT</div>
-                <div className="text-gray-300">Hardest to hit</div>
-                <div className="text-yellow-300 font-bold">5x - 10x</div>
-              </div>
-              <div className="bg-black/40 border border-green-400 rounded-lg p-2 sm:p-3 text-center">
-                <div className="text-green-400 font-black">OVER</div>
-                <div className="text-gray-300">Lower number = Lower payout</div>
-                <div className="text-green-300 font-bold">1.5x - 3x</div>
+                {/* Odds Display */}
+                <div className="mt-6 bg-gradient-to-br from-purple-900 to-purple-800 border-4 border-purple-400 rounded-2xl p-6 shadow-2xl shadow-purple-400/30">
+                  <h3 className="text-purple-300 font-black text-lg font-mono text-center mb-4">📊 HOUSE ODDS 📊</h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between items-center bg-black/40 rounded-lg p-2">
+                      <span className="text-blue-300 font-bold">UNDER</span>
+                      <span className="text-blue-200">1.5x - 3x</span>
+                    </div>
+                    <div className="flex justify-between items-center bg-black/40 rounded-lg p-2">
+                      <span className="text-yellow-300 font-bold">EXACT</span>
+                      <span className="text-yellow-200">5x - 10x</span>
+                    </div>
+                    <div className="flex justify-between items-center bg-black/40 rounded-lg p-2">
+                      <span className="text-green-300 font-bold">OVER</span>
+                      <span className="text-green-200">1.5x - 3x</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

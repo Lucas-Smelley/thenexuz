@@ -243,100 +243,182 @@ export default function SlotsPage() {
           />
         )}
 
-        {/* Main content */}
-        <div className={`relative min-h-screen flex flex-col justify-center items-center px-4 transition-all duration-1000 ${
+        {/* Main content - CASINO FLOOR LAYOUT */}
+        <div className={`relative min-h-screen transition-all duration-1000 ${
           (isSpinning || showCelebration) ? 'z-30' : 'z-20'
         }`}>
           
-          {/* Title */}
-          <div className="text-center mb-6 sm:mb-12">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-2 sm:mb-4 font-mono tracking-wider text-purple-400 drop-shadow-2xl animate-pulse whitespace-nowrap"
-                style={{
-                  textShadow: '0 0 20px rgba(168, 85, 247, 1), 0 0 40px rgba(168, 85, 247, 0.6)'
-                }}>
-              SLUPER EPIC SLOTS
-            </h1>
-            <div className="h-1 sm:h-2 w-32 sm:w-64 bg-gradient-to-r from-cyan-500 via-purple-400 via-pink-400 to-yellow-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
-          </div>
-
-          {/* Slot Machine */}
-          <div className="bg-black/80 border-4 border-yellow-400 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-yellow-400/50 backdrop-blur-sm mb-6 sm:mb-8">
-            {/* Slot Machine Display */}
-            <div className="bg-gradient-to-br from-gray-900 to-black border-4 border-cyan-400 rounded-2xl p-4 sm:p-6 mb-6">
-              <div className="flex justify-center items-center space-x-2 sm:space-x-4">
-                {reels.map((reelIndex, i) => (
-                  <div key={i} className="relative">
-                    {/* Reel Frame */}
-                    <div className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-purple-400 rounded-xl p-4 sm:p-6 shadow-inner">
-                      <div className={`text-4xl sm:text-6xl md:text-8xl text-center transition-all duration-300 ${
-                        isSpinning ? 'blur-sm animate-spin' : 'blur-0'
-                      } ${slotSymbols[reelIndex].color}`}>
-                        {slotSymbols[reelIndex].symbol}
-                      </div>
-                    </div>
-                    
-                    {/* Reel glow effect */}
-                    <div className={`absolute inset-0 rounded-xl transition-all duration-500 ${
-                      isSpinning ? 'bg-purple-400/20 animate-pulse' : 'bg-transparent'
-                    }`} />
-                  </div>
-                ))}
+          {/* Top Bar with Title and Neon Signs */}
+          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/90 to-transparent z-10">
+            <div className="flex justify-between items-center p-4 h-full">
+              {/* Left Neon Sign */}
+              <div className="hidden lg:block bg-black border-4 border-pink-400 rounded-lg p-3 animate-pulse">
+                <div className="text-pink-400 font-black text-xl font-mono">🎰 JACKPOT 🎰</div>
+                <div className="text-pink-300 text-sm font-mono">WIN BIG!</div>
               </div>
               
-              {/* Symbol names */}
-              {!isSpinning && (
-                <div className="flex justify-center items-center space-x-2 sm:space-x-4 mt-4">
-                  {reels.map((reelIndex, i) => (
-                    <div key={i} className="text-xs sm:text-sm text-gray-400 font-mono text-center">
-                      {slotSymbols[reelIndex].name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Spin Button */}
-            <button
-              onClick={spinSlots}
-              disabled={isSpinning || (!user || (profile && profile.epic_coins < SPIN_COST))}
-              className={`w-full py-3 sm:py-4 text-lg sm:text-2xl font-black font-mono rounded-xl transition-all duration-300 transform ${
-                isSpinning
-                  ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                  : (!user || (profile && profile.epic_coins < SPIN_COST))
-                  ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-purple-500 to-pink-500 border-2 sm:border-4 border-yellow-400 text-white hover:scale-105 hover:shadow-2xl shadow-purple-500/50'
-              }`}
-            >
-              <div className="flex flex-col items-center">
-                <span className="whitespace-nowrap">
-                  {isSpinning ? '🎰 SPINNING 🎰' : '💰 SPIN 💰'}
-                </span>
-                {!isSpinning && (
-                  <span className="text-xs text-yellow-200 font-bold whitespace-nowrap">
-                    {!user ? 'LOGIN REQUIRED' : 
-                     profile && profile.epic_coins < SPIN_COST ? 'INSUFFICIENT FUNDS' : 
-                     `${SPIN_COST} EC`}
-                  </span>
-                )}
+              {/* Center Title */}
+              <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider text-purple-400 drop-shadow-2xl animate-pulse"
+                  style={{
+                    textShadow: '0 0 20px rgba(168, 85, 247, 1), 0 0 40px rgba(168, 85, 247, 0.6)'
+                  }}>
+                CASINO SLOTS
+              </h1>
+              
+              {/* Right Neon Sign */}
+              <div className="hidden lg:block bg-black border-4 border-cyan-400 rounded-lg p-3 animate-pulse">
+                <div className="text-cyan-400 font-black text-xl font-mono">💎 777 💎</div>
+                <div className="text-cyan-300 text-sm font-mono">LUCKY!</div>
               </div>
-            </button>
+            </div>
           </div>
 
-          {/* Paytable */}
-          <div className="bg-black/60 border-2 border-cyan-400 rounded-2xl p-4 sm:p-6 backdrop-blur-sm">
-            <h3 className="text-lg sm:text-xl font-black font-mono text-cyan-400 mb-4 text-center">PAYTABLE</h3>
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              {slotSymbols.map((symbol, index) => (
-                <div key={index} className="flex items-center justify-between bg-black/40 border border-gray-600 rounded-lg p-2 sm:p-3">
-                  <div className="flex items-center space-x-2">
-                    <span className={`text-lg sm:text-2xl ${symbol.color}`}>{symbol.symbol}</span>
-                    <span className="text-xs sm:text-sm text-gray-300 font-mono">{symbol.name}</span>
+          {/* Casino Floor Layout */}
+          <div className="pt-32 pb-8 px-4 min-h-screen flex items-center justify-center">
+            <div className="max-w-6xl w-full">
+              
+              {/* Main Slot Machine - Vegas Style */}
+              <div className="relative mx-auto max-w-3xl">
+                {/* Slot Machine Cabinet */}
+                <div className="bg-gradient-to-b from-red-600 via-red-800 to-black border-8 border-yellow-400 rounded-t-3xl rounded-b-lg shadow-2xl shadow-red-500/50 relative overflow-hidden">
+                  
+                  {/* Top Casino Header */}
+                  <div className="bg-gradient-to-r from-yellow-400 to-gold-500 h-16 flex items-center justify-center border-b-4 border-red-800">
+                    <div className="text-black font-black text-2xl font-mono tracking-wider">⭐ EPIC SLOTS ⭐</div>
                   </div>
-                  <div className="text-xs sm:text-sm font-black text-yellow-400 font-mono">
-                    {symbol.value}EC (3x) / {symbol.value}EC (2x)
+                  
+                  {/* Screen Area */}
+                  <div className="bg-black/90 m-6 rounded-xl border-4 border-cyan-400 p-6 relative">
+                    {/* Decorative Lights */}
+                    <div className="absolute -top-2 left-0 right-0 flex justify-around">
+                      {Array.from({length: 5}).map((_, i) => (
+                        <div key={i} className={`w-4 h-4 rounded-full animate-pulse ${
+                          i % 2 === 0 ? 'bg-yellow-400' : 'bg-pink-400'
+                        }`} style={{animationDelay: `${i * 0.2}s`}} />
+                      ))}
+                    </div>
+                    
+                    {/* Reels Display */}
+                    <div className="flex justify-center items-center space-x-4 py-8">
+                      {reels.map((reelIndex, i) => (
+                        <div key={i} className="relative">
+                          {/* Vegas-style Reel */}
+                          <div className="bg-white border-4 border-gray-800 rounded-lg w-24 h-32 sm:w-32 sm:h-40 flex items-center justify-center relative overflow-hidden">
+                            {/* Reel Strip Effect */}
+                            <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-white to-transparent transition-all duration-300 ${
+                              isSpinning ? 'animate-pulse opacity-50' : 'opacity-0'
+                            }`} />
+                            
+                            <div className={`text-4xl sm:text-6xl text-center transition-all duration-300 z-10 ${
+                              isSpinning ? 'blur-sm scale-110' : 'blur-0 scale-100'
+                            } ${slotSymbols[reelIndex].color}`}>
+                              {slotSymbols[reelIndex].symbol}
+                            </div>
+                          </div>
+                          
+                          {/* Reel Label */}
+                          <div className="text-center mt-2">
+                            <div className="text-yellow-400 font-mono text-xs font-bold">REEL {i + 1}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Result Display */}
+                    {!isSpinning && (
+                      <div className="text-center text-purple-400 font-mono text-lg font-bold">
+                        {reels.map((reelIndex, i) => slotSymbols[reelIndex].name).join(' • ')}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Control Panel */}
+                  <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-6 rounded-b-lg border-t-4 border-yellow-400">
+                    <div className="flex justify-center">
+                      <button
+                        onClick={spinSlots}
+                        disabled={isSpinning || (!user || (profile && profile.epic_coins < SPIN_COST))}
+                        className={`px-12 py-6 text-3xl font-black font-mono rounded-full border-4 transition-all duration-300 transform shadow-2xl ${
+                          isSpinning
+                            ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                            : (!user || (profile && profile.epic_coins < SPIN_COST))
+                            ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-red-500 via-red-600 to-red-700 border-yellow-400 text-yellow-100 hover:scale-110 hover:shadow-yellow-400/50 animate-pulse'
+                        }`}
+                      >
+                        {isSpinning ? '🎰 SPINNING' : '🎯 SPIN'}
+                      </button>
+                    </div>
+                    
+                    <div className="text-center mt-4">
+                      <div className="text-yellow-400 font-mono font-bold">
+                        {!user ? 'LOGIN TO PLAY' : 
+                         profile && profile.epic_coins < SPIN_COST ? 'INSUFFICIENT FUNDS' : 
+                         `COST: ${SPIN_COST} EC`}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
+              
+              {/* Side Panels - Casino Style */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                
+                {/* Left Panel - Paytable */}
+                <div className="bg-gradient-to-br from-green-800 to-green-900 border-4 border-green-400 rounded-2xl p-6 shadow-2xl shadow-green-400/30">
+                  <div className="text-center mb-6">
+                    <div className="bg-black border-2 border-green-400 rounded-lg p-3 inline-block">
+                      <h3 className="text-green-400 font-black text-2xl font-mono">💰 PAYTABLE 💰</h3>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {slotSymbols.map((symbol, index) => (
+                      <div key={index} className="bg-black/60 border-2 border-green-500/50 rounded-lg p-3 flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <span className={`text-3xl ${symbol.color}`}>{symbol.symbol}</span>
+                          <span className="text-green-300 font-mono font-bold">{symbol.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-yellow-400 font-black font-mono">3x: {symbol.value * 3}EC</div>
+                          <div className="text-yellow-300 font-mono text-sm">2x: {symbol.value}EC</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Right Panel - Casino Info */}
+                <div className="bg-gradient-to-br from-blue-800 to-blue-900 border-4 border-blue-400 rounded-2xl p-6 shadow-2xl shadow-blue-400/30">
+                  <div className="text-center mb-6">
+                    <div className="bg-black border-2 border-blue-400 rounded-lg p-3 inline-block">
+                      <h3 className="text-blue-400 font-black text-2xl font-mono">🎰 HOW TO PLAY</h3>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 text-blue-200">
+                    <div className="bg-black/60 border border-blue-500/50 rounded-lg p-4">
+                      <div className="text-yellow-400 font-bold font-mono mb-2">🎯 MATCHING SYMBOLS</div>
+                      <div className="text-sm font-mono">Get 2 or 3 matching symbols to win!</div>
+                    </div>
+                    
+                    <div className="bg-black/60 border border-blue-500/50 rounded-lg p-4">
+                      <div className="text-yellow-400 font-bold font-mono mb-2">💎 TRIPLE MATCH</div>
+                      <div className="text-sm font-mono">3 matching symbols = 3x payout!</div>
+                    </div>
+                    
+                    <div className="bg-black/60 border border-blue-500/50 rounded-lg p-4">
+                      <div className="text-yellow-400 font-bold font-mono mb-2">🚀 RARE SYMBOLS</div>
+                      <div className="text-sm font-mono">Higher value symbols are rarer but pay more!</div>
+                    </div>
+                    
+                    <div className="bg-black/60 border border-blue-500/50 rounded-lg p-4">
+                      <div className="text-yellow-400 font-bold font-mono mb-2">💰 SPIN COST</div>
+                      <div className="text-sm font-mono">Each spin costs {SPIN_COST} Epic Coins</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
