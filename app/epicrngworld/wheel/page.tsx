@@ -353,22 +353,22 @@ export default function WheelPage() {
       <div className="absolute top-4 left-4 z-30">
         <a
           href="/epicrngworld"
-          className="flex items-center space-x-2 px-4 py-2 bg-black/80 border-2 border-pink-400 hover:border-cyan-400 transition-all duration-300 font-bold transform hover:scale-110 shadow-2xl shadow-pink-400/50 hover:shadow-cyan-400/50 rounded-lg backdrop-blur-sm"
+          className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1 sm:py-2 bg-black/80 border-2 border-pink-400 hover:border-cyan-400 transition-all duration-300 font-bold transform hover:scale-110 shadow-2xl shadow-pink-400/50 hover:shadow-cyan-400/50 rounded-lg backdrop-blur-sm"
         >
-          <ArrowLeft className="w-5 h-5 text-pink-400" />
-          <span className="text-sm font-mono font-black text-pink-400">BACK TO RNG WORLD</span>
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400" />
+          <span className="text-xs sm:text-sm font-mono font-black text-pink-400 whitespace-nowrap">BACK TO RNG WORLD</span>
         </a>
       </div>
 
       {/* User info / Epic Coins */}
       <div className="absolute top-4 right-4 z-30">
         {user && profile ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-col sm:flex-row">
             {/* Epic Coins Display */}
-            <div className="bg-black/80 border-2 border-green-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-green-400/50 backdrop-blur-sm">
-              <div className="flex items-center space-x-2">
-                <Coins className="w-5 h-5 text-green-400 animate-pulse" />
-                <span className="text-sm font-black text-green-400">{profile.epic_coins.toLocaleString()}EC</span>
+            <div className="bg-black/80 border-2 border-green-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-green-400/50 backdrop-blur-sm">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-black text-green-400 whitespace-nowrap">{profile.epic_coins.toLocaleString()}EC</span>
               </div>
             </div>
             
@@ -376,23 +376,23 @@ export default function WheelPage() {
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="bg-black/80 border-2 border-cyan-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
+                className="bg-black/80 border-2 border-cyan-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
               >
-                <div className="flex items-center space-x-2">
-                  <User className="w-5 h-5 text-cyan-400" />
-                  <span className="text-sm font-black text-cyan-400">{profile.username}</span>
-                  <ChevronDown className={`w-4 h-4 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                <div className="flex items-center space-x-1 sm:space-x-2">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+                  <span className="text-xs sm:text-sm font-black text-cyan-400 max-w-20 sm:max-w-none truncate">{profile.username}</span>
+                  <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </div>
               </button>
               
               {/* Dropdown Menu */}
               {showUserMenu && (
-                <div className="absolute right-0 top-full mt-2 bg-black/90 border-2 border-cyan-400 rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm min-w-[160px] z-50">
+                <div className="absolute right-0 top-full mt-2 bg-black/90 border-2 border-cyan-400 rounded-lg shadow-2xl shadow-cyan-400/50 backdrop-blur-sm min-w-[160px] max-w-[200px] z-50">
                   <div className="p-2">
                     <div className="px-3 py-2 border-b border-cyan-400/30">
                       <div className="text-xs text-cyan-300 font-mono">Signed in as</div>
-                      <div className="text-sm font-black text-cyan-400 font-mono">{profile.username}</div>
-                      <div className="text-xs text-cyan-300 font-mono">{user.email}</div>
+                      <div className="text-sm font-black text-cyan-400 font-mono truncate">{profile.username}</div>
+                      <div className="text-xs text-cyan-300 font-mono truncate">{user.email}</div>
                     </div>
                     <button
                       onClick={() => {
@@ -410,9 +410,9 @@ export default function WheelPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-black/80 border-2 border-yellow-400 px-4 py-2 font-mono rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-black text-yellow-400">🎲 SPIN TO WIN EC! 🎲</span>
+          <div className="bg-black/80 border-2 border-yellow-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-yellow-400/50 backdrop-blur-sm">
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <span className="text-xs sm:text-sm font-black text-yellow-400 whitespace-nowrap">🎲 SPIN TO WIN EC! 🎲</span>
             </div>
           </div>
         )}
@@ -432,14 +432,14 @@ export default function WheelPage() {
       }`}>
         
         {/* Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-4 font-mono tracking-wider text-yellow-400 drop-shadow-2xl animate-pulse"
+        <div className="text-center mb-6 sm:mb-12">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-2 sm:mb-4 font-mono tracking-wider text-yellow-400 drop-shadow-2xl animate-pulse whitespace-nowrap"
               style={{
                 textShadow: '0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 255, 0, 0.6)'
               }}>
             SPIN THE WHEEL
           </h1>
-          <div className="h-2 w-64 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
+          <div className="h-1 sm:h-2 w-32 sm:w-64 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
         </div>
 
         {/* Wheel with Triangle Indicator */}
@@ -569,20 +569,20 @@ export default function WheelPage() {
         <button
           onClick={spinWheel}
           disabled={isSpinning || (!user || (profile && profile.epic_coins < SPIN_COST))}
-          className={`mt-8 px-12 py-6 text-2xl font-black font-mono rounded-2xl transition-all duration-300 transform z-50 relative ${
+          className={`mt-4 sm:mt-8 px-6 sm:px-12 py-3 sm:py-6 text-lg sm:text-2xl font-black font-mono rounded-xl sm:rounded-2xl transition-all duration-300 transform z-50 relative ${
             isSpinning
               ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
               : (!user || (profile && profile.epic_coins < SPIN_COST))
               ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
-              : 'bg-gradient-to-r from-pink-500 to-purple-500 border-4 border-yellow-400 text-white hover:scale-110 hover:shadow-2xl shadow-pink-500/50'
+              : 'bg-gradient-to-r from-pink-500 to-purple-500 border-2 sm:border-4 border-yellow-400 text-white hover:scale-110 hover:shadow-2xl shadow-pink-500/50'
           }`}
         >
           <div className="flex flex-col items-center">
-            <span className="text-2xl">
+            <span className="text-lg sm:text-2xl whitespace-nowrap">
               {isSpinning ? '🔥 SPINNING 🔥' : showCelebration ? '🎯 SPIN AGAIN 🎯' : '💫 SPIN 💫'}
             </span>
             {!isSpinning && (
-              <span className="text-xs text-yellow-200 font-bold">
+              <span className="text-xs text-yellow-200 font-bold whitespace-nowrap">
                 {!user ? 'LOGIN REQUIRED' : 
                  profile && profile.epic_coins < SPIN_COST ? 'INSUFFICIENT FUNDS' : 
                  `${SPIN_COST} EC`}
@@ -593,7 +593,7 @@ export default function WheelPage() {
 
         {/* Celebration Display */}
         {showCelebration && selectedSegment && (
-          <div className="fixed inset-0 flex items-center justify-center z-40 pointer-events-auto" onClick={hideCelebration}>
+          <div className="fixed inset-0 flex items-center justify-center z-40 pointer-events-auto px-4" onClick={hideCelebration}>
             {/* Fireworks Effect */}
             <div className="absolute inset-0">
               {Array.from({ length: 20 }).map((_, i) => (
@@ -617,22 +617,22 @@ export default function WheelPage() {
             </div>
 
             {/* Main Celebration Text */}
-            <div className="text-center animate-bounce" onClick={(e) => e.stopPropagation()}>
-              <div className="mb-8">
-                <h2 className="text-6xl font-black font-mono text-yellow-400 mb-4 animate-pulse"
+            <div className="text-center animate-bounce max-w-full" onClick={(e) => e.stopPropagation()}>
+              <div className="mb-4 sm:mb-8">
+                <h2 className="text-3xl sm:text-4xl md:text-6xl font-black font-mono text-yellow-400 mb-2 sm:mb-4 animate-pulse whitespace-nowrap"
                     style={{
                       textShadow: '0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.8)'
                     }}>
                   🎉 WINNER! 🎉
                 </h2>
-                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black/95 px-6 py-4 rounded-2xl border-4 border-white"
+                <div className="text-4xl sm:text-6xl md:text-8xl font-black font-mono mb-2 sm:mb-4 animate-pulse bg-black/95 px-3 sm:px-6 py-2 sm:py-4 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white whitespace-nowrap"
                      style={{
                        color: '#FFFFFF',
                        textShadow: `0 0 40px ${getSegmentBaseColor(selectedSegment.color)}, 0 0 80px ${getSegmentBaseColor(selectedSegment.color)}, 0 0 10px #000000`
                      }}>
                   {selectedSegment.text}
                 </div>
-                <div className="text-2xl font-bold text-white animate-pulse">
+                <div className="text-lg sm:text-xl md:text-2xl font-bold text-white animate-pulse whitespace-nowrap">
                   🌟 CONGRATULATIONS! 🌟
                 </div>
               </div>
