@@ -250,32 +250,25 @@ export default function WheelPage() {
           animation: rainbow-shift 4s ease-in-out infinite;
         }
         .electric-glow {
-          animation: electric-pulse 2s ease-in-out infinite, color-fade 4s ease-in-out infinite;
-          box-shadow: 0 0 20px currentColor, inset 0 0 20px rgba(139, 92, 246, 0.3);
+          animation: simple-glow 3s ease-in-out infinite;
         }
         .neon-glow {
-          animation: neon-flicker 3s ease-in-out infinite, color-fade 3.5s ease-in-out infinite;
-          box-shadow: 0 0 25px currentColor, inset 0 0 15px rgba(6, 182, 212, 0.4);
+          animation: simple-glow 3.5s ease-in-out infinite;
         }
         .toxic-glow {
-          animation: toxic-pulse 2.5s ease-in-out infinite, color-fade 3s ease-in-out infinite;
-          box-shadow: 0 0 15px currentColor, inset 0 0 20px rgba(132, 204, 22, 0.3);
+          animation: simple-glow 2.8s ease-in-out infinite;
         }
         .fire-glow {
-          animation: fire-flicker 1.5s ease-in-out infinite, color-fade 2.8s ease-in-out infinite;
-          box-shadow: 0 0 30px currentColor, inset 0 0 25px rgba(234, 88, 12, 0.4);
+          animation: simple-glow 2.2s ease-in-out infinite;
         }
         .death-glow {
-          animation: death-pulse 1s ease-in-out infinite, color-fade 2s ease-in-out infinite;
-          box-shadow: 0 0 35px currentColor, inset 0 0 30px rgba(220, 38, 38, 0.5);
+          animation: simple-glow 1.8s ease-in-out infinite;
         }
         .gold-glow {
-          animation: golden-shimmer 2.8s ease-in-out infinite, color-fade 4.2s ease-in-out infinite;
-          box-shadow: 0 0 25px currentColor, inset 0 0 20px rgba(245, 158, 11, 0.4);
+          animation: simple-glow 3.2s ease-in-out infinite;
         }
         .plasma-glow {
-          animation: plasma-wave 2.2s ease-in-out infinite, color-fade 3.7s ease-in-out infinite;
-          box-shadow: 0 0 20px currentColor, inset 0 0 15px rgba(16, 185, 129, 0.3);
+          animation: simple-glow 2.6s ease-in-out infinite;
         }
         
         @keyframes rainbow-shift {
@@ -318,6 +311,10 @@ export default function WheelPage() {
         @keyframes color-fade {
           0%, 100% { opacity: 0.7; }
           50% { opacity: 1; }
+        }
+        @keyframes simple-glow {
+          0%, 100% { filter: brightness(1) saturate(1); }
+          50% { filter: brightness(1.1) saturate(1.2); }
         }
       `}</style>
       
@@ -501,66 +498,23 @@ export default function WheelPage() {
               }
               
               return (
-                <div key={index} className="absolute w-full h-full">
-                  {/* Base color layer */}
-                  <div
-                    className={`absolute w-full h-full transition-all duration-500 ${
-                      isSelected ? 'animate-pulse' : ''
-                    } ${getAnimationClass(segment.color)}`}
-                    style={{
-                      clipPath: `polygon(${points.join(', ')})`,
-                      backgroundColor: getSegmentBaseColor(segment.color),
-                      filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
-                    }}
-                  />
-                  
-                  {/* Gradient layer */}
-                  <div
-                    className={`absolute w-full h-full ${segment.color === 'rainbow' ? 'rainbow-glow' : ''}`}
-                    style={{
-                      clipPath: `polygon(${points.join(', ')})`,
-                      background: segment.color === 'rainbow' ?
-                        'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)' :
-                        `linear-gradient(135deg, ${getSegmentBaseColor(segment.color)} 0%, ${getSegmentAccentColor(segment.color)} 100%)`,
-                      opacity: 0.8,
-                      mixBlendMode: 'multiply',
-                      animation: segment.color !== 'rainbow' ? 'color-fade 3.5s ease-in-out infinite' : undefined
-                    }}
-                  />
-                  
-                  {/* Animated pattern overlay */}
-                  <div
-                    className={`absolute w-full h-full ${getAnimationClass(segment.color)}`}
-                    style={{
-                      clipPath: `polygon(${points.join(', ')})`,
-                      background: segment.color === 'rainbow' ? 
-                        'repeating-conic-gradient(from 0deg at 50% 50%, #ff0000 0deg, #ff8000 45deg, #ffff00 90deg, #00ff00 135deg, #00ffff 180deg, #0080ff 225deg, #8000ff 270deg, #ff0080 315deg, #ff0000 360deg)' :
-                        `repeating-linear-gradient(45deg, transparent 0px, transparent 15px, ${getSegmentAccentColor(segment.color)} 15px, ${getSegmentAccentColor(segment.color)} 18px)`,
-                      opacity: 0.2,
-                      mixBlendMode: 'overlay'
-                    }}
-                  />
-                  
-                  {/* Radial highlight */}
-                  <div
-                    className="absolute w-full h-full"
-                    style={{
-                      clipPath: `polygon(${points.join(', ')})`,
-                      background: `radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 50%)`,
-                      opacity: 0.7
-                    }}
-                  />
-                  
-                  {/* Edge glow */}
-                  <div
-                    className="absolute w-full h-full"
-                    style={{
-                      clipPath: `polygon(${points.join(', ')})`,
-                      boxShadow: `inset 0 0 20px ${getSegmentAccentColor(segment.color)}, 0 0 10px ${getSegmentBaseColor(segment.color)}`,
-                      opacity: isSelected ? 1 : 0.6
-                    }}
-                  />
-                  
+                <div
+                  key={index}
+                  className={`absolute w-full h-full ${
+                    isSelected ? 'animate-pulse' : ''
+                  } ${segment.color === 'rainbow' ? 'rainbow-glow' : getAnimationClass(segment.color)}`}
+                  style={{
+                    clipPath: `polygon(${points.join(', ')})`,
+                    background: segment.color === 'rainbow' ?
+                      'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)' :
+                      `linear-gradient(135deg, ${getSegmentBaseColor(segment.color)} 0%, ${getSegmentAccentColor(segment.color)} 100%)`,
+                    boxShadow: isSelected ? 
+                      `inset 0 0 30px rgba(255, 255, 255, 0.8), 0 0 20px ${getSegmentBaseColor(segment.color)}` : 
+                      `0 0 10px ${getSegmentBaseColor(segment.color)}`,
+                    filter: isSelected ? 'brightness(1.3) saturate(1.3)' : 'none',
+                    willChange: 'filter, opacity'
+                  }}
+                >
                   {/* Segment text */}
                   <div
                     className={`absolute text-white font-bold font-mono text-center z-10 ${
@@ -571,7 +525,7 @@ export default function WheelPage() {
                       left: `${50 + 32 * Math.cos((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
                       top: `${50 + 32 * Math.sin((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
                       transform: `translate(-50%, -50%) rotate(${startAngle + (endAngle - startAngle) / 2}deg)`,
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.9)',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.9)',
                       fontSize: segment.segmentAngle < 15 ? '0.65rem' : 
                                 segment.segmentAngle < 25 ? '0.8rem' : '1rem',
                       maxWidth: `${Math.max(40, segment.segmentAngle * 2)}px`,
