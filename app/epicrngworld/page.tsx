@@ -384,7 +384,7 @@ export default function EpicRngWorldPage() {
             </a>
             
             {/* DICE - Top Right */}
-            <div className="absolute cursor-pointer group" 
+            <a href="/epicrngworld/dice" className="absolute cursor-pointer group" 
                  style={{
                    top: 'clamp(5px, 1vw, 20px)', 
                    right: 'clamp(2%, 12vw, 20%)', 
@@ -401,10 +401,10 @@ export default function EpicRngWorldPage() {
                   <div className="text-cyan-300 text-xs font-mono font-bold group-hover:text-green-300 transition-colors hidden sm:block">🎲 ROLL 🎲</div>
                 </div>
               </div>
-            </div>
+            </a>
             
             {/* CRASH - Right */}
-            <div className="absolute cursor-pointer group" 
+            <a href="/epicrngworld/crash" className="absolute cursor-pointer group" 
                  style={{
                    top: 'clamp(150px, 25vw, 180px)', 
                    right: 'clamp(1%, 5vw, 8%)', 
@@ -421,7 +421,7 @@ export default function EpicRngWorldPage() {
                   <div className="text-green-300 text-xs font-mono font-bold group-hover:text-purple-300 transition-colors hidden sm:block">🚀 UP 🚀</div>
                 </div>
               </div>
-            </div>
+            </a>
             
             {/* SPECTACULAR live jackpot counter - CENTER of the layout */}
             <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-2 sm:px-4 max-w-sm sm:max-w-xl lg:max-w-3xl mx-auto z-10 w-full sm:w-auto">

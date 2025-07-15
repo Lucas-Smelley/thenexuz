@@ -318,35 +318,57 @@ export default function WheelPage() {
         }
       `}</style>
       
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
-      {/* Same background as epic RNG world */}
+      <div className="min-h-screen bg-gradient-to-br from-amber-900 via-black via-orange-950 to-yellow-900 relative overflow-hidden">
+      {/* Wheel-themed background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/30 via-purple-500/40 via-cyan-500/30 to-green-500/30 animate-pulse"></div>
-        <div className="absolute inset-0 bg-gradient-to-bl from-yellow-400/20 via-transparent via-red-500/25 to-blue-500/20 animate-ping" style={{animationDuration: '4s'}}></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/25 via-yellow-500/35 via-red-500/25 to-pink-500/25 animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-bl from-amber-400/18 via-transparent via-orange-500/22 to-red-500/18 animate-ping" style={{animationDuration: '5s'}}></div>
         
-        <div className="absolute inset-0 opacity-40">
-          <div className="grid grid-cols-20 grid-rows-20 h-full w-full">
-            {Array.from({ length: 400 }).map((_, i) => (
-              <div
-                key={i}
-                className={`border-2 ${
-                  i % 6 === 0 ? 'border-pink-400/50 bg-pink-500/10' :
-                  i % 6 === 1 ? 'border-cyan-400/50 bg-cyan-500/10' :
-                  i % 6 === 2 ? 'border-yellow-400/50 bg-yellow-500/10' :
-                  i % 6 === 3 ? 'border-green-400/50 bg-green-500/10' :
-                  i % 6 === 4 ? 'border-purple-400/50 bg-purple-500/10' :
-                  'border-red-400/50 bg-red-500/10'
-                } animate-pulse`}
-                style={{
-                  animationDelay: `${(i * 0.01) % 2}s`,
-                  animationDuration: `${2 + (i * 0.005) % 2}s`
-                }}
-              />
-            ))}
+        {/* Wheel-inspired vertical lines pattern */}
+        <div className="absolute inset-0 opacity-35">
+          <div className="grid grid-cols-18 grid-rows-18 h-full w-full">
+            {Array.from({ length: 324 }).map((_, i) => {
+              const col = i % 18
+              const isVerticalPattern = (col === 8 || col === 9 || col === 7 || col === 10 || col === 6 || col === 11)
+              return (
+                <div
+                  key={i}
+                  className={`border-l border-r ${
+                    isVerticalPattern ? 
+                      i % 4 === 0 ? 'border-yellow-400/60 bg-yellow-500/15' :
+                      i % 4 === 1 ? 'border-orange-400/60 bg-orange-500/15' :
+                      i % 4 === 2 ? 'border-red-400/60 bg-red-500/15' :
+                      'border-pink-400/60 bg-pink-500/15' :
+                      i % 6 === 0 ? 'border-amber-400/40 bg-amber-500/8' :
+                      i % 6 === 1 ? 'border-yellow-400/40 bg-yellow-500/8' :
+                      i % 6 === 2 ? 'border-orange-400/40 bg-orange-500/8' :
+                      i % 6 === 3 ? 'border-red-400/40 bg-red-500/8' :
+                      i % 6 === 4 ? 'border-pink-400/40 bg-pink-500/8' :
+                      'border-rose-400/40 bg-rose-500/8'
+                  } animate-pulse`}
+                  style={{
+                    animationDelay: `${(i * 0.015) % 3}s`,
+                    animationDuration: `${3 + (i * 0.008) % 2}s`
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
         
-        <div className="absolute inset-0 bg-gradient-conic from-pink-500/30 via-cyan-500/30 via-yellow-500/30 to-green-500/30 animate-spin" style={{animationDuration: '20s'}}></div>
+        {/* Rotating wheel-like overlays */}
+        <div className="absolute inset-0 bg-gradient-conic from-yellow-500/25 via-orange-500/25 via-red-500/25 to-pink-500/25 animate-spin" style={{animationDuration: '18s'}}></div>
+        <div className="absolute inset-0 bg-gradient-conic from-amber-500/15 via-yellow-500/15 via-orange-500/15 to-red-500/15 animate-spin" style={{animationDuration: '35s', animationDirection: 'reverse'}}></div>
+        
+        {/* Floating wheel segments */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/6 left-1/5 w-10 h-10 bg-yellow-400/20 rotate-45 animate-bounce opacity-70 shadow-2xl shadow-yellow-400/50 rounded-full"></div>
+          <div className="absolute top-1/4 right-1/4 w-8 h-8 bg-orange-400/20 rotate-12 animate-pulse opacity-60 shadow-xl shadow-orange-400/50 rounded-full"></div>
+          <div className="absolute bottom-1/3 left-1/6 w-12 h-12 border-4 border-red-400/30 rotate-45 animate-spin opacity-50 shadow-2xl shadow-red-400/50 rounded-full"></div>
+          <div className="absolute top-1/2 right-1/5 w-6 h-6 bg-pink-400/20 animate-bounce opacity-70 shadow-xl shadow-pink-400/50 rounded-full"></div>
+          <div className="absolute bottom-1/4 right-1/3 w-14 h-14 border-3 border-amber-400/25 animate-pulse opacity-60 shadow-2xl shadow-amber-400/50 rounded-full"></div>
+          <div className="absolute top-1/3 left-1/8 w-7 h-7 bg-rose-400/20 rotate-45 animate-bounce opacity-65 shadow-xl shadow-rose-400/50 rounded-full"></div>
+        </div>
       </div>
 
       {/* Back button */}
