@@ -10,24 +10,24 @@ const wheelSegments = [
   { text: "100000 EC", color: "rainbow", weight: 1 }, // rainbow - mega jackpot (top)
   
   // Right side descending (clockwise from top)
-  { text: "DOUBLE", color: "#8B5CF6", weight: 1.5 }, // violet - special but not too flashy
-  { text: "1000 EC", color: "#3B82F6", weight: 3 }, // blue - excellent win
-  { text: "600 EC", color: "#0EA5E9", weight: 4 }, // sky blue - good win
-  { text: "500 EC", color: "#10B981", weight: 5 }, // emerald - decent win
-  { text: "400 EC", color: "#059669", weight: 4 }, // green - small win
-  { text: "150 EC", color: "#84CC16", weight: 3 }, // lime - break even
-  { text: "-500 EC", color: "#EA580C", weight: 2 }, // orange - loss
+  { text: "DOUBLE", color: "electric-purple", weight: 1.5 }, // electric purple gradient - special
+  { text: "1000 EC", color: "cyber-blue", weight: 3 }, // cyber blue gradient - excellent win
+  { text: "600 EC", color: "neon-cyan", weight: 4 }, // neon cyan - good win
+  { text: "500 EC", color: "plasma-green", weight: 5 }, // plasma green - decent win
+  { text: "400 EC", color: "toxic-lime", weight: 4 }, // toxic lime - small win
+  { text: "150 EC", color: "golden-yellow", weight: 3 }, // golden yellow - break even
+  { text: "-500 EC", color: "burning-orange", weight: 2 }, // burning orange - loss
   
   // Bottom - BIG LOSS directly opposite the mega jackpot (6 o'clock)
-  { text: "LOSE 5000", color: "#7F1D1D", weight: 1 }, // dark red - massive loss
+  { text: "LOSE 5000", color: "death-red", weight: 1 }, // death red gradient - massive loss
   
-  { text: "-500 EC", color: "#EA580C", weight: 2 }, // orange - loss
-  { text: "150 EC", color: "#84CC16", weight: 3 }, // lime - break even
-  { text: "400 EC", color: "#059669", weight: 4 }, // green - small win
-  { text: "500 EC", color: "#10B981", weight: 5 }, // emerald - decent win
-  { text: "600 EC", color: "#0EA5E9", weight: 4 }, // sky blue - good win
-  { text: "1000 EC", color: "#3B82F6", weight: 3 }, // blue - excellent win
-  { text: "DOUBLE", color: "#8B5CF6", weight: 1.5 }, // violet - special but not too flashy
+  { text: "-500 EC", color: "lava-orange", weight: 2 }, // lava orange - loss
+  { text: "150 EC", color: "radioactive-yellow", weight: 3 }, // radioactive yellow - break even
+  { text: "400 EC", color: "matrix-green", weight: 4 }, // matrix green - small win
+  { text: "500 EC", color: "emerald-glow", weight: 5 }, // emerald glow - decent win
+  { text: "600 EC", color: "ice-blue", weight: 4 }, // ice blue - good win
+  { text: "1000 EC", color: "lightning-blue", weight: 3 }, // lightning blue - excellent win
+  { text: "DOUBLE", color: "mystic-purple", weight: 1.5 }, // mystic purple - special
 ]
 
 export default function WheelPage() {
@@ -45,6 +45,46 @@ export default function WheelPage() {
   }
 
   const SPIN_COST = 200
+
+  // Function to get animated gradient backgrounds
+  const getSegmentBackground = (color: string, isSelected: boolean) => {
+    switch (color) {
+      case 'rainbow':
+        return 'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)'
+      case 'electric-purple':
+        return 'linear-gradient(45deg, #4C1D95 0%, #7C3AED 25%, #A855F7 50%, #C084FC 75%, #DDD6FE 100%)'
+      case 'cyber-blue':
+        return 'linear-gradient(45deg, #1E3A8A 0%, #2563EB 25%, #3B82F6 50%, #60A5FA 75%, #93C5FD 100%)'
+      case 'neon-cyan':
+        return 'linear-gradient(45deg, #0C4A6E 0%, #0891B2 25%, #0EA5E9 50%, #38BDF8 75%, #7DD3FC 100%)'
+      case 'plasma-green':
+        return 'linear-gradient(45deg, #14532D 0%, #16A34A 25%, #22C55E 50%, #4ADE80 75%, #86EFAC 100%)'
+      case 'toxic-lime':
+        return 'linear-gradient(45deg, #365314 0%, #65A30D 25%, #84CC16 50%, #A3E635 75%, #BEF264 100%)'
+      case 'golden-yellow':
+        return 'linear-gradient(45deg, #92400E 0%, #D97706 25%, #F59E0B 50%, #FBBF24 75%, #FDE047 100%)'
+      case 'burning-orange':
+        return 'linear-gradient(45deg, #9A3412 0%, #DC2626 25%, #EA580C 50%, #F97316 75%, #FB923C 100%)'
+      case 'death-red':
+        return 'linear-gradient(45deg, #450A0A 0%, #7F1D1D 25%, #991B1B 50%, #DC2626 75%, #EF4444 100%)'
+      case 'lava-orange':
+        return 'linear-gradient(45deg, #7C2D12 0%, #C2410C 25%, #EA580C 50%, #F97316 75%, #FDBA74 100%)'
+      case 'radioactive-yellow':
+        return 'linear-gradient(45deg, #713F12 0%, #CA8A04 25%, #EAB308 50%, #FACC15 75%, #FEF08A 100%)'
+      case 'matrix-green':
+        return 'linear-gradient(45deg, #14532D 0%, #15803D 25%, #16A34A 50%, #22C55E 75%, #4ADE80 100%)'
+      case 'emerald-glow':
+        return 'linear-gradient(45deg, #064E3B 0%, #047857 25%, #059669 50%, #10B981 75%, #6EE7B7 100%)'
+      case 'ice-blue':
+        return 'linear-gradient(45deg, #0C4A6E 0%, #0369A1 25%, #0284C7 50%, #0EA5E9 75%, #BAE6FD 100%)'
+      case 'lightning-blue':
+        return 'linear-gradient(45deg, #1E3A8A 0%, #1E40AF 25%, #1D4ED8 50%, #2563EB 75%, #DBEAFE 100%)'
+      case 'mystic-purple':
+        return 'linear-gradient(45deg, #581C87 0%, #6B21A8 25%, #7C3AED 50%, #8B5CF6 75%, #E9D5FF 100%)'
+      default:
+        return color
+    }
+  }
 
   // Calculate total weight and create cumulative segments
   const totalWeight = wheelSegments.reduce((sum, segment) => sum + segment.weight, 0)
@@ -195,7 +235,62 @@ export default function WheelPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
+    <>
+      {/* CSS animations for gradient effects */}
+      <style jsx>{`
+        .rainbow-glow {
+          background: linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%);
+          background-size: 300% 300%;
+          animation: rainbow-shift 4s ease-in-out infinite;
+        }
+        .electric-glow {
+          animation: electric-pulse 2s ease-in-out infinite;
+        }
+        .neon-glow {
+          animation: neon-flicker 3s ease-in-out infinite;
+        }
+        .toxic-glow {
+          animation: toxic-pulse 2.5s ease-in-out infinite;
+        }
+        .fire-glow {
+          animation: fire-flicker 1.5s ease-in-out infinite;
+        }
+        .death-glow {
+          animation: death-pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes rainbow-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        @keyframes electric-pulse {
+          0%, 100% { filter: brightness(1) hue-rotate(0deg); }
+          50% { filter: brightness(1.2) hue-rotate(30deg); }
+        }
+        @keyframes neon-flicker {
+          0%, 100% { filter: brightness(1); }
+          25% { filter: brightness(0.8); }
+          50% { filter: brightness(1.2); }
+          75% { filter: brightness(0.9); }
+        }
+        @keyframes toxic-pulse {
+          0%, 100% { filter: brightness(1) saturate(1); }
+          50% { filter: brightness(1.1) saturate(1.3); }
+        }
+        @keyframes fire-flicker {
+          0%, 100% { filter: brightness(1); }
+          20% { filter: brightness(0.9); }
+          40% { filter: brightness(1.1); }
+          60% { filter: brightness(0.8); }
+          80% { filter: brightness(1.2); }
+        }
+        @keyframes death-pulse {
+          0%, 100% { filter: brightness(0.8) saturate(1.2); }
+          50% { filter: brightness(1.3) saturate(1.8); }
+        }
+      `}</style>
+      
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
       {/* Same background as epic RNG world */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-500/30 via-purple-500/40 via-cyan-500/30 to-green-500/30 animate-pulse"></div>
@@ -321,6 +416,16 @@ export default function WheelPage() {
 
         {/* Wheel with Triangle Indicator */}
         <div className="relative">
+          {/* Outer glow ring */}
+          <div className={`absolute rounded-full animate-pulse transition-all duration-1000 ${
+            isSpinning || showCelebration ? 'w-[520px] h-[520px] -top-[10px] -left-[10px]' : 'w-[404px] h-[404px] -top-[6px] -left-[6px]'
+          }`}
+          style={{
+            background: 'conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000)',
+            filter: 'blur(8px)',
+            opacity: 0.6
+          }} />
+          
           {/* Wheel with Segments */}
           <div 
             className={`rounded-full border-8 border-yellow-400 shadow-2xl shadow-yellow-400/50 relative overflow-hidden transition-all duration-1000 ${
@@ -349,19 +454,31 @@ export default function WheelPage() {
                 points.push(`${x}% ${y}%`)
               }
               
+              const getAnimationClass = (color: string) => {
+                switch (color) {
+                  case 'rainbow': return 'rainbow-glow'
+                  case 'electric-purple': case 'mystic-purple': return 'electric-glow'
+                  case 'neon-cyan': case 'ice-blue': case 'lightning-blue': return 'neon-glow'
+                  case 'toxic-lime': case 'radioactive-yellow': return 'toxic-glow'
+                  case 'burning-orange': case 'lava-orange': return 'fire-glow'
+                  case 'death-red': return 'death-glow'
+                  default: return ''
+                }
+              }
+              
               return (
                 <div
                   key={index}
                   className={`absolute w-full h-full transition-all duration-500 ${
                     isSelected ? 'animate-pulse' : ''
-                  }`}
+                  } ${getAnimationClass(segment.color)}`}
                   style={{
                     clipPath: `polygon(${points.join(', ')})`,
-                    background: segment.color === 'rainbow' 
-                      ? 'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)' 
-                      : segment.color,
-                    boxShadow: isSelected ? `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color === 'rainbow' ? '#FFD700' : segment.color}` : 
-                               segment.color === 'rainbow' ? '0 0 20px rgba(255, 215, 0, 0.4)' : 'none',
+                    background: getSegmentBackground(segment.color, isSelected),
+                    boxShadow: isSelected ? 
+                      `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color === 'rainbow' ? '#FFD700' : '#FFFFFF'}` : 
+                      segment.color === 'rainbow' ? '0 0 20px rgba(255, 215, 0, 0.4)' :
+                      !segment.color.startsWith('#') ? '0 0 15px rgba(255, 255, 255, 0.3)' : 'none',
                     filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
                   }}
                 >
@@ -389,9 +506,25 @@ export default function WheelPage() {
             })}
           </div>
           
-          {/* Triangle Indicator at 3 o'clock */}
+          {/* Enhanced Triangle Indicator at 3 o'clock */}
           <div className="absolute top-1/2 right-0 transform translate-x-6 -translate-y-1/2">
-            <div className="w-0 h-0 border-t-[8px] border-b-[8px] border-r-[45px] border-t-transparent border-b-transparent border-r-white"></div>
+            {/* Glowing base */}
+            <div className="absolute w-0 h-0 border-t-[12px] border-b-[12px] border-r-[55px] border-t-transparent border-b-transparent animate-pulse"
+                 style={{
+                   borderRightColor: '#FFD700',
+                   filter: 'drop-shadow(0 0 10px #FFD700) drop-shadow(0 0 20px #FF69B4)',
+                   transform: 'translate(-2px, 0)'
+                 }}></div>
+            {/* Main indicator */}
+            <div className="w-0 h-0 border-t-[8px] border-b-[8px] border-r-[45px] border-t-transparent border-b-transparent relative z-10"
+                 style={{
+                   borderRightColor: 'white',
+                   filter: 'drop-shadow(0 0 5px rgba(255, 255, 255, 0.8))'
+                 }}></div>
+            {/* Sparkles */}
+            <div className="absolute -top-2 -left-2 w-1 h-1 bg-yellow-400 rounded-full animate-ping" style={{animationDelay: '0s'}}></div>
+            <div className="absolute top-2 -left-3 w-1 h-1 bg-pink-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+            <div className="absolute -bottom-2 -left-2 w-1 h-1 bg-cyan-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
           </div>
         </div>
 
@@ -455,10 +588,12 @@ export default function WheelPage() {
                     }}>
                   🎉 WINNER! 🎉
                 </h2>
-                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black px-6 py-4 rounded-2xl border-4 border-white"
+                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black/90 px-6 py-4 rounded-2xl border-4 border-white"
                      style={{
-                       color: selectedSegment.color,
-                       textShadow: `0 0 40px ${selectedSegment.color}, 0 0 80px ${selectedSegment.color}`
+                       color: selectedSegment.color === 'rainbow' ? '#FFD700' : '#FFFFFF',
+                       textShadow: selectedSegment.color === 'rainbow' ? 
+                         '0 0 40px #FFD700, 0 0 80px #FFD700, 0 0 10px #000000' :
+                         `0 0 40px ${selectedSegment.color}, 0 0 80px ${selectedSegment.color}, 0 0 10px #000000`
                      }}>
                   {selectedSegment.text}
                 </div>
@@ -761,5 +896,6 @@ export default function WheelPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }
