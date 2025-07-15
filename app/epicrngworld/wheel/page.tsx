@@ -437,7 +437,7 @@ export default function WheelPage() {
               style={{
                 textShadow: '0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 255, 0, 0.6)'
               }}>
-            SPIN THE WHEEL
+            WHEELY EPIC WHEEL
           </h1>
           <div className="h-1 sm:h-2 w-32 sm:w-64 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl"></div>
         </div>

@@ -364,7 +364,7 @@ export default function EpicRngWorldPage() {
             </a>
             
             {/* SLOTS - Top Left */}
-            <div className="absolute cursor-pointer group" 
+            <a href="/epicrngworld/slots" className="absolute cursor-pointer group" 
                  style={{
                    top: 'clamp(5px, 1vw, 20px)', 
                    left: 'clamp(2%, 12vw, 20%)', 
@@ -381,7 +381,7 @@ export default function EpicRngWorldPage() {
                   <div className="text-pink-300 text-xs font-mono font-bold group-hover:text-cyan-300 transition-colors hidden sm:block">💎 777 💎</div>
                 </div>
               </div>
-            </div>
+            </a>
             
             {/* DICE - Top Right */}
             <div className="absolute cursor-pointer group" 
