@@ -46,43 +46,49 @@ export default function WheelPage() {
 
   const SPIN_COST = 200
 
-  // Function to get animated gradient backgrounds
-  const getSegmentBackground = (color: string, isSelected: boolean) => {
+  // Function to get base colors for layered approach
+  const getSegmentBaseColor = (color: string) => {
     switch (color) {
-      case 'rainbow':
-        return 'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)'
-      case 'electric-purple':
-        return 'linear-gradient(45deg, #4C1D95 0%, #7C3AED 25%, #A855F7 50%, #C084FC 75%, #DDD6FE 100%)'
-      case 'cyber-blue':
-        return 'linear-gradient(45deg, #1E3A8A 0%, #2563EB 25%, #3B82F6 50%, #60A5FA 75%, #93C5FD 100%)'
-      case 'neon-cyan':
-        return 'linear-gradient(45deg, #0C4A6E 0%, #0891B2 25%, #0EA5E9 50%, #38BDF8 75%, #7DD3FC 100%)'
-      case 'plasma-green':
-        return 'linear-gradient(45deg, #14532D 0%, #16A34A 25%, #22C55E 50%, #4ADE80 75%, #86EFAC 100%)'
-      case 'toxic-lime':
-        return 'linear-gradient(45deg, #365314 0%, #65A30D 25%, #84CC16 50%, #A3E635 75%, #BEF264 100%)'
-      case 'golden-yellow':
-        return 'linear-gradient(45deg, #92400E 0%, #D97706 25%, #F59E0B 50%, #FBBF24 75%, #FDE047 100%)'
-      case 'burning-orange':
-        return 'linear-gradient(45deg, #9A3412 0%, #DC2626 25%, #EA580C 50%, #F97316 75%, #FB923C 100%)'
-      case 'death-red':
-        return 'linear-gradient(45deg, #450A0A 0%, #7F1D1D 25%, #991B1B 50%, #DC2626 75%, #EF4444 100%)'
-      case 'lava-orange':
-        return 'linear-gradient(45deg, #7C2D12 0%, #C2410C 25%, #EA580C 50%, #F97316 75%, #FDBA74 100%)'
-      case 'radioactive-yellow':
-        return 'linear-gradient(45deg, #713F12 0%, #CA8A04 25%, #EAB308 50%, #FACC15 75%, #FEF08A 100%)'
-      case 'matrix-green':
-        return 'linear-gradient(45deg, #14532D 0%, #15803D 25%, #16A34A 50%, #22C55E 75%, #4ADE80 100%)'
-      case 'emerald-glow':
-        return 'linear-gradient(45deg, #064E3B 0%, #047857 25%, #059669 50%, #10B981 75%, #6EE7B7 100%)'
-      case 'ice-blue':
-        return 'linear-gradient(45deg, #0C4A6E 0%, #0369A1 25%, #0284C7 50%, #0EA5E9 75%, #BAE6FD 100%)'
-      case 'lightning-blue':
-        return 'linear-gradient(45deg, #1E3A8A 0%, #1E40AF 25%, #1D4ED8 50%, #2563EB 75%, #DBEAFE 100%)'
-      case 'mystic-purple':
-        return 'linear-gradient(45deg, #581C87 0%, #6B21A8 25%, #7C3AED 50%, #8B5CF6 75%, #E9D5FF 100%)'
-      default:
-        return color
+      case 'rainbow': return '#FFD700'
+      case 'electric-purple': return '#8B5CF6'
+      case 'cyber-blue': return '#3B82F6'
+      case 'neon-cyan': return '#06B6D4'
+      case 'plasma-green': return '#10B981'
+      case 'toxic-lime': return '#84CC16'
+      case 'golden-yellow': return '#F59E0B'
+      case 'burning-orange': return '#EA580C'
+      case 'death-red': return '#DC2626'
+      case 'lava-orange': return '#F97316'
+      case 'radioactive-yellow': return '#EAB308'
+      case 'matrix-green': return '#22C55E'
+      case 'emerald-glow': return '#059669'
+      case 'ice-blue': return '#0EA5E9'
+      case 'lightning-blue': return '#2563EB'
+      case 'mystic-purple': return '#7C3AED'
+      default: return color
+    }
+  }
+
+  // Function to get accent colors for layered effects
+  const getSegmentAccentColor = (color: string) => {
+    switch (color) {
+      case 'rainbow': return '#FF69B4'
+      case 'electric-purple': return '#C084FC'
+      case 'cyber-blue': return '#60A5FA'
+      case 'neon-cyan': return '#22D3EE'
+      case 'plasma-green': return '#34D399'
+      case 'toxic-lime': return '#A3E635'
+      case 'golden-yellow': return '#FBBF24'
+      case 'burning-orange': return '#F97316'
+      case 'death-red': return '#EF4444'
+      case 'lava-orange': return '#FB923C'
+      case 'radioactive-yellow': return '#FACC15'
+      case 'matrix-green': return '#4ADE80'
+      case 'emerald-glow': return '#10B981'
+      case 'ice-blue': return '#38BDF8'
+      case 'lightning-blue': return '#3B82F6'
+      case 'mystic-purple': return '#A855F7'
+      default: return '#FFFFFF'
     }
   }
 
@@ -244,19 +250,32 @@ export default function WheelPage() {
           animation: rainbow-shift 4s ease-in-out infinite;
         }
         .electric-glow {
-          animation: electric-pulse 2s ease-in-out infinite;
+          animation: electric-pulse 2s ease-in-out infinite, color-fade 4s ease-in-out infinite;
+          box-shadow: 0 0 20px currentColor, inset 0 0 20px rgba(139, 92, 246, 0.3);
         }
         .neon-glow {
-          animation: neon-flicker 3s ease-in-out infinite;
+          animation: neon-flicker 3s ease-in-out infinite, color-fade 3.5s ease-in-out infinite;
+          box-shadow: 0 0 25px currentColor, inset 0 0 15px rgba(6, 182, 212, 0.4);
         }
         .toxic-glow {
-          animation: toxic-pulse 2.5s ease-in-out infinite;
+          animation: toxic-pulse 2.5s ease-in-out infinite, color-fade 3s ease-in-out infinite;
+          box-shadow: 0 0 15px currentColor, inset 0 0 20px rgba(132, 204, 22, 0.3);
         }
         .fire-glow {
-          animation: fire-flicker 1.5s ease-in-out infinite;
+          animation: fire-flicker 1.5s ease-in-out infinite, color-fade 2.8s ease-in-out infinite;
+          box-shadow: 0 0 30px currentColor, inset 0 0 25px rgba(234, 88, 12, 0.4);
         }
         .death-glow {
-          animation: death-pulse 1s ease-in-out infinite;
+          animation: death-pulse 1s ease-in-out infinite, color-fade 2s ease-in-out infinite;
+          box-shadow: 0 0 35px currentColor, inset 0 0 30px rgba(220, 38, 38, 0.5);
+        }
+        .gold-glow {
+          animation: golden-shimmer 2.8s ease-in-out infinite, color-fade 4.2s ease-in-out infinite;
+          box-shadow: 0 0 25px currentColor, inset 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+        .plasma-glow {
+          animation: plasma-wave 2.2s ease-in-out infinite, color-fade 3.7s ease-in-out infinite;
+          box-shadow: 0 0 20px currentColor, inset 0 0 15px rgba(16, 185, 129, 0.3);
         }
         
         @keyframes rainbow-shift {
@@ -287,6 +306,18 @@ export default function WheelPage() {
         @keyframes death-pulse {
           0%, 100% { filter: brightness(0.8) saturate(1.2); }
           50% { filter: brightness(1.3) saturate(1.8); }
+        }
+        @keyframes golden-shimmer {
+          0%, 100% { filter: brightness(1) saturate(1); }
+          50% { filter: brightness(1.3) saturate(1.4); }
+        }
+        @keyframes plasma-wave {
+          0%, 100% { filter: brightness(1) hue-rotate(0deg); }
+          50% { filter: brightness(1.2) hue-rotate(15deg); }
+        }
+        @keyframes color-fade {
+          0%, 100% { opacity: 0.7; }
+          50% { opacity: 1; }
         }
       `}</style>
       
@@ -462,29 +493,77 @@ export default function WheelPage() {
                   case 'toxic-lime': case 'radioactive-yellow': return 'toxic-glow'
                   case 'burning-orange': case 'lava-orange': return 'fire-glow'
                   case 'death-red': return 'death-glow'
+                  case 'golden-yellow': return 'gold-glow'
+                  case 'plasma-green': case 'emerald-glow': case 'matrix-green': return 'plasma-glow'
+                  case 'cyber-blue': return 'neon-glow'
                   default: return ''
                 }
               }
               
               return (
-                <div
-                  key={index}
-                  className={`absolute w-full h-full transition-all duration-500 ${
-                    isSelected ? 'animate-pulse' : ''
-                  } ${getAnimationClass(segment.color)}`}
-                  style={{
-                    clipPath: `polygon(${points.join(', ')})`,
-                    background: getSegmentBackground(segment.color, isSelected),
-                    boxShadow: isSelected ? 
-                      `inset 0 0 50px rgba(255, 255, 255, 0.8), 0 0 50px ${segment.color === 'rainbow' ? '#FFD700' : '#FFFFFF'}` : 
-                      segment.color === 'rainbow' ? '0 0 20px rgba(255, 215, 0, 0.4)' :
-                      !segment.color.startsWith('#') ? '0 0 15px rgba(255, 255, 255, 0.3)' : 'none',
-                    filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
-                  }}
-                >
+                <div key={index} className="absolute w-full h-full">
+                  {/* Base color layer */}
+                  <div
+                    className={`absolute w-full h-full transition-all duration-500 ${
+                      isSelected ? 'animate-pulse' : ''
+                    } ${getAnimationClass(segment.color)}`}
+                    style={{
+                      clipPath: `polygon(${points.join(', ')})`,
+                      backgroundColor: getSegmentBaseColor(segment.color),
+                      filter: isSelected ? 'brightness(1.5) saturate(1.5)' : 'none'
+                    }}
+                  />
+                  
+                  {/* Gradient layer */}
+                  <div
+                    className={`absolute w-full h-full ${segment.color === 'rainbow' ? 'rainbow-glow' : ''}`}
+                    style={{
+                      clipPath: `polygon(${points.join(', ')})`,
+                      background: segment.color === 'rainbow' ?
+                        'linear-gradient(45deg, #ff0000 0%, #ff8000 14%, #ffff00 28%, #00ff00 42%, #00ffff 57%, #0080ff 71%, #8000ff 85%, #ff0080 100%)' :
+                        `linear-gradient(135deg, ${getSegmentBaseColor(segment.color)} 0%, ${getSegmentAccentColor(segment.color)} 100%)`,
+                      opacity: 0.8,
+                      mixBlendMode: 'multiply',
+                      animation: segment.color !== 'rainbow' ? 'color-fade 3.5s ease-in-out infinite' : undefined
+                    }}
+                  />
+                  
+                  {/* Animated pattern overlay */}
+                  <div
+                    className={`absolute w-full h-full ${getAnimationClass(segment.color)}`}
+                    style={{
+                      clipPath: `polygon(${points.join(', ')})`,
+                      background: segment.color === 'rainbow' ? 
+                        'repeating-conic-gradient(from 0deg at 50% 50%, #ff0000 0deg, #ff8000 45deg, #ffff00 90deg, #00ff00 135deg, #00ffff 180deg, #0080ff 225deg, #8000ff 270deg, #ff0080 315deg, #ff0000 360deg)' :
+                        `repeating-linear-gradient(45deg, transparent 0px, transparent 15px, ${getSegmentAccentColor(segment.color)} 15px, ${getSegmentAccentColor(segment.color)} 18px)`,
+                      opacity: 0.2,
+                      mixBlendMode: 'overlay'
+                    }}
+                  />
+                  
+                  {/* Radial highlight */}
+                  <div
+                    className="absolute w-full h-full"
+                    style={{
+                      clipPath: `polygon(${points.join(', ')})`,
+                      background: `radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 50%)`,
+                      opacity: 0.7
+                    }}
+                  />
+                  
+                  {/* Edge glow */}
+                  <div
+                    className="absolute w-full h-full"
+                    style={{
+                      clipPath: `polygon(${points.join(', ')})`,
+                      boxShadow: `inset 0 0 20px ${getSegmentAccentColor(segment.color)}, 0 0 10px ${getSegmentBaseColor(segment.color)}`,
+                      opacity: isSelected ? 1 : 0.6
+                    }}
+                  />
+                  
                   {/* Segment text */}
                   <div
-                    className={`absolute text-white font-bold font-mono text-center ${
+                    className={`absolute text-white font-bold font-mono text-center z-10 ${
                       segment.segmentAngle < 20 ? 'text-xs' : 
                       segment.segmentAngle < 30 ? 'text-sm' : 'text-base'
                     }`}
@@ -492,7 +571,7 @@ export default function WheelPage() {
                       left: `${50 + 32 * Math.cos((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
                       top: `${50 + 32 * Math.sin((startAngle + (endAngle - startAngle) / 2 - 90) * Math.PI / 180)}%`,
                       transform: `translate(-50%, -50%) rotate(${startAngle + (endAngle - startAngle) / 2}deg)`,
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.9)',
                       fontSize: segment.segmentAngle < 15 ? '0.65rem' : 
                                 segment.segmentAngle < 25 ? '0.8rem' : '1rem',
                       maxWidth: `${Math.max(40, segment.segmentAngle * 2)}px`,
@@ -588,12 +667,10 @@ export default function WheelPage() {
                     }}>
                   🎉 WINNER! 🎉
                 </h2>
-                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black/90 px-6 py-4 rounded-2xl border-4 border-white"
+                <div className="text-8xl font-black font-mono mb-4 animate-pulse bg-black/95 px-6 py-4 rounded-2xl border-4 border-white"
                      style={{
-                       color: selectedSegment.color === 'rainbow' ? '#FFD700' : '#FFFFFF',
-                       textShadow: selectedSegment.color === 'rainbow' ? 
-                         '0 0 40px #FFD700, 0 0 80px #FFD700, 0 0 10px #000000' :
-                         `0 0 40px ${selectedSegment.color}, 0 0 80px ${selectedSegment.color}, 0 0 10px #000000`
+                       color: '#FFFFFF',
+                       textShadow: `0 0 40px ${getSegmentBaseColor(selectedSegment.color)}, 0 0 80px ${getSegmentBaseColor(selectedSegment.color)}, 0 0 10px #000000`
                      }}>
                   {selectedSegment.text}
                 </div>
