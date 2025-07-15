@@ -446,7 +446,9 @@ export default function WheelPage() {
         <div className="relative">
           {/* Outer glow ring */}
           <div className={`absolute rounded-full animate-pulse transition-all duration-1000 ${
-            isSpinning || showCelebration ? 'w-[520px] h-[520px] -top-[10px] -left-[10px]' : 'w-[404px] h-[404px] -top-[6px] -left-[6px]'
+            isSpinning || showCelebration 
+              ? 'w-[520px] h-[520px] -top-[10px] -left-[10px] sm:w-[520px] sm:h-[520px] sm:-top-[10px] sm:-left-[10px] max-sm:w-[340px] max-sm:h-[340px] max-sm:-top-[8px] max-sm:-left-[8px]' 
+              : 'w-[404px] h-[404px] -top-[6px] -left-[6px] max-sm:w-[304px] max-sm:h-[304px] max-sm:-top-[4px] max-sm:-left-[4px]'
           }`}
           style={{
             background: 'conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0080ff, #8000ff, #ff0080, #ff0000)',
@@ -457,7 +459,9 @@ export default function WheelPage() {
           {/* Wheel with Segments */}
           <div 
             className={`rounded-full border-8 border-yellow-400 shadow-2xl shadow-yellow-400/50 relative overflow-hidden transition-all duration-1000 ${
-              isSpinning || showCelebration ? 'w-[500px] h-[500px]' : 'w-96 h-96'
+              isSpinning || showCelebration 
+                ? 'w-[500px] h-[500px] sm:w-[500px] sm:h-[500px] max-sm:w-80 max-sm:h-80' 
+                : 'w-96 h-96 max-sm:w-72 max-sm:h-72'
             }`}
             style={{
               transform: `rotate(${rotation}deg)`,
