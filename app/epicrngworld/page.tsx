@@ -270,17 +270,29 @@ export default function EpicRngWorldPage() {
 
       {/* Title Section */}
       <div className="relative z-10 text-center pt-[clamp(2rem,6vh,4rem)]">
-        <h1 className="text-[clamp(2rem,min(8vw,8vh),5rem)] font-black font-mono text-yellow-400 animate-pulse leading-none" style={{
-          textShadow: '0 0 20px rgba(251, 191, 36, 0.8), 0 0 40px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.4)',
-          background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #fbbf24)',
-          backgroundSize: '200% 200%',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          animation: 'gradient 3s ease infinite, glow-pulse 2s ease-in-out infinite alternate'
-        }}>
-          EPIC RNG WORLD
-        </h1>
+        <div className="relative">
+          {/* Glitch background layer */}
+          <div className="absolute inset-0 animate-ping opacity-30">
+            <h1 className="text-[clamp(2.5rem,min(10vw,10vh),7rem)] font-black font-mono text-pink-400 leading-none">
+              {glitchText}
+            </h1>
+          </div>
+          
+          {/* Main title */}
+          <h1 className="relative text-[clamp(2.5rem,min(10vw,10vh),7rem)] font-black font-mono leading-none transform hover:scale-105 transition-all duration-500" style={{
+            color: '#ffff00',
+            textShadow: '0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.8), 0 0 90px rgba(255, 255, 0, 0.6), 0 0 120px rgba(255, 255, 0, 0.4)',
+            background: 'linear-gradient(45deg, #ffff00, #fbbf24, #f59e0b, #ffff00)',
+            backgroundSize: '300% 300%',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            animation: 'gradient 2s ease infinite, glow-pulse 1.5s ease-in-out infinite alternate, title-float 4s ease-in-out infinite',
+            filter: 'blur(0.5px)'
+          }}>
+            {glitchText}
+          </h1>
+        </div>
       </div>
 
       {/* Mega Jackpot Section */}
@@ -302,52 +314,117 @@ export default function EpicRngWorldPage() {
 
       {/* Games Grid */}
       <div className="relative z-10 mt-[clamp(2rem,4vh,4rem)] flex justify-center">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-[clamp(1rem,2vh,2rem)] max-w-2xl sm:max-w-4xl md:max-w-6xl">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-[clamp(1rem,2vh,2rem)] max-w-2xl sm:max-w-4xl md:max-w-5xl lg:max-w-6xl">
           
           {/* SLOTS */}
-          <a href="/epicrngworld/slots" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-pink-400 px-[clamp(1rem,min(3vw,3vh),2.5rem)] py-[clamp(1rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-pink-400/50 hover:border-cyan-400 hover:shadow-cyan-400/50 transition-all duration-300 transform hover:scale-105 -rotate-2 hover:rotate-0 text-center">
-            <Gem className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-pink-400 group-hover:text-cyan-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-colors" />
-            <h3 className="text-pink-400 group-hover:text-cyan-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors">SLOTS</h3>
-          </a>
+          <div className="relative">
+            <div className="absolute -inset-3 bg-gradient-to-br from-pink-600/80 via-purple-600/90 to-pink-600/80 rounded-xl animate-pulse shadow-2xl shadow-pink-500/60"></div>
+            <a href="/epicrngworld/slots" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-pink-400 px-[clamp(2rem,min(6vw,6vh),6rem)] py-[clamp(1rem,min(2.5vw,2.5vh),2rem)] rounded-lg shadow-xl shadow-pink-400/50 hover:border-cyan-400 hover:shadow-cyan-400/50 transition-all duration-300 transform hover:scale-105 -rotate-2 hover:rotate-0 text-center overflow-hidden relative block">
+              <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-white/20 to-transparent rounded-tl-lg"></div>
+              <div className="relative">
+                <Gem className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-pink-400 group-hover:text-cyan-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-all duration-500 animate-pulse group-hover:animate-spin transform group-hover:rotate-45" style={{filter: 'drop-shadow(0 0 15px rgba(236, 72, 153, 0.8)) drop-shadow(0 0 30px rgba(236, 72, 153, 0.4))'}} />
+                <h3 className="text-pink-400 group-hover:text-cyan-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors relative z-10">SLOTS</h3>
+              </div>
+            </a>
+          </div>
 
           {/* DICE */}
-          <a href="/epicrngworld/dice" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-cyan-400 px-[clamp(1rem,min(3vw,3vh),2.5rem)] py-[clamp(1rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-cyan-400/50 hover:border-green-400 hover:shadow-green-400/50 transition-all duration-300 transform hover:scale-105 rotate-1 hover:rotate-0 text-center">
-            <Coins className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-cyan-400 group-hover:text-green-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-colors" />
-            <h3 className="text-cyan-400 group-hover:text-green-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors">DICE</h3>
-          </a>
+          <div className="relative">
+            <div className="absolute -inset-3 bg-gradient-to-tl from-cyan-600/80 via-blue-600/90 to-cyan-600/80 rounded-xl animate-ping shadow-2xl shadow-cyan-500/60" style={{animationDuration: '3s'}}></div>
+            <a href="/epicrngworld/dice" className="group bg-gradient-to-tl from-black via-gray-900 to-black border-2 border-cyan-400 px-[clamp(2rem,min(6vw,6vh),6rem)] py-[clamp(1rem,min(2.5vw,2.5vh),2rem)] rounded-lg shadow-xl shadow-cyan-400/50 hover:border-green-400 hover:shadow-green-400/50 transition-all duration-300 transform hover:scale-105 rotate-1 hover:rotate-0 text-center overflow-hidden relative block">
+              <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-lg"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"></div>
+              <div className="relative">
+                <Coins className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-cyan-400 group-hover:text-green-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-all duration-700 animate-bounce group-hover:animate-spin transform group-hover:scale-110" style={{filter: 'drop-shadow(0 0 20px rgba(6, 182, 212, 0.9)) drop-shadow(0 0 40px rgba(6, 182, 212, 0.5))', animationDuration: '2s'}} />
+                <h3 className="text-cyan-400 group-hover:text-green-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors relative z-10">DICE</h3>
+              </div>
+            </a>
+          </div>
 
           {/* WHEEL */}
-          <a href="/epicrngworld/wheel" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-yellow-400 px-[clamp(1rem,min(3vw,3vh),2.5rem)] py-[clamp(1rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-yellow-400/50 hover:border-pink-400 hover:shadow-pink-400/50 transition-all duration-300 transform hover:scale-105 -rotate-1 hover:rotate-0 text-center">
-            <Shuffle className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-yellow-400 group-hover:text-pink-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-colors" />
-            <h3 className="text-yellow-400 group-hover:text-pink-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors">WHEEL</h3>
-          </a>
+          <div className="relative">
+            <div className="absolute -inset-3 bg-gradient-conic from-yellow-600/90 via-orange-600/80 to-yellow-600/90 rounded-xl animate-spin shadow-2xl shadow-yellow-500/60" style={{animationDuration: '8s'}}></div>
+            <a href="/epicrngworld/wheel" className="group bg-gradient-to-bl from-black via-yellow-900/40 to-black border-2 border-yellow-400 px-[clamp(2rem,min(6vw,6vh),6rem)] py-[clamp(1rem,min(2.5vw,2.5vh),2rem)] rounded-lg shadow-xl shadow-yellow-400/50 hover:border-pink-400 hover:shadow-pink-400/50 transition-all duration-300 transform hover:scale-105 -rotate-1 hover:rotate-0 text-center overflow-hidden relative block">
+              <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-white/20 to-transparent rounded-bl-lg"></div>
+              <div className="relative">
+                <Shuffle className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-yellow-400 group-hover:text-pink-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-all duration-500 animate-spin group-hover:animate-pulse transform group-hover:rotate-180" style={{filter: 'drop-shadow(0 0 25px rgba(251, 191, 36, 1)) drop-shadow(0 0 50px rgba(251, 191, 36, 0.6))', animationDuration: '3s'}} />
+                <h3 className="text-yellow-400 group-hover:text-pink-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors relative z-10">WHEEL</h3>
+              </div>
+            </a>
+          </div>
 
           {/* PLINKO */}
-          <a href="/epicrngworld/plinko" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-purple-400 px-[clamp(1rem,min(3vw,3vh),2.5rem)] py-[clamp(1rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-purple-400/50 hover:border-fuchsia-400 hover:shadow-fuchsia-400/50 transition-all duration-300 transform hover:scale-105 rotate-2 hover:rotate-0 text-center">
-            <div className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] border-4 border-purple-400 group-hover:border-fuchsia-400 rounded-full mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-colors"></div>
-            <h3 className="text-purple-400 group-hover:text-fuchsia-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors">PLINKO</h3>
-          </a>
+          <div className="relative">
+            <div className="absolute -inset-3 bg-gradient-to-tr from-purple-600/80 via-fuchsia-600/90 to-purple-600/80 rounded-xl animate-ping shadow-2xl shadow-purple-500/60" style={{animationDuration: '4s'}}></div>
+            <a href="/epicrngworld/plinko" className="group bg-gradient-to-tr from-black via-purple-900 to-black border-2 border-purple-400 px-[clamp(2rem,min(6vw,6vh),6rem)] py-[clamp(1rem,min(2.5vw,2.5vh),2rem)] rounded-lg shadow-xl shadow-purple-400/50 hover:border-fuchsia-400 hover:shadow-fuchsia-400/50 transition-all duration-300 transform hover:scale-105 rotate-2 hover:rotate-0 text-center overflow-hidden relative block">
+              <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-lg"></div>
+              <div className="absolute right-0 top-0 w-2 h-full bg-gradient-to-b from-purple-400/60 via-fuchsia-400/40 to-purple-400/60 animate-pulse"></div>
+              <div className="relative">
+                <div className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] border-4 border-purple-400 group-hover:border-fuchsia-400 rounded-full mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-all duration-700 animate-bounce group-hover:animate-ping transform group-hover:scale-125 relative" style={{filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)) drop-shadow(0 0 60px rgba(168, 85, 247, 0.4))', animationDuration: '1.5s'}}>
+                  <div className="absolute inset-1 bg-gradient-to-br from-purple-400/60 to-fuchsia-400/60 rounded-full animate-pulse"></div>
+                </div>
+                <h3 className="text-purple-400 group-hover:text-fuchsia-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors relative z-10">PLINKO</h3>
+              </div>
+            </a>
+          </div>
 
           {/* CRASH */}
-          <a href="/epicrngworld/crash" className="group bg-gradient-to-br from-black via-purple-900 to-black border-2 border-green-400 px-[clamp(1rem,min(3vw,3vh),2.5rem)] py-[clamp(1rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-green-400/50 hover:border-purple-400 hover:shadow-purple-400/50 transition-all duration-300 transform hover:scale-105 -rotate-1.5 hover:rotate-0 text-center">
-            <Star className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-green-400 group-hover:text-purple-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-colors" />
-            <h3 className="text-green-400 group-hover:text-purple-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors">CRASH</h3>
-          </a>
+          <div className="relative">
+            <div className="absolute -inset-3 bg-gradient-to-tl from-green-600/80 via-emerald-600/90 to-green-600/80 rounded-xl animate-bounce shadow-2xl shadow-green-500/60" style={{animationDuration: '2.5s'}}></div>
+            <a href="/epicrngworld/crash" className="group bg-gradient-to-tl from-black via-green-900/40 to-black border-2 border-green-400 px-[clamp(2rem,min(6vw,6vh),6rem)] py-[clamp(1rem,min(2.5vw,2.5vh),2rem)] rounded-lg shadow-xl shadow-green-400/50 hover:border-purple-400 hover:shadow-purple-400/50 transition-all duration-300 transform hover:scale-105 -rotate-1.5 hover:rotate-0 text-center overflow-hidden relative block">
+              <div className="absolute bottom-0 right-0 w-1/3 h-1/3 bg-gradient-to-tl from-white/20 to-transparent rounded-br-lg"></div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent animate-ping"></div>
+              <div className="absolute top-1 right-1 w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
+              <div className="relative">
+                <Star className="w-[clamp(1.5rem,min(6vw,6vh),4rem)] h-[clamp(1.5rem,min(6vw,6vh),4rem)] text-green-400 group-hover:text-purple-400 mx-auto mb-[clamp(0.5rem,min(2vw,2vh),1.2rem)] transition-all duration-600 animate-pulse group-hover:animate-bounce transform group-hover:rotate-12 group-hover:scale-110" style={{filter: 'drop-shadow(0 0 35px rgba(34, 197, 94, 1)) drop-shadow(0 0 70px rgba(34, 197, 94, 0.5))', animationDuration: '1.8s'}} />
+                <h3 className="text-green-400 group-hover:text-purple-400 font-mono font-black text-[clamp(0.6rem,min(2vw,2vh),1.2rem)] transition-colors relative z-10">CRASH</h3>
+              </div>
+            </a>
+          </div>
 
         </div>
       </div>
 
       {/* My Gorbz Button */}
       <div className="relative z-10 mt-[clamp(2rem,4vh,3rem)] flex justify-center pb-8">
-        <a
-          href={user ? "/deathbooty" : "#"}
-          onClick={!user ? (e) => { e.preventDefault(); setShowAuthModal(true); } : undefined}
-          className="group bg-gradient-to-br from-black via-gray-900 to-black border-2 border-orange-400 px-[clamp(3rem,min(8vw,6vh),5rem)] py-[clamp(1.5rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-orange-400/50 hover:border-yellow-400 hover:shadow-yellow-400/50 transition-all duration-300 transform hover:scale-105 text-center"
-        >
-          <h3 className="text-orange-400 group-hover:text-yellow-400 font-mono font-black text-[clamp(1rem,min(3vw,2vh),1.5rem)] transition-colors">
-            {user ? "MY GORBZ" : "SIGN UP"}
-          </h3>
-        </a>
+        <div className="relative">
+          {/* Enhanced background layers matching home page */}
+          <div className="absolute -inset-6 bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 rounded-xl opacity-90"></div>
+          <div className="absolute -inset-5 bg-gradient-to-r from-pink-500/60 via-purple-500/70 via-cyan-500/60 to-green-500/60 animate-pulse rounded-xl"></div>
+          <div className="absolute -inset-4 bg-gradient-to-bl from-yellow-400/40 via-transparent via-red-500/50 to-blue-500/40 animate-ping rounded-xl" style={{animationDuration: '4s'}}></div>
+          
+          {/* Floating shapes around button */}
+          <div className="absolute -top-2 -left-2 w-4 h-4 bg-pink-400 rotate-45 animate-bounce opacity-80 shadow-xl shadow-pink-400/50"></div>
+          <div className="absolute -top-1 -right-3 w-5 h-5 border-2 border-cyan-400 rotate-45 animate-spin opacity-70 shadow-xl shadow-cyan-400/50"></div>
+          <div className="absolute -bottom-2 -left-3 w-3 h-3 bg-yellow-400 rounded-full animate-pulse opacity-80 shadow-xl shadow-yellow-400/50"></div>
+          <div className="absolute -bottom-1 -right-2 w-4 h-4 bg-green-400 animate-pulse opacity-70 shadow-xl shadow-green-400/50"></div>
+          
+          {/* Rotating overlays */}
+          <div className="absolute -inset-3 bg-gradient-conic from-pink-500/40 via-cyan-500/40 via-yellow-500/40 to-green-500/40 animate-spin rounded-xl" style={{animationDuration: '20s'}}></div>
+          <div className="absolute -inset-2 bg-gradient-conic from-purple-500/30 via-red-500/30 via-blue-500/30 to-orange-500/30 animate-spin rounded-xl" style={{animationDuration: '30s', animationDirection: 'reverse'}}></div>
+          
+          <a
+            href={user ? "/epicrngworld/mygorbz" : "#"}
+            onClick={!user ? (e) => { e.preventDefault(); setShowAuthModal(true); } : undefined}
+            className="group bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 border-2 border-pink-400 hover:border-cyan-400 px-[clamp(3rem,min(8vw,6vh),5rem)] py-[clamp(1.5rem,min(3vw,3vh),2.5rem)] rounded-lg shadow-xl shadow-pink-400/50 hover:shadow-cyan-400/50 transition-all duration-300 transform hover:scale-105 text-center overflow-hidden relative block"
+          >
+            {/* Matrix-like falling elements */}
+            <div className="absolute inset-0 pointer-events-none opacity-40">
+              <div className="absolute font-mono text-xs font-bold animate-pulse text-pink-400" style={{left: '10%', top: '20%', animationDelay: '0s', textShadow: '0 0 10px currentColor'}}>💎</div>
+              <div className="absolute font-mono text-xs font-bold animate-pulse text-cyan-400" style={{right: '15%', top: '30%', animationDelay: '0.5s', textShadow: '0 0 10px currentColor'}}>⚡</div>
+              <div className="absolute font-mono text-xs font-bold animate-pulse text-yellow-400" style={{left: '20%', bottom: '25%', animationDelay: '1s', textShadow: '0 0 10px currentColor'}}>🔥</div>
+              <div className="absolute font-mono text-xs font-bold animate-pulse text-green-400" style={{right: '25%', bottom: '35%', animationDelay: '1.5s', textShadow: '0 0 10px currentColor'}}>💰</div>
+            </div>
+            
+            <div className="relative">
+              <h3 className="font-mono font-black text-[clamp(1rem,min(3vw,2vh),1.5rem)] transition-all duration-500 transform group-hover:scale-110 relative z-10 text-yellow-400" style={{
+                textShadow: '0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.8), 0 0 90px rgba(255, 255, 0, 0.6)'
+              }}>
+                {user ? "MY GORBZ" : "SIGN UP"}
+              </h3>
+            </div>
+          </a>
+        </div>
       </div>
 
       {/* Auth Modal */}
@@ -376,10 +453,18 @@ export default function EpicRngWorldPage() {
         }
         @keyframes glow-pulse {
           0% { 
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 40px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.4);
+            text-shadow: 0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 255, 0, 0.8), 0 0 90px rgba(255, 255, 0, 0.6), 0 0 120px rgba(255, 255, 0, 0.4);
           }
           100% { 
-            text-shadow: 0 0 30px rgba(251, 191, 36, 1), 0 0 60px rgba(251, 191, 36, 0.8), 0 0 90px rgba(251, 191, 36, 0.6);
+            text-shadow: 0 0 50px rgba(255, 255, 0, 1), 0 0 100px rgba(255, 255, 0, 0.9), 0 0 150px rgba(255, 255, 0, 0.7), 0 0 200px rgba(255, 255, 0, 0.5);
+          }
+        }
+        @keyframes title-float {
+          0%, 100% { 
+            transform: translateY(0px) scale(1);
+          }
+          50% { 
+            transform: translateY(-5px) scale(1.02);
           }
         }
       `}</style>
