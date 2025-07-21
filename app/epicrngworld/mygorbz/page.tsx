@@ -195,6 +195,22 @@ export default function MyGorbzPage() {
         <div className="mt-4 text-xl font-mono font-bold text-cyan-400">
           {userGorbz.length} / {allGorbz.length} Collected
         </div>
+        
+        {/* Prominent Shop Button */}
+        <div className="mt-8">
+          <a
+            href="/epicrngworld/shop"
+            className="inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 border-4 border-purple-400 hover:border-pink-400 transition-all duration-300 font-bold transform hover:scale-110 shadow-2xl shadow-purple-500/60 hover:shadow-pink-500/60 rounded-xl backdrop-blur-sm text-white hover:text-purple-100 text-2xl font-mono font-black"
+            style={{
+              textShadow: '0 0 10px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 0, 0, 0.8)',
+              boxShadow: '0 0 30px rgba(147, 51, 234, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3)'
+            }}
+          >
+            <Gem className="w-8 h-8 animate-pulse" />
+            <span>GET MORE GORBZ</span>
+            <Gem className="w-8 h-8 animate-pulse" />
+          </a>
+        </div>
       </div>
 
       {/* Gorbz Collection */}
@@ -212,7 +228,7 @@ export default function MyGorbzPage() {
               const isEquipped = profile?.main_gorb === gorb.id
 
               return (
-                <div key={gorb.id} className="relative group">
+                <div key={gorb.id} className="relative group flex flex-col items-center">
                   {/* Rarity Halo */}
                   <div className={`absolute -inset-4 bg-gradient-to-r ${config.bg} rounded-full ${config.glow} ${config.animation} opacity-75`}></div>
                   

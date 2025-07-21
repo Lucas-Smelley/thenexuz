@@ -35,7 +35,7 @@ export default function ShopPage() {
   const spinTiers = {
     basic: {
       name: 'BASIC SPIN',
-      cost: 100,
+      cost: 500,
       color: 'gray',
       weights: { RayOfSunshine: 0.0001, Epic: 0.002, Bombaclat: 0.017, Crusty: 0.087, Ahh: 0.894 }
     },
@@ -47,13 +47,13 @@ export default function ShopPage() {
     },
     elite: {
       name: 'ELITE SPIN',
-      cost: 1000,
+      cost: 5000,
       color: 'purple',
       weights: { RayOfSunshine: 0.005, Epic: 0.03, Bombaclat: 0.1, Crusty: 0.35, Ahh: 0.515 }
     },
     legendary: {
       name: 'LEGENDARY SPIN',
-      cost: 5000,
+      cost: 10000,
       color: 'yellow',
       weights: { RayOfSunshine: 0.02, Epic: 0.1, Bombaclat: 0.2, Crusty: 0.5, Ahh: 0.18 }
     }
@@ -89,10 +89,13 @@ export default function ShopPage() {
     }
   }
 
-  const startSpin = (tier: keyof typeof spinTiers) => {
-    if (!profile || profile.epic_coins < spinTiers[tier].cost) return
+  const openSpinModal = (tier: keyof typeof spinTiers) => {
     setSelectedTier(tier)
     setShowSpinModal(true)
+  }
+
+  const startSpin = () => {
+    if (!profile || !selectedTier || profile.epic_coins < spinTiers[selectedTier].cost) return
     setIsSpinning(true)
     
     // Start the CSS animation after a delay
@@ -101,7 +104,7 @@ export default function ShopPage() {
     }, 500)
     
     // Handle the spin logic
-    spinForGorb(tier)
+    spinForGorb(selectedTier)
   }
 
   const spinForGorb = async (tier: keyof typeof spinTiers) => {
@@ -145,27 +148,31 @@ export default function ShopPage() {
       const randomIndex = Math.floor(Math.random() * weightedRarities.length)
       const wonRarity = weightedRarities[randomIndex] || 'Ahh'
 
-      // Get a random Gorb of the won rarity that the user doesn't own yet
-      const availableGorbz = allGorbz.filter(gorb => 
-        gorb.rarity === wonRarity && !profile.gorbz?.includes(gorb.id)
-      )
+      // Get a random Gorb of the won rarity (regardless of ownership)
+      const availableGorbz = allGorbz.filter(gorb => gorb.rarity === wonRarity)
       
       if (availableGorbz.length > 0) {
         const wonGorb = availableGorbz[Math.floor(Math.random() * availableGorbz.length)]
         
-        // Add the Gorb to user's collection
-        const updatedGorbz = [...(profile.gorbz || []), wonGorb.id]
-        await supabase
-          .from('users')
-          .update({ 
-            gorbz: updatedGorbz,
-            gorbz_collected_total: (profile.gorbz_collected_total || 0) + 1
-          })
-          .eq('id', user?.id)
+        // Check if user already owns this Gorb
+        const isOwned = profile.gorbz?.includes(wonGorb.id)
         
+        if (!isOwned) {
+          // Add the Gorb to user's collection
+          const updatedGorbz = [...(profile.gorbz || []), wonGorb.id]
+          await supabase
+            .from('users')
+            .update({ 
+              gorbz: updatedGorbz,
+              gorbz_collected_total: (profile.gorbz_collected_total || 0) + 1
+            })
+            .eq('id', user?.id)
+        }
+        
+        // Always set the result to show the gorb (whether new or duplicate)
         setSpinResult(wonGorb.id)
       } else {
-        // Give duplicate - just show the rarity
+        // Fallback - just show the rarity
         setSpinResult(wonRarity)
       }
 
@@ -303,7 +310,7 @@ export default function ShopPage() {
                 }`}></div>
                 
                 <button
-                  onClick={() => startSpin(tierKey as keyof typeof spinTiers)}
+                  onClick={() => openSpinModal(tierKey as keyof typeof spinTiers)}
                   disabled={!canAfford}
                   className={`relative w-full bg-gradient-to-br from-black via-gray-900 to-black border-2 rounded-xl p-6 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
                     tier.color === 'gray' ? 'border-gray-400 hover:border-gray-300 shadow-xl shadow-gray-400/50' :
@@ -368,10 +375,35 @@ export default function ShopPage() {
       {showSpinModal && selectedTier && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Background Blur */}
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+            onClick={() => {
+              if (!isSpinning) {
+                setShowSpinModal(false)
+                setSpinResult(null)
+                setSelectedTier(null)
+                setSpinClass('')
+              }
+            }}
+          ></div>
           
           {/* Modal Content */}
           <div className="relative bg-gradient-to-br from-purple-900 via-black to-blue-900 border-2 border-yellow-400 rounded-2xl p-8 max-w-4xl w-full mx-4 shadow-2xl shadow-yellow-400/50">
+            {/* X Close Button */}
+            {!isSpinning && (
+              <button
+                onClick={() => {
+                  setShowSpinModal(false)
+                  setSpinResult(null)
+                  setSelectedTier(null)
+                  setSpinClass('')
+                }}
+                className="absolute top-4 right-4 w-8 h-8 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-200 hover:scale-110"
+              >
+                ×
+              </button>
+            )}
+            
             <div className="text-center space-y-8">
               {/* Tier Info */}
               <div>
@@ -450,23 +482,53 @@ export default function ShopPage() {
               </div>
 
               {/* Spin Status */}
-              {isSpinning ? (
+              {!isSpinning && !spinResult ? (
+                <div className="space-y-6">
+                  <div className="text-xl font-mono font-bold text-white">
+                    Ready to spin for amazing Gorbz?
+                  </div>
+                  {profile && selectedTier && profile.epic_coins >= spinTiers[selectedTier].cost ? (
+                    <button
+                      onClick={startSpin}
+                      className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-mono font-black rounded-lg transition-all duration-300 transform hover:scale-105 text-2xl shadow-2xl shadow-green-500/50"
+                    >
+                      🎰 SPIN NOW 🎰
+                    </button>
+                  ) : (
+                    <div className="text-red-400 font-mono font-black text-lg">
+                      INSUFFICIENT EPIC COINS
+                    </div>
+                  )}
+                </div>
+              ) : isSpinning ? (
                 <div className="text-2xl font-mono font-black text-yellow-400 animate-pulse">
                   SPINNING...
                 </div>
               ) : spinResult ? (
                 <div className="space-y-4">
-                  <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
-                    🎉 YOU WON! 🎉
-                  </div>
-                  {allGorbz.find(g => g.id === spinResult) && (
-                    <div>
-                      <div className="text-2xl font-mono font-black text-yellow-400">
-                        {allGorbz.find(g => g.id === spinResult)?.name}
+                  {allGorbz.find(g => g.id === spinResult) ? (
+                    <>
+                      {profile?.gorbz?.includes(spinResult) ? (
+                        <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
+                          😔 AWW DUPLICATE 😔
+                        </div>
+                      ) : (
+                        <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                          🎉 YOU WON! 🎉
+                        </div>
+                      )}
+                      <div>
+                        <div className="text-2xl font-mono font-black text-yellow-400">
+                          {allGorbz.find(g => g.id === spinResult)?.name}
+                        </div>
+                        <div className={`text-xl font-mono ${getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').textColor}`}>
+                          {getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').label}
+                        </div>
                       </div>
-                      <div className={`text-xl font-mono ${getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').textColor}`}>
-                        {getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').label}
-                      </div>
+                    </>
+                  ) : (
+                    <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                      🎉 YOU WON! 🎉
                     </div>
                   )}
                   <button
