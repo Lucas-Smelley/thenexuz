@@ -427,7 +427,7 @@ export default function PlinkoPage() {
         }`}>
           
           {/* Game Header */}
-          <div className="text-center py-8 bg-gradient-to-b from-black/80 to-transparent relative">
+          <div className="text-center py-4 sm:py-8 bg-gradient-to-b from-black/80 to-transparent relative">
             <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider relative z-10"
                 style={{
                   background: 'linear-gradient(45deg, #10b981, #06b6d4, #8b5cf6, #ec4899, #f59e0b)',
@@ -443,16 +443,16 @@ export default function PlinkoPage() {
           </div>
           
           {/* Main Game Area */}
-          <div className="max-w-6xl mx-auto px-4 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 sm:gap-6">
               
               {/* Plinko Board - Center */}
               <div className="lg:col-span-2 order-1 lg:order-2">
-                <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-4 border-yellow-400 rounded-2xl p-6 shadow-2xl relative overflow-hidden" style={{
+                <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-4 border-yellow-400 rounded-2xl p-3 sm:p-6 shadow-2xl relative overflow-hidden" style={{
                   boxShadow: '0 0 40px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.3)'
                 }}>
-                  <div className="text-center mb-4">
-                    <h3 className="font-black text-xl font-mono animate-pulse" style={{
+                  <div className="text-center mb-2 sm:mb-4">
+                    <h3 className="font-black text-lg sm:text-xl font-mono animate-pulse" style={{
                       background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
@@ -461,9 +461,15 @@ export default function PlinkoPage() {
                     }}>PLINKO BOARD</h3>
                   </div>
                   
-                  {/* Plinko Board SVG */}
-                  <div className="relative bg-green-900/50 rounded-xl border-2 border-gold-400 p-4">
-                    <svg width="100%" height="600" viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT + 100}`} className="border-2 border-green-400 rounded-lg bg-green-800/30">
+                  {/* Plinko Board SVG - Mobile Responsive */}
+                  <div className="relative bg-green-900/50 rounded-xl border-2 border-gold-400 p-2 sm:p-4">
+                    <svg 
+                      width="100%" 
+                      height="auto" 
+                      viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT + 100}`} 
+                      className="border-2 border-green-400 rounded-lg bg-green-800/30 max-h-[70vh] sm:max-h-none"
+                      preserveAspectRatio="xMidYMid meet"
+                    >
                       {/* Draw pegs */}
                       {pegs.map((peg, index) => (
                         <circle
@@ -554,11 +560,11 @@ export default function PlinkoPage() {
                   </div>
                   
                   {/* Drop Button - Bottom of Plinko Board */}
-                  <div className="mt-6">
+                  <div className="mt-3 sm:mt-6">
                     <button
                       onClick={dropBall}
                       disabled={isDropping || (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)}
-                      className={`w-full py-4 text-xl font-black font-mono rounded-xl transition-all duration-300 transform ${
+                      className={`w-full py-3 sm:py-4 text-lg sm:text-xl font-black font-mono rounded-xl transition-all duration-300 transform ${
                         isDropping
                           ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
                           : (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
