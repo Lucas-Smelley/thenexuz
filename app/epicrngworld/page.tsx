@@ -194,38 +194,39 @@ export default function EpicRngWorldPage() {
       </div>
 
       {/* Header */}
-      <header className="relative z-30 p-4 flex justify-between items-center">
+      <header className="relative z-30 p-2 sm:p-4 flex justify-between items-center">
         <a
           href="/"
-          className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-black via-purple-900 to-black border-2 border-pink-400 hover:border-cyan-400 transition-all duration-300 font-bold transform hover:scale-105 shadow-xl shadow-pink-400/50 hover:shadow-cyan-400/50 rounded-lg backdrop-blur-sm text-pink-400 hover:text-cyan-400"
+          className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 sm:py-2 bg-gradient-to-r from-black via-purple-900 to-black border border-2 border-pink-400 hover:border-cyan-400 transition-all duration-300 font-bold transform hover:scale-105 shadow-lg sm:shadow-xl shadow-pink-400/50 hover:shadow-cyan-400/50 rounded-md sm:rounded-lg backdrop-blur-sm text-pink-400 hover:text-cyan-400"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm font-mono font-black">NEXUZ</span>
+          <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+          <span className="text-xs sm:text-sm font-mono font-black whitespace-nowrap hidden xs:inline sm:inline">NEXUZ</span>
+          <span className="text-xs font-mono font-black xs:hidden sm:hidden">HOME</span>
         </a>
 
         {user && profile ? (
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-black via-purple-900 to-black border-2 border-green-400 px-3 py-2 font-mono rounded-lg shadow-xl shadow-green-400/50 backdrop-blur-sm">
-              <div className="flex items-center space-x-2">
-                <Coins className="w-4 h-4 text-green-400 animate-pulse" />
-                <span className="text-sm font-black text-green-400">{profile.epic_coins.toLocaleString()}EC</span>
+          <div className="flex items-center gap-1 sm:gap-2 flex-col sm:flex-row">
+            <div className="bg-gradient-to-r from-black via-purple-900 to-black border border-2 border-green-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-xl shadow-green-400/50 backdrop-blur-sm">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <Coins className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-green-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-black text-green-400">{profile.epic_coins.toLocaleString()}EC</span>
               </div>
             </div>
             
             <div className="relative" data-user-menu>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="bg-gradient-to-r from-black via-purple-900 to-black border-2 border-cyan-400 px-3 py-2 font-mono rounded-lg shadow-xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
+                className="bg-gradient-to-r from-black via-purple-900 to-black border border-2 border-cyan-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-xl shadow-cyan-400/50 backdrop-blur-sm hover:border-purple-400 transition-colors"
               >
-                <div className="flex items-center space-x-2">
-                  <User className="w-4 h-4 text-cyan-400" />
-                  <span className="text-sm font-black text-cyan-400">{profile.username}</span>
-                  <ChevronDown className={`w-3 h-3 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                <div className="flex items-center space-x-1 sm:space-x-2">
+                  <User className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-cyan-400" />
+                  <span className="text-xs sm:text-sm font-black text-cyan-400 max-w-16 sm:max-w-20 md:max-w-none truncate">{profile.username}</span>
+                  <ChevronDown className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 text-cyan-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </div>
               </button>
               
               {showUserMenu && (
-                <div className="absolute right-0 top-full mt-2 bg-gradient-to-r from-black via-purple-900 to-black border-2 border-cyan-400 rounded-md shadow-xl shadow-cyan-400/50 backdrop-blur-sm min-w-[160px] z-50">
+                <div className="absolute right-0 top-full mt-1 sm:mt-2 bg-gradient-to-r from-black via-purple-900 to-black border border-2 border-cyan-400 rounded-md sm:rounded-lg shadow-lg sm:shadow-xl shadow-cyan-400/50 backdrop-blur-sm min-w-[140px] sm:min-w-[160px] max-w-[180px] sm:max-w-[200px] z-50">
                   <div className="p-2">
                     <div className="px-3 py-2 border-b border-cyan-400/30">
                       <div className="text-xs text-cyan-300 font-mono">Signed in as</div>
@@ -248,18 +249,18 @@ export default function EpicRngWorldPage() {
             </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border-2 border-yellow-400 px-3 py-2 font-mono rounded-lg shadow-xl shadow-yellow-400/50 backdrop-blur-sm hover:border-orange-400 transition-colors overflow-hidden">
+          <div className="flex items-center gap-1 sm:gap-2 flex-col sm:flex-row">
+            <div className="bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border border-2 border-yellow-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-xl shadow-yellow-400/50 backdrop-blur-sm hover:border-orange-400 transition-colors overflow-hidden">
               <div className="absolute inset-0 bg-yellow-400/15 animate-pulse"></div>
-              <div className="relative flex items-center space-x-1">
-                <TrendingUp className="w-4 h-4 text-yellow-400 animate-pulse" />
-                <span className="text-sm font-black text-yellow-400">RNG: {Math.floor(cryptoPrice).toLocaleString()}EC</span>
+              <div className="relative flex items-center space-x-1 sm:space-x-2">
+                <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-yellow-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-black text-yellow-400 whitespace-nowrap">RNG: {Math.floor(cryptoPrice).toLocaleString()}EC</span>
               </div>
             </div>
             
             <button
               onClick={() => setShowAuthModal(true)}
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 font-mono font-black text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 border-2 border-white rounded-lg shadow-xl shadow-pink-500/50 transform hover:scale-105"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-2 sm:px-4 py-1 sm:py-2 font-mono font-black text-xs sm:text-sm hover:from-purple-500 hover:to-pink-500 transition-all duration-300 border border-2 border-white rounded-md sm:rounded-lg shadow-lg sm:shadow-xl shadow-pink-500/50 transform hover:scale-105"
             >
               LOGIN
             </button>

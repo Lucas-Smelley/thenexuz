@@ -126,7 +126,7 @@ export default function PlinkoPage() {
     const newBall = {
       id: ballId,
       x: startX,
-      y: 20,
+      y: -20, // Start higher up in the new viewBox coordinate system
       vx: (Math.random() - 0.5) * 2,
       vy: 0,
       betAmount: currentBet
@@ -202,6 +202,8 @@ export default function PlinkoPage() {
         const multiplier = multipliers[finalSlot]
         const winnings = Math.floor(ball.betAmount * multiplier)
         
+        console.log('Ball landed - X:', ball.x, 'Slot:', finalSlot, 'Multiplier:', multiplier, 'Bet:', ball.betAmount, 'Winnings:', winnings)
+        
         // Update history and stats
         const isWin = winnings >= ball.betAmount
         setBallHistory(prev => [...prev.slice(-9), { 
@@ -224,21 +226,47 @@ export default function PlinkoPage() {
           setTotalLosses(prev => prev + 1)
         }
         
-        if (winnings > 0) {
+        if (winnings > 0 && user) {
           // Award winnings
+          console.log('Awarding winnings:', winnings, 'for multiplier:', multiplier)
           supabase
             .from('users')
             .select('epic_coins')
             .eq('id', user.id)
             .single()
-            .then(({ data: currentProfile }) => {
-              if (currentProfile) {
+            .then(({ data: currentProfile, error: selectError }: { data: any, error: any }) => {
+              if (selectError) {
+                console.error('Error fetching current profile:', selectError)
+                return
+              }
+              if (currentProfile && typeof currentProfile.epic_coins === 'number') {
+                console.log('Current coins:', currentProfile.epic_coins, 'Adding:', winnings)
+                const newCoinAmount = Math.max(0, currentProfile.epic_coins + winnings)
+                console.log('Updating to:', newCoinAmount)
                 supabase
                   .from('users')
-                  .update({ epic_coins: currentProfile.epic_coins + winnings })
+                  .update({ epic_coins: newCoinAmount })
                   .eq('id', user.id)
-                  .then(() => refreshProfile())
+                  .then(({ data, error: updateError }: { data: any, error: any }) => {
+                    if (updateError) {
+                      console.error('Error updating coins:', {
+                        error: updateError,
+                        message: updateError?.message,
+                        details: updateError?.details,
+                        hint: updateError?.hint,
+                        code: updateError?.code,
+                        userId: user.id,
+                        attemptedAmount: newCoinAmount
+                      })
+                    } else {
+                      console.log('Successfully awarded winnings, refreshing profile. Updated data:', data)
+                      refreshProfile()
+                    }
+                  })
               }
+            })
+            .catch((error: any) => {
+              console.error('Error in winnings payout:', error)
             })
         }
 
@@ -352,24 +380,25 @@ export default function PlinkoPage() {
         </div>
 
         {/* Back button */}
-        <div className="absolute top-4 left-4 z-30">
+        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-40">
           <a
             href="/epicrngworld"
-            className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1 sm:py-2 bg-black/80 border-2 border-purple-400 hover:border-fuchsia-400 transition-all duration-300 font-bold transform hover:scale-110 shadow-2xl shadow-purple-400/50 hover:shadow-fuchsia-400/50 rounded-lg backdrop-blur-sm"
+            className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 sm:py-2 bg-black/80 border border-2 border-purple-400 hover:border-fuchsia-400 transition-all duration-300 font-bold transform hover:scale-110 shadow-lg sm:shadow-2xl shadow-purple-400/50 hover:shadow-fuchsia-400/50 rounded-md sm:rounded-lg backdrop-blur-sm"
           >
-            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-            <span className="text-xs sm:text-sm font-mono font-black text-purple-400 whitespace-nowrap">BACK TO RNG WORLD</span>
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-purple-400" />
+            <span className="text-xs sm:text-sm font-mono font-black text-purple-400 whitespace-nowrap hidden xs:inline sm:inline">BACK TO RNG WORLD</span>
+            <span className="text-xs font-mono font-black text-purple-400 xs:hidden sm:hidden">BACK</span>
           </a>
         </div>
 
         {/* User info / Epic Coins */}
-        <div className="absolute top-4 right-4 z-30">
+        <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-40">
           {user && profile ? (
-            <div className="flex items-center gap-2 sm:gap-3 flex-col sm:flex-row">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-col sm:flex-row">
               {/* Epic Coins Display */}
-              <div className="bg-black/80 border-2 border-purple-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-purple-400/50 backdrop-blur-sm">
+              <div className="bg-black/80 border border-2 border-purple-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-2xl shadow-purple-400/50 backdrop-blur-sm">
                 <div className="flex items-center space-x-1 sm:space-x-2">
-                  <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 animate-pulse" />
+                  <Coins className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-purple-400 animate-pulse" />
                   <span className="text-xs sm:text-sm font-black text-purple-400 whitespace-nowrap">{profile.epic_coins.toLocaleString()}EC</span>
                 </div>
               </div>
@@ -378,18 +407,18 @@ export default function PlinkoPage() {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="bg-black/80 border-2 border-fuchsia-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-fuchsia-400/50 backdrop-blur-sm hover:border-pink-400 transition-colors"
+                  className="bg-black/80 border border-2 border-fuchsia-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-2xl shadow-fuchsia-400/50 backdrop-blur-sm hover:border-pink-400 transition-colors"
                 >
                   <div className="flex items-center space-x-1 sm:space-x-2">
-                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-fuchsia-400" />
-                    <span className="text-xs sm:text-sm font-black text-fuchsia-400 max-w-20 sm:max-w-none truncate">{profile.username}</span>
-                    <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 text-fuchsia-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                    <User className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-fuchsia-400" />
+                    <span className="text-xs sm:text-sm font-black text-fuchsia-400 max-w-16 sm:max-w-20 md:max-w-none truncate">{profile.username}</span>
+                    <ChevronDown className={`w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 text-fuchsia-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                   </div>
                 </button>
                 
                 {/* Dropdown Menu */}
                 {showUserMenu && (
-                  <div className="absolute right-0 top-full mt-2 bg-black/90 border-2 border-fuchsia-400 rounded-lg shadow-2xl shadow-fuchsia-400/50 backdrop-blur-sm min-w-[160px] max-w-[200px] z-50">
+                  <div className="absolute right-0 top-full mt-1 sm:mt-2 bg-black/90 border border-2 border-fuchsia-400 rounded-md sm:rounded-lg shadow-lg sm:shadow-2xl shadow-fuchsia-400/50 backdrop-blur-sm min-w-[140px] sm:min-w-[160px] max-w-[180px] sm:max-w-[200px] z-50">
                     <div className="p-2">
                       <div className="px-3 py-2 border-b border-fuchsia-400/30">
                         <div className="text-xs text-fuchsia-300 font-mono">Signed in as</div>
@@ -412,9 +441,9 @@ export default function PlinkoPage() {
               </div>
             </div>
           ) : (
-            <div className="bg-black/80 border-2 border-purple-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-purple-400/50 backdrop-blur-sm">
+            <div className="bg-black/80 border border-2 border-purple-400 px-2 sm:px-3 py-1 sm:py-2 font-mono rounded-md sm:rounded-lg shadow-lg sm:shadow-2xl shadow-purple-400/50 backdrop-blur-sm">
               <div className="flex items-center space-x-1 sm:space-x-2">
-                <span className="text-xs sm:text-sm font-black text-purple-400 whitespace-nowrap">PLINKO</span>
+                <span className="text-xs sm:text-sm font-black text-purple-400 whitespace-nowrap">🎲 PLINKO</span>
               </div>
             </div>
           )}
@@ -422,7 +451,7 @@ export default function PlinkoPage() {
 
 
         {/* Main content */}
-        <div className={`relative min-h-screen transition-all duration-1000 ${
+        <div className={`relative min-h-screen ${
           balls.length > 0 ? 'z-30' : 'z-20'
         }`}>
           
@@ -463,13 +492,13 @@ export default function PlinkoPage() {
                   
                   {/* Plinko Board SVG - Mobile Responsive */}
                   <div className="relative bg-green-900/50 rounded-xl border-2 border-gold-400 p-2 sm:p-4">
-                    <svg 
-                      width="100%" 
-                      height="auto" 
-                      viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT + 100}`} 
-                      className="border-2 border-green-400 rounded-lg bg-green-800/30 max-h-[70vh] sm:max-h-none"
-                      preserveAspectRatio="xMidYMid meet"
-                    >
+                    <div className="w-full max-h-[70vh] sm:max-h-none overflow-hidden">
+                      <svg 
+                        width="100%" 
+                        viewBox={`0 -40 ${BOARD_WIDTH} ${BOARD_HEIGHT + 140}`} 
+                        className="border-2 border-green-400 rounded-lg bg-green-800/30 w-full h-auto"
+                        preserveAspectRatio="xMidYMid meet"
+                      >
                       {/* Draw pegs */}
                       {pegs.map((peg, index) => (
                         <circle
@@ -536,7 +565,7 @@ export default function PlinkoPage() {
                       {/* Drop zone indicator */}
                       <rect
                         x={BOARD_WIDTH / 2 - 30}
-                        y={0}
+                        y={50}
                         width={60}
                         height={20}
                         fill="#34d399"
@@ -547,7 +576,7 @@ export default function PlinkoPage() {
                       />
                       <text
                         x={BOARD_WIDTH / 2}
-                        y={14}
+                        y={64}
                         textAnchor="middle"
                         fill="white"
                         fontSize="12"
@@ -557,6 +586,7 @@ export default function PlinkoPage() {
                         DROP
                       </text>
                     </svg>
+                    </div>
                   </div>
                   
                   {/* Drop Button - Bottom of Plinko Board */}
