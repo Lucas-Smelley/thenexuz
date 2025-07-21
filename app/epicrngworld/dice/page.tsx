@@ -165,27 +165,33 @@ export default function DicePage() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-black via-teal-950 to-cyan-900 relative overflow-hidden">
-        {/* Animated Background */}
+        {/* Cohesive Green Casino Background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 via-teal-500/30 via-cyan-500/20 to-blue-500/20 animate-pulse"></div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-lime-400/15 via-transparent via-emerald-500/20 to-teal-500/15 animate-ping" style={{animationDuration: '5s'}}></div>
+          {/* Primary green casino gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-green-800/40 via-emerald-700/50 via-teal-600/40 to-green-800/40 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-bl from-green-400/20 via-transparent via-emerald-500/25 to-teal-500/20 animate-ping" style={{animationDuration: '5s'}}></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-emerald-600/15 via-green-500/20 via-teal-500/15 to-emerald-600/15 animate-bounce" style={{animationDuration: '8s'}}></div>
           
-          {/* Dice-themed grid pattern */}
+          {/* Subtle accent spinning rings */}
+          <div className="absolute inset-0 bg-gradient-conic from-green-500/15 via-emerald-500/15 via-teal-500/15 via-cyan-500/10 via-green-500/15 to-green-500/15 animate-spin" style={{animationDuration: '20s'}}></div>
+          <div className="absolute inset-0 bg-gradient-conic from-emerald-400/10 via-green-400/10 via-teal-400/10 to-emerald-400/10 animate-spin" style={{animationDuration: '30s', animationDirection: 'reverse'}}></div>
+          
+          {/* Cohesive green grid pattern */}
           <div className="absolute inset-0 opacity-25">
-            <div className="grid grid-cols-16 grid-rows-16 h-full w-full">
-              {Array.from({ length: 256 }).map((_, i) => (
+            <div className="grid grid-cols-16 grid-rows-12 h-full w-full">
+              {Array.from({ length: 192 }).map((_, i) => (
                 <div
                   key={i}
                   className={`border ${
-                    i % 6 === 0 ? 'border-green-400/30 bg-green-500/5' :
-                    i % 6 === 1 ? 'border-teal-400/30 bg-teal-500/5' :
-                    i % 6 === 2 ? 'border-cyan-400/30 bg-cyan-500/5' :
-                    i % 6 === 3 ? 'border-blue-400/30 bg-blue-500/5' :
-                    i % 6 === 4 ? 'border-emerald-400/30 bg-emerald-500/5' :
-                    'border-lime-400/30 bg-lime-500/5'
-                  } animate-pulse`}
+                    i % 6 === 0 ? 'border-green-400/30 bg-green-500/8 shadow-sm shadow-green-400/20' :
+                    i % 6 === 1 ? 'border-emerald-400/30 bg-emerald-500/8 shadow-sm shadow-emerald-400/20' :
+                    i % 6 === 2 ? 'border-teal-400/30 bg-teal-500/8 shadow-sm shadow-teal-400/20' :
+                    i % 6 === 3 ? 'border-cyan-400/25 bg-cyan-500/6 shadow-sm shadow-cyan-400/15' :
+                    i % 6 === 4 ? 'border-lime-400/25 bg-lime-500/6 shadow-sm shadow-lime-400/15' :
+                    'border-yellow-400/20 bg-yellow-500/5 shadow-sm shadow-yellow-400/10'
+                  } animate-pulse transition-all duration-300`}
                   style={{
-                    animationDelay: `${(i * 0.02) % 4}s`,
+                    animationDelay: `${(i * 0.02) % 6}s`,
                     animationDuration: `${4 + (i * 0.01) % 2}s`
                   }}
                 />
@@ -193,7 +199,27 @@ export default function DicePage() {
             </div>
           </div>
           
-          <div className="absolute inset-0 bg-gradient-conic from-green-500/15 via-teal-500/15 via-cyan-500/15 to-blue-500/15 animate-spin" style={{animationDuration: '30s'}}></div>
+          {/* Multiple rotating gradients */}
+          <div className="absolute inset-0 bg-gradient-conic from-green-500/20 via-teal-500/20 via-cyan-500/20 to-blue-500/20 animate-spin" style={{animationDuration: '30s'}}></div>
+          <div className="absolute inset-0 bg-gradient-conic from-purple-500/15 via-pink-500/15 via-red-500/15 to-orange-500/15 animate-spin" style={{animationDuration: '45s', animationDirection: 'reverse'}}></div>
+          
+          {/* Cohesive green orbs */}
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className={`absolute rounded-full blur-xl animate-pulse ${
+                i % 3 === 0 ? 'bg-green-400/15 w-32 h-32' :
+                i % 3 === 1 ? 'bg-emerald-400/15 w-24 h-24' :
+                'bg-teal-400/15 w-28 h-28'
+              }`}
+              style={{
+                left: `${(i * 25.7) % 85}%`,
+                top: `${(i * 33.3) % 85}%`,
+                animationDelay: `${i * 0.8}s`,
+                animationDuration: `${5 + (i % 2)}s`
+              }}
+            />
+          ))}
         </div>
 
         {/* Back button */}
@@ -278,83 +304,179 @@ export default function DicePage() {
           (isRolling || showCelebration) ? 'z-30' : 'z-20'
         }`}>
           
-          {/* Casino Table Header */}
-          <div className="text-center py-8 bg-gradient-to-b from-black/80 to-transparent">
-            <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider text-green-400 drop-shadow-2xl"
+          {/* Ultra Casino Table Header with More Clutter */}
+          <div className="text-center py-8 bg-gradient-to-b from-black/80 to-transparent relative">
+            {/* Background neon lines */}
+            <div className="absolute inset-0 overflow-hidden">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`absolute h-1 animate-pulse ${
+                    i % 3 === 0 ? 'bg-green-400/30' :
+                    i % 3 === 1 ? 'bg-cyan-400/30' : 'bg-purple-400/30'
+                  }`}
+                  style={{
+                    width: `${60 + (i * 7) % 40}%`,
+                    left: `${(i * 8.33) % 50}%`,
+                    top: `${(i * 8.33) % 100}%`,
+                    animationDelay: `${i * 0.2}s`,
+                    transform: `rotate(${(i * 15) % 180}deg)`
+                  }}
+                />
+              ))}
+            </div>
+            
+            {/* Cohesive promotional banners */}
+            <div className="absolute top-2 left-4 bg-green-600/90 border-2 border-yellow-400 px-3 py-1 rounded-lg animate-bounce transform -rotate-12">
+              <div className="text-yellow-100 font-black text-xs font-mono">🔥 HOT TABLES! 🔥</div>
+            </div>
+            <div className="absolute top-2 right-4 bg-emerald-600/90 border-2 border-gold-400 px-3 py-1 rounded-lg animate-bounce transform rotate-12" style={{animationDelay: '0.5s'}}>
+              <div className="text-gold-100 font-black text-xs font-mono">💎 VIP DICE! 💎</div>
+            </div>
+            
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider relative z-10"
                 style={{
-                  textShadow: '0 0 20px rgba(34, 197, 94, 1), 0 0 40px rgba(34, 197, 94, 0.6)'
+                  background: 'linear-gradient(45deg, #10b981, #06b6d4, #8b5cf6, #ec4899, #f59e0b)',
+                  backgroundSize: '300% 300%',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  animation: 'gradient 3s ease infinite',
+                  textShadow: '0 0 30px rgba(34, 197, 94, 0.8), 0 0 60px rgba(34, 197, 94, 0.4), 0 0 90px rgba(34, 197, 94, 0.2)'
                 }}>
-              🎲 CRAPS TABLE 🎲
+              🎲 ULTIMATE CRAPS EXPERIENCE 🎲
             </h1>
+            
+            {/* Cohesive scrolling ticker */}
+            <div className="mt-4 bg-green-900/70 border-2 border-yellow-400 rounded-lg p-2 relative overflow-hidden">
+              <div className="text-yellow-300 font-mono text-sm font-bold animate-pulse">🎯 LIVE ODDS • BIG WINS • INSTANT PAYOUTS • 24/7 ACTION 🎯</div>
+            </div>
           </div>
+          
+          {/* Add CSS keyframes for gradient animation */}
+          <style jsx>{`
+            @keyframes gradient {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+          `}</style>
           
           {/* Casino Table Surface */}
           <div className="max-w-7xl mx-auto px-4 py-8">
             
             {/* Dice Rolling Area - Center Stage */}
             <div className="relative mb-8">
-              {/* Table Felt */}
-              <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-8 border-yellow-500 rounded-3xl p-8 shadow-2xl shadow-green-500/50 relative overflow-hidden">
+              {/* Enhanced Casino Table Felt with Neon Trim */}
+              <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-8 border-yellow-500 rounded-3xl p-8 shadow-2xl shadow-green-500/50 relative overflow-hidden" style={{
+                boxShadow: '0 0 40px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.3), inset 0 0 40px rgba(34, 197, 94, 0.1)'
+              }}>
                 
-                {/* Table Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="grid grid-cols-12 grid-rows-8 h-full w-full">
-                    {Array.from({length: 96}).map((_, i) => (
-                      <div key={i} className="border border-yellow-400" />
+                {/* Enhanced Table Pattern with Neon Grid */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="grid grid-cols-16 grid-rows-12 h-full w-full">
+                    {Array.from({length: 192}).map((_, i) => (
+                      <div 
+                        key={i} 
+                        className={`border-2 ${
+                          i % 8 === 0 ? 'border-yellow-400/60 bg-yellow-400/5 shadow-sm shadow-yellow-400/30' :
+                          i % 8 === 1 ? 'border-orange-400/60 bg-orange-400/5 shadow-sm shadow-orange-400/30' :
+                          i % 8 === 2 ? 'border-red-400/60 bg-red-400/5 shadow-sm shadow-red-400/30' :
+                          i % 8 === 3 ? 'border-pink-400/60 bg-pink-400/5 shadow-sm shadow-pink-400/30' :
+                          i % 8 === 4 ? 'border-purple-400/60 bg-purple-400/5 shadow-sm shadow-purple-400/30' :
+                          i % 8 === 5 ? 'border-blue-400/60 bg-blue-400/5 shadow-sm shadow-blue-400/30' :
+                          i % 8 === 6 ? 'border-cyan-400/60 bg-cyan-400/5 shadow-sm shadow-cyan-400/30' :
+                          'border-teal-400/60 bg-teal-400/5 shadow-sm shadow-teal-400/30'
+                        } animate-pulse`}
+                        style={{
+                          animationDelay: `${(i * 0.01) % 3}s`,
+                          animationDuration: `${2 + (i * 0.005) % 2}s`
+                        }}
+                      />
                     ))}
                   </div>
                 </div>
                 
-                {/* Dice Area */}
+                {/* Casino decorative elements */}
+                <div className="absolute top-4 left-4 text-yellow-400 font-black text-2xl animate-pulse" style={{textShadow: '0 0 10px currentColor'}}>♠</div>
+                <div className="absolute top-4 right-4 text-red-400 font-black text-2xl animate-pulse" style={{textShadow: '0 0 10px currentColor', animationDelay: '0.5s'}}>♦</div>
+                <div className="absolute bottom-4 left-4 text-black font-black text-2xl animate-pulse" style={{textShadow: '0 0 10px #ffffff', animationDelay: '1s'}}>♣</div>
+                <div className="absolute bottom-4 right-4 text-red-400 font-black text-2xl animate-pulse" style={{textShadow: '0 0 10px currentColor', animationDelay: '1.5s'}}>♥</div>
+                
+                {/* Enhanced Dice Area with Neon Effects */}
                 <div className="relative z-10 text-center">
-                  <div className="bg-black/40 border-4 border-gold-400 rounded-2xl p-8 mb-6 max-w-2xl mx-auto">
+                  <div className="bg-black/60 border-4 border-gold-400 rounded-2xl p-8 mb-6 max-w-2xl mx-auto relative overflow-hidden" style={{
+                    boxShadow: '0 0 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.3), inset 0 0 30px rgba(251, 191, 36, 0.1)'
+                  }}>
+                    {/* Animated border glow */}
+                    <div className="absolute inset-0 rounded-2xl border-4 border-gold-400 animate-pulse" style={{
+                      boxShadow: '0 0 20px rgba(251, 191, 36, 0.8), inset 0 0 20px rgba(251, 191, 36, 0.2)'
+                    }}></div>
                     
                     {/* Dice Display */}
                     <div className="flex justify-center items-center space-x-8 mb-6">
-                      {/* Dice 1 */}
+                      {/* Enhanced Dice 1 with Neon Glow */}
                       <div className="relative">
-                        <div className={`bg-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform ${
-                          isRolling ? 'animate-bounce scale-110' : 'scale-100'
-                        }`}>
+                        <div className={`bg-gradient-to-br from-white via-gray-100 to-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform transition-all duration-300 ${
+                          isRolling ? 'animate-bounce scale-110 shadow-green-400/50' : 'scale-100 hover:scale-105 hover:shadow-cyan-400/50'
+                        }`} style={{
+                          boxShadow: isRolling ? '0 0 40px rgba(34, 197, 94, 0.8), 0 20px 40px rgba(0, 0, 0, 0.3)' : '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)'
+                        }}>
                           <div className={`text-4xl sm:text-6xl ${getDiceColor(dice1)} transition-all duration-300 ${
                             isRolling ? 'blur-sm' : 'blur-0'
                           }`}>
                             {getDiceEmoji(dice1)}
                           </div>
                         </div>
-                        <div className="text-green-300 font-mono text-sm font-bold mt-2">DIE 1</div>
+                        <div className="text-green-300 font-mono text-sm font-bold mt-2 animate-pulse" style={{textShadow: '0 0 10px rgba(34, 197, 94, 0.8)'}}>DIE 1</div>
                       </div>
 
-                      {/* Plus Symbol */}
-                      <div className="text-6xl text-yellow-400 font-black animate-pulse">+</div>
+                      {/* Enhanced Plus Symbol */}
+                      <div className="text-6xl font-black animate-pulse relative" style={{
+                        background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
+                      }}>+</div>
 
-                      {/* Dice 2 */}
+                      {/* Enhanced Dice 2 with Neon Glow */}
                       <div className="relative">
-                        <div className={`bg-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform ${
-                          isRolling ? 'animate-bounce scale-110' : 'scale-100'
-                        }`}>
+                        <div className={`bg-gradient-to-br from-white via-gray-100 to-white border-4 border-gray-800 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl transform transition-all duration-300 ${
+                          isRolling ? 'animate-bounce scale-110 shadow-green-400/50' : 'scale-100 hover:scale-105 hover:shadow-cyan-400/50'
+                        }`} style={{
+                          boxShadow: isRolling ? '0 0 40px rgba(34, 197, 94, 0.8), 0 20px 40px rgba(0, 0, 0, 0.3)' : '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(6, 182, 212, 0.3)'
+                        }}>
                           <div className={`text-4xl sm:text-6xl ${getDiceColor(dice2)} transition-all duration-300 ${
                             isRolling ? 'blur-sm' : 'blur-0'
                           }`}>
                             {getDiceEmoji(dice2)}
                           </div>
                         </div>
-                        <div className="text-green-300 font-mono text-sm font-bold mt-2">DIE 2</div>
+                        <div className="text-green-300 font-mono text-sm font-bold mt-2 animate-pulse" style={{textShadow: '0 0 10px rgba(34, 197, 94, 0.8)'}}>DIE 2</div>
                       </div>
 
-                      {/* Equals Symbol */}
-                      <div className="text-6xl text-yellow-400 font-black animate-pulse">=</div>
+                      {/* Enhanced Equals Symbol */}
+                      <div className="text-6xl font-black animate-pulse" style={{
+                        background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
+                      }}>=</div>
 
-                      {/* Total */}
+                      {/* Enhanced Total with Mega Neon */}
                       <div className="relative">
-                        <div className="bg-gradient-to-br from-gold-400 to-yellow-600 border-4 border-yellow-300 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl">
+                        <div className="bg-gradient-to-br from-gold-400 via-yellow-500 to-yellow-600 border-4 border-yellow-300 rounded-xl w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center shadow-2xl animate-pulse" style={{
+                          boxShadow: '0 0 40px rgba(251, 191, 36, 1), 0 0 80px rgba(251, 191, 36, 0.6), 0 20px 40px rgba(0, 0, 0, 0.3)'
+                        }}>
                           <div className={`text-4xl sm:text-6xl font-black text-black transition-all duration-300 ${
                             isRolling ? 'blur-sm' : 'blur-0'
                           }`}>
                             {dice1 + dice2}
                           </div>
                         </div>
-                        <div className="text-yellow-400 font-mono text-sm font-bold mt-2">TOTAL</div>
+                        <div className="text-yellow-400 font-mono text-sm font-bold mt-2 animate-pulse" style={{textShadow: '0 0 15px rgba(251, 191, 36, 1)'}}>TOTAL</div>
                       </div>
                     </div>
                     
@@ -381,10 +503,22 @@ export default function DicePage() {
               {/* Left Side - Betting Controls */}
               <div className="lg:col-span-2 space-y-6">
                 
-                {/* Betting Amount Section */}
-                <div className="bg-gradient-to-br from-red-900 to-red-800 border-4 border-red-400 rounded-2xl p-6 shadow-2xl shadow-red-400/30">
-                  <div className="text-center mb-4">
-                    <h3 className="text-red-300 font-black text-xl font-mono border-b-2 border-red-400 pb-2">💰 PLACE YOUR BET 💰</h3>
+                {/* Cohesive Betting Amount Section */}
+                <div className="bg-gradient-to-br from-green-900 via-emerald-800 to-green-900 border-4 border-yellow-400 rounded-2xl p-6 shadow-2xl relative overflow-hidden" style={{
+                  boxShadow: '0 0 40px rgba(251, 191, 36, 0.4), 0 0 80px rgba(34, 197, 94, 0.3), inset 0 0 30px rgba(34, 197, 94, 0.1)'
+                }}>
+                  {/* Animated border */}
+                  <div className="absolute inset-0 rounded-2xl border-4 border-yellow-400 animate-pulse" style={{
+                    boxShadow: '0 0 25px rgba(251, 191, 36, 0.6), inset 0 0 25px rgba(34, 197, 94, 0.2)'
+                  }}></div>
+                  <div className="text-center mb-4 relative z-10">
+                    <h3 className="font-black text-xl font-mono border-b-2 border-yellow-400 pb-2 animate-pulse" style={{
+                      background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #92400e)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
+                    }}>💰 PLACE YOUR BET 💰</h3>
                   </div>
 
                   {/* Chip Selection */}
@@ -422,11 +556,14 @@ export default function DicePage() {
                               key={amount}
                               onClick={() => setBetAmount(amount)}
                               disabled={isRolling}
-                              className={`p-3 rounded-full border-4 font-black text-xs transition-all ${
+                              className={`p-3 rounded-full border-4 font-black text-xs transition-all transform ${
                                 betAmount === amount
-                                  ? 'bg-yellow-400 border-yellow-300 text-black scale-110'
-                                  : 'bg-red-600 border-red-400 text-white hover:scale-105'
+                                  ? 'bg-gradient-to-br from-yellow-400 to-yellow-500 border-yellow-300 text-black scale-110 animate-pulse'
+                                  : 'bg-gradient-to-br from-green-700 to-emerald-800 border-green-400 text-white hover:scale-105 hover:shadow-lg hover:shadow-green-400/50'
                               }`}
+                              style={{
+                                boxShadow: betAmount === amount ? '0 0 20px rgba(251, 191, 36, 0.8)' : '0 0 10px rgba(34, 197, 94, 0.5)'
+                              }}
                             >
                               {amount}
                             </button>
@@ -468,19 +605,32 @@ export default function DicePage() {
                   </div>
                 </div>
 
-                {/* Betting Board - Three Sections */}
-                <div className="grid grid-cols-3 gap-4">
+                {/* Enhanced Betting Board - Three Sections with Neon */}
+                <div className="grid grid-cols-3 gap-4 relative">
+                  {/* Cohesive promotional badges */}
+                  <div className="absolute -top-4 left-4 bg-yellow-500/90 border-2 border-green-400 px-2 py-1 rounded-full animate-bounce transform -rotate-12 z-10">
+                    <div className="text-green-100 font-black text-xs font-mono">🔥 HOT! 🔥</div>
+                  </div>
+                  <div className="absolute -top-4 right-4 bg-emerald-500/90 border-2 border-gold-400 px-2 py-1 rounded-full animate-bounce transform rotate-12 z-10" style={{animationDelay: '0.3s'}}>
+                    <div className="text-gold-100 font-black text-xs font-mono">💎 VIP 💎</div>
+                  </div>
                   
-                  {/* UNDER Section */}
+                  {/* Enhanced UNDER Section */}
                   <button
                     onClick={() => setPrediction('under')}
                     disabled={isRolling}
-                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 relative overflow-hidden ${
                       prediction === 'under' 
-                        ? 'bg-blue-500 border-blue-300 text-white shadow-blue-400/50 shadow-2xl' 
-                        : 'bg-blue-900/50 border-blue-400 text-blue-300 hover:bg-blue-500/20'
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 border-blue-300 text-white shadow-2xl animate-pulse' 
+                        : 'bg-gradient-to-br from-blue-900/60 to-blue-800/60 border-blue-400 text-blue-300 hover:bg-blue-500/30 hover:shadow-lg hover:shadow-blue-400/50'
                     }`}
+                    style={{
+                      boxShadow: prediction === 'under' ? '0 0 40px rgba(59, 130, 246, 0.8), 0 0 80px rgba(59, 130, 246, 0.4)' : '0 0 20px rgba(59, 130, 246, 0.3)'
+                    }}
                   >
+                    {prediction === 'under' && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                    )}
                     <div className="text-center">
                       <div className="text-2xl mb-2">📉</div>
                       <div className="text-lg font-mono">UNDER</div>
@@ -491,16 +641,22 @@ export default function DicePage() {
                     </div>
                   </button>
                   
-                  {/* EXACT Section */}
+                  {/* Enhanced EXACT Section */}
                   <button
                     onClick={() => setPrediction('exact')}
                     disabled={isRolling}
-                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 relative overflow-hidden ${
                       prediction === 'exact' 
-                        ? 'bg-yellow-500 border-yellow-300 text-black shadow-yellow-400/50 shadow-2xl' 
-                        : 'bg-yellow-900/50 border-yellow-400 text-yellow-300 hover:bg-yellow-500/20'
+                        ? 'bg-gradient-to-br from-yellow-500 to-yellow-600 border-yellow-300 text-black shadow-2xl animate-pulse' 
+                        : 'bg-gradient-to-br from-yellow-900/60 to-yellow-800/60 border-yellow-400 text-yellow-300 hover:bg-yellow-500/30 hover:shadow-lg hover:shadow-yellow-400/50'
                     }`}
+                    style={{
+                      boxShadow: prediction === 'exact' ? '0 0 40px rgba(251, 191, 36, 0.8), 0 0 80px rgba(251, 191, 36, 0.4)' : '0 0 20px rgba(251, 191, 36, 0.3)'
+                    }}
                   >
+                    {prediction === 'exact' && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                    )}
                     <div className="text-center">
                       <div className="text-2xl mb-2">🎯</div>
                       <div className="text-lg font-mono">EXACT</div>
@@ -511,16 +667,22 @@ export default function DicePage() {
                     </div>
                   </button>
                   
-                  {/* OVER Section */}
+                  {/* Enhanced OVER Section */}
                   <button
                     onClick={() => setPrediction('over')}
                     disabled={isRolling}
-                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 ${
+                    className={`p-6 rounded-2xl border-4 font-black transition-all transform hover:scale-105 relative overflow-hidden ${
                       prediction === 'over' 
-                        ? 'bg-green-500 border-green-300 text-white shadow-green-400/50 shadow-2xl' 
-                        : 'bg-green-900/50 border-green-400 text-green-300 hover:bg-green-500/20'
+                        ? 'bg-gradient-to-br from-green-500 to-green-600 border-green-300 text-white shadow-2xl animate-pulse' 
+                        : 'bg-gradient-to-br from-green-900/60 to-green-800/60 border-green-400 text-green-300 hover:bg-green-500/30 hover:shadow-lg hover:shadow-green-400/50'
                     }`}
+                    style={{
+                      boxShadow: prediction === 'over' ? '0 0 40px rgba(34, 197, 94, 0.8), 0 0 80px rgba(34, 197, 94, 0.4)' : '0 0 20px rgba(34, 197, 94, 0.3)'
+                    }}
                   >
+                    {prediction === 'over' && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                    )}
                     <div className="text-center">
                       <div className="text-2xl mb-2">📈</div>
                       <div className="text-lg font-mono">OVER</div>
@@ -536,10 +698,24 @@ export default function DicePage() {
               {/* Right Side - Action Center */}
               <div className="lg:col-span-1">
                 
-                {/* Roll Button */}
-                <div className="bg-gradient-to-br from-black to-gray-900 border-4 border-gold-400 rounded-2xl p-6 shadow-2xl shadow-gold-400/30 text-center">
-                  <div className="mb-4">
-                    <h3 className="text-gold-400 font-black text-xl font-mono">🎲 ROLL EM! 🎲</h3>
+                {/* Enhanced Roll Button with Mega Neon */}
+                <div className="bg-gradient-to-br from-black via-gray-900 to-black border-4 border-gold-400 rounded-2xl p-6 shadow-2xl text-center relative overflow-hidden" style={{
+                  boxShadow: '0 0 50px rgba(251, 191, 36, 0.6), 0 0 100px rgba(251, 191, 36, 0.3), inset 0 0 40px rgba(251, 191, 36, 0.1)'
+                }}>
+                  {/* Animated border glow */}
+                  <div className="absolute inset-0 rounded-2xl border-4 border-gold-400 animate-pulse" style={{
+                    boxShadow: '0 0 30px rgba(251, 191, 36, 0.8), inset 0 0 30px rgba(251, 191, 36, 0.2)'
+                  }}></div>
+                  <div className="mb-4 relative z-10">
+                    <h3 className="font-black text-xl font-mono animate-pulse" style={{
+                      background: 'linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #fbbf24)',
+                      backgroundSize: '200% 200%',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      animation: 'gradient 2s ease infinite',
+                      textShadow: '0 0 30px rgba(251, 191, 36, 0.8)'
+                    }}>🎲 ROLL EM! 🎲</h3>
                   </div>
                   
                   <button
@@ -564,9 +740,21 @@ export default function DicePage() {
                   </div>
                 </div>
 
-                {/* Odds Display */}
-                <div className="mt-6 bg-gradient-to-br from-purple-900 to-purple-800 border-4 border-purple-400 rounded-2xl p-6 shadow-2xl shadow-purple-400/30">
-                  <h3 className="text-purple-300 font-black text-lg font-mono text-center mb-4">📊 HOUSE ODDS 📊</h3>
+                {/* Enhanced Odds Display */}
+                <div className="mt-6 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 border-4 border-purple-400 rounded-2xl p-6 shadow-2xl relative overflow-hidden" style={{
+                  boxShadow: '0 0 40px rgba(147, 51, 234, 0.6), 0 0 80px rgba(147, 51, 234, 0.3), inset 0 0 30px rgba(147, 51, 234, 0.1)'
+                }}>
+                  {/* Animated border */}
+                  <div className="absolute inset-0 rounded-2xl border-4 border-purple-400 animate-pulse" style={{
+                    boxShadow: '0 0 25px rgba(147, 51, 234, 0.8), inset 0 0 25px rgba(147, 51, 234, 0.2)'
+                  }}></div>
+                  <h3 className="font-black text-lg font-mono text-center mb-4 animate-pulse relative z-10" style={{
+                    background: 'linear-gradient(45deg, #d8b4fe, #c084fc, #a855f7, #9333ea)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    textShadow: '0 0 20px rgba(147, 51, 234, 0.8)'
+                  }}>📊 HOUSE ODDS 📊</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center bg-black/40 rounded-lg p-2">
                       <span className="text-blue-300 font-bold">UNDER</span>
@@ -636,28 +824,116 @@ export default function DicePage() {
           </div>
         )}
 
-        {/* Floating dice symbols */}
-        <div className="absolute inset-0 pointer-events-none opacity-15">
+        {/* Enhanced Floating Effects & Advertisements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Cohesive floating dice symbols */}
           {Array.from({ length: 24 }).map((_, i) => (
             <div
               key={i}
               className={`absolute font-mono text-2xl font-bold animate-pulse ${
                 i % 6 === 0 ? 'text-green-400' :
-                i % 6 === 1 ? 'text-teal-400' :
-                i % 6 === 2 ? 'text-cyan-400' :
-                i % 6 === 3 ? 'text-blue-400' :
-                i % 6 === 4 ? 'text-emerald-400' : 'text-lime-400'
-              }`}
+                i % 6 === 1 ? 'text-emerald-400' :
+                i % 6 === 2 ? 'text-teal-400' :
+                i % 6 === 3 ? 'text-cyan-400' :
+                i % 6 === 4 ? 'text-lime-400' : 'text-yellow-400'
+              } opacity-20`}
               style={{
-                left: `${(i * 13.7) % 100}%`,
-                top: `${(i * 19.3) % 100}%`,
-                animationDelay: `${(i * 0.3) % 6}s`,
-                textShadow: '0 0 10px currentColor'
+                left: `${(i * 11.7) % 95}%`,
+                top: `${(i * 17.3) % 95}%`,
+                animationDelay: `${(i * 0.2) % 8}s`,
+                textShadow: '0 0 15px currentColor',
+                transform: `rotate(${(i * 45) % 360}deg) scale(${0.8 + (i % 3) * 0.3})`
               }}
             >
               {getDiceEmoji((i % 6) + 1)}
             </div>
           ))}
+          
+          {/* Cohesive floating dollar signs and coins */}
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={`money-${i}`}
+              className={`absolute font-mono text-xl font-bold animate-bounce ${
+                i % 3 === 0 ? 'text-green-400' :
+                i % 3 === 1 ? 'text-yellow-400' : 'text-emerald-400'
+              } opacity-15`}
+              style={{
+                left: `${(i * 23.7) % 90}%`,
+                top: `${(i * 29.3) % 90}%`,
+                animationDelay: `${(i * 0.4) % 6}s`,
+                animationDuration: `${3 + (i % 3)}s`,
+                textShadow: '0 0 10px currentColor'
+              }}
+            >
+              {i % 3 === 0 ? '$' : i % 3 === 1 ? '🪙' : '💰'}
+            </div>
+          ))}
+          
+          {/* Cohesive floating card suits */}
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={`suit-${i}`}
+              className={`absolute text-2xl font-bold animate-ping ${
+                i % 4 === 0 ? 'text-yellow-400' :
+                i % 4 === 1 ? 'text-green-400' :
+                i % 4 === 2 ? 'text-emerald-400' : 'text-teal-400'
+              } opacity-10`}
+              style={{
+                left: `${(i * 31.7) % 85}%`,
+                top: `${(i * 37.3) % 85}%`,
+                animationDelay: `${(i * 0.6) % 8}s`,
+                animationDuration: `${4 + (i % 2)}s`,
+                textShadow: '0 0 8px currentColor'
+              }}
+            >
+              {i % 4 === 0 ? '♠' : i % 4 === 1 ? '♣' : i % 4 === 2 ? '♥' : '♦'}
+            </div>
+          ))}
+        </div>
+        
+        {/* Cohesive Satirical Gambling Advertisements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Corner Advertisements - Green/Gold theme */}
+          <div className="absolute top-16 left-8 bg-green-600/95 border-2 border-yellow-400 px-4 py-2 rounded-lg transform -rotate-12 animate-pulse">
+            <div className="text-yellow-100 font-black text-sm font-mono text-center">
+              💸 LOSE MONEY FAST! 💸<br/>
+              <span className="text-xs">Bankruptcy in 3 rolls!</span>
+            </div>
+          </div>
+          
+          <div className="absolute top-24 right-8 bg-emerald-600/95 border-2 border-gold-400 px-4 py-2 rounded-lg transform rotate-12 animate-bounce" style={{animationDelay: '1s'}}>
+            <div className="text-gold-100 font-black text-sm font-mono text-center">
+              🎰 ADDICTION GUARANTEED! 🎰<br/>
+              <span className="text-xs">Call 1-800-BROKE-NOW</span>
+            </div>
+          </div>
+          
+          <div className="absolute bottom-32 left-8 bg-teal-600/95 border-2 border-yellow-400 px-4 py-2 rounded-lg transform rotate-6 animate-pulse" style={{animationDelay: '2s'}}>
+            <div className="text-yellow-100 font-black text-sm font-mono text-center">
+              😱 99% LOSE EVERYTHING! 😱<br/>
+              <span className="text-xs">The house always wins!</span>
+            </div>
+          </div>
+          
+          <div className="absolute bottom-40 right-8 bg-green-700/95 border-2 border-orange-400 px-4 py-2 rounded-lg transform -rotate-6 animate-bounce" style={{animationDelay: '3s'}}>
+            <div className="text-orange-100 font-black text-sm font-mono text-center">
+              💵 EMPTY WALLET SPEEDRUN! 💵<br/>
+              <span className="text-xs">World record: 2 minutes!</span>
+            </div>
+          </div>
+          
+          {/* Middle screen testimonials - cohesive colors */}
+          <div className="absolute top-1/3 left-4 bg-emerald-600/90 border-2 border-cyan-400 px-3 py-2 rounded-lg transform -rotate-3 animate-pulse" style={{animationDelay: '4s'}}>
+            <div className="text-cyan-100 font-black text-xs font-mono">
+              🗣️ "Lost my house but gained life experience!" - Dave
+            </div>
+          </div>
+          
+          <div className="absolute top-2/3 right-4 bg-teal-600/90 border-2 border-lime-400 px-3 py-2 rounded-lg transform rotate-3 animate-bounce" style={{animationDelay: '5s'}}>
+            <div className="text-lime-100 font-black text-xs font-mono">
+              🗣️ "My kids hate me but the dice love me!" - Karen
+            </div>
+          </div>
         </div>
       </div>
     </>

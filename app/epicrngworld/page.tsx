@@ -129,7 +129,7 @@ export default function EpicRngWorldPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-purple-900 via-black via-red-950 to-blue-900 relative overflow-hidden">
       {/* Vibrant animated background layers */}
       <div className="absolute inset-0">
         {/* Animated aurora effect */}
@@ -292,147 +292,63 @@ export default function EpicRngWorldPage() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-20 min-h-screen px-4 flex flex-col">
+      <div className="relative z-20 h-screen flex flex-col">
         
-        {/* TITLE SECTION - Compact top section with space from auth buttons */}
-        <div className="pt-16 pb-4">
-          <div className="text-center px-4">
-            <div className="relative">
-              <div className="absolute inset-0 animate-ping opacity-30">
-                <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-pink-400 mb-2 font-mono tracking-wider">
-                  <span className="inline-block">{glitchText}</span>
-                </h1>
-              </div>
-              <h1 className="relative text-3xl sm:text-5xl md:text-7xl font-black mb-2 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300 text-yellow-400 drop-shadow-2xl"
-                  style={{
-                    filter: 'blur(0.5px)',
-                    textShadow: '0 0 8px rgba(255, 255, 0, 0.8), 0 0 16px rgba(255, 255, 0, 0.4)'
-                  }}>
-                <span className="inline-block animate-pulse">{glitchText}</span>
+        {/* TITLE SECTION */}
+        <div className="pt-12 lg:pt-16 xl:pt-20 pb-8 lg:pb-12 xl:pb-16 text-center">
+          <div className="relative mb-3">
+            <div className="absolute inset-0 animate-ping opacity-30">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black text-pink-400 mb-2 font-mono tracking-wider">
+                <span className="inline-block">{glitchText}</span>
               </h1>
             </div>
-            <div className="h-1.5 w-32 sm:w-48 md:w-64 bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 via-green-400 to-purple-500 mx-auto animate-pulse rounded-full shadow-2xl shadow-pink-400/50"></div>
-            <div className="h-1 w-24 sm:w-32 md:w-48 bg-gradient-to-r from-purple-500 via-red-400 to-orange-400 mx-auto animate-pulse rounded-full mt-1 shadow-xl shadow-purple-400/50"></div>
-            
-            {/* Compact tagline */}
-            <div className="text-center mt-2 px-4">
-              <div className="text-sm sm:text-lg md:text-xl font-black tracking-widest mb-1 font-mono transform hover:scale-105 transition-transform"
-                   style={{
-                     background: 'linear-gradient(90deg, #10b981, #06b6d4, #ec4899, #f59e0b)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     textShadow: '0 0 20px #10b981, 0 0 40px #06b6d4'
-                   }}>
-                <span className="block animate-pulse">QUANTUM LUCK PROTOCOL</span>
-              </div>
-              <div className="text-xs sm:text-base md:text-lg font-black font-mono"
-                   style={{
-                     background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     textShadow: '0 0 15px #f59e0b'
-                   }}>
-                {">>>"} MAKE YOUR DREAMS COME TRUE {"<<<"}
-              </div>
-            </div>
+            <h1 className="relative text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black mb-2 font-mono tracking-wider transform hover:scale-105 transition-transform duration-300 text-yellow-400 drop-shadow-2xl"
+                style={{
+                  filter: 'blur(0.5px)',
+                  textShadow: '0 0 8px rgba(255, 255, 0, 0.8), 0 0 16px rgba(255, 255, 0, 0.4)'
+                }}>
+              <span className="inline-block animate-pulse">{glitchText}</span>
+            </h1>
+          </div>
+          
+          <div className="h-2 w-full max-w-md mx-auto bg-gradient-to-r from-pink-500 via-cyan-400 via-yellow-400 via-green-400 to-purple-500 animate-pulse rounded-full shadow-2xl shadow-pink-400/50 mb-3"></div>
+          
+          <div className="text-lg sm:text-xl lg:text-2xl font-black tracking-widest mb-2 font-mono"
+               style={{
+                 background: 'linear-gradient(90deg, #10b981, #06b6d4, #ec4899, #f59e0b)',
+                 backgroundClip: 'text',
+                 WebkitBackgroundClip: 'text',
+                 color: 'transparent',
+                 textShadow: '0 0 20px #10b981, 0 0 40px #06b6d4'
+               }}>
+            <span className="animate-pulse">QUANTUM LUCK PROTOCOL</span>
+          </div>
+          
+          <div className="text-base sm:text-lg lg:text-xl font-black font-mono"
+               style={{
+                 background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
+                 backgroundClip: 'text',
+                 WebkitBackgroundClip: 'text',
+                 color: 'transparent',
+                 textShadow: '0 0 15px #f59e0b'
+               }}>
+            {">>>"} MAKE YOUR DREAMS COME TRUE {"<<<"}
           </div>
         </div>
 
-        {/* GAMES SECTION - Positioned much higher in the middle of remaining space */}
-        <div className="flex-1 flex items-start justify-center pt-8">
-          <div className="relative w-full max-w-6xl mx-auto px-4" style={{height: 'clamp(300px, 45vw, 380px)'}}>
-            {/* WHEEL - Left */}
-            <a href="/epicrngworld/wheel" className="absolute cursor-pointer group" 
-                 style={{
-                   top: 'clamp(150px, 25vw, 180px)', 
-                   left: 'clamp(1%, 5vw, 8%)', 
-                   width: 'clamp(100px, 18vw, 160px)', 
-                   transform: 'rotate(clamp(-45deg, -35deg, -30deg))', 
-                   zIndex: 15
-                 }}>
-              <div className="absolute -inset-3 bg-gradient-to-r from-yellow-400/40 to-pink-400/40 rounded-full animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-yellow-400 p-3 sm:p-5 rounded-full hover:border-pink-400 transition-colors shadow-2xl shadow-yellow-400/60 group-hover:shadow-pink-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
-                <div className="absolute inset-0 bg-yellow-400/15 rounded-full group-hover:bg-pink-400/15 transition-colors"></div>
-                <div className="relative text-center">
-                  <Shuffle className="w-8 h-8 sm:w-10 sm:h-10 text-yellow-400 mx-auto mb-1 sm:mb-2 group-hover:animate-spin group-hover:text-pink-400 transition-colors drop-shadow-xl" />
-                  <div className="text-yellow-400 font-mono font-black text-sm sm:text-base group-hover:text-pink-400 transition-colors mb-1">WHEEL</div>
-                  <div className="text-yellow-300 text-xs font-mono font-bold group-hover:text-pink-300 transition-colors hidden sm:block">💥 SPIN 💥</div>
-                </div>
-              </div>
-            </a>
-            
-            {/* SLOTS - Top Left */}
-            <a href="/epicrngworld/slots" className="absolute cursor-pointer group" 
-                 style={{
-                   top: 'clamp(5px, 1vw, 20px)', 
-                   left: 'clamp(2%, 12vw, 20%)', 
-                   width: 'clamp(110px, 20vw, 170px)', 
-                   transform: 'rotate(clamp(-25deg, -20deg, -15deg))', 
-                   zIndex: 15
-                 }}>
-              <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-r from-pink-400/40 to-cyan-400/40 rounded-3xl animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-pink-400 p-4 sm:p-6 rounded-3xl hover:border-cyan-400 transition-colors shadow-2xl shadow-pink-400/60 group-hover:shadow-cyan-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
-                <div className="absolute inset-0 bg-pink-400/15 rounded-3xl group-hover:bg-cyan-400/15 transition-colors"></div>
-                <div className="relative text-center">
-                  <Gem className="w-9 h-9 sm:w-11 sm:h-11 text-pink-400 mx-auto mb-1 sm:mb-2 group-hover:animate-pulse group-hover:text-cyan-400 transition-colors drop-shadow-xl" />
-                  <div className="text-pink-400 font-mono font-black text-sm sm:text-base group-hover:text-cyan-400 transition-colors mb-1">SLOTS</div>
-                  <div className="text-pink-300 text-xs font-mono font-bold group-hover:text-cyan-300 transition-colors hidden sm:block">💎 777 💎</div>
-                </div>
-              </div>
-            </a>
-            
-            {/* DICE - Top Right */}
-            <a href="/epicrngworld/dice" className="absolute cursor-pointer group" 
-                 style={{
-                   top: 'clamp(5px, 1vw, 20px)', 
-                   right: 'clamp(2%, 12vw, 20%)', 
-                   width: 'clamp(110px, 20vw, 170px)', 
-                   transform: 'rotate(clamp(15deg, 20deg, 25deg))', 
-                   zIndex: 15
-                 }}>
-              <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-r from-cyan-400/40 to-green-400/40 rounded-3xl animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-cyan-400 p-4 sm:p-6 rounded-3xl hover:border-green-400 transition-colors shadow-2xl shadow-cyan-400/60 group-hover:shadow-green-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
-                <div className="absolute inset-0 bg-cyan-400/15 rounded-3xl group-hover:bg-green-400/15 transition-colors"></div>
-                <div className="relative text-center">
-                  <Coins className="w-9 h-9 sm:w-11 sm:h-11 text-cyan-400 mx-auto mb-1 sm:mb-2 group-hover:animate-bounce group-hover:text-green-400 transition-colors drop-shadow-xl" />
-                  <div className="text-cyan-400 font-mono font-black text-sm sm:text-base group-hover:text-green-400 transition-colors mb-1">DICE</div>
-                  <div className="text-cyan-300 text-xs font-mono font-bold group-hover:text-green-300 transition-colors hidden sm:block">🎲 ROLL 🎲</div>
-                </div>
-              </div>
-            </a>
-            
-            {/* CRASH - Right */}
-            <a href="/epicrngworld/crash" className="absolute cursor-pointer group" 
-                 style={{
-                   top: 'clamp(150px, 25vw, 180px)', 
-                   right: 'clamp(1%, 5vw, 8%)', 
-                   width: 'clamp(100px, 18vw, 160px)', 
-                   transform: 'rotate(clamp(30deg, 35deg, 45deg))', 
-                   zIndex: 15
-                 }}>
-              <div className="absolute -inset-3 bg-gradient-to-r from-green-400/40 to-purple-400/40 rounded-full animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-green-400 p-3 sm:p-5 rounded-full hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/60 group-hover:shadow-purple-400/60 overflow-hidden transform hover:scale-110 transition-transform duration-300">
-                <div className="absolute inset-0 bg-green-400/15 rounded-full group-hover:bg-purple-400/15 transition-colors"></div>
-                <div className="relative text-center">
-                  <Star className="w-8 h-8 sm:w-10 sm:h-10 text-green-400 mx-auto mb-1 sm:mb-2 group-hover:animate-pulse group-hover:text-purple-400 transition-colors drop-shadow-xl" />
-                  <div className="text-green-400 font-mono font-black text-sm sm:text-base group-hover:text-purple-400 transition-colors mb-1">CRASH</div>
-                  <div className="text-green-300 text-xs font-mono font-bold group-hover:text-purple-300 transition-colors hidden sm:block">🚀 UP 🚀</div>
-                </div>
-              </div>
-            </a>
-            
-            {/* SPECTACULAR live jackpot counter - CENTER of the layout */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 px-2 sm:px-4 max-w-sm sm:max-w-xl lg:max-w-3xl mx-auto z-10 w-full sm:w-auto">
-              <div className="absolute -inset-3 sm:-inset-6 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
-              <div className="absolute -inset-1 sm:-inset-3 border-2 sm:border-4 border-yellow-400 border-dashed rounded-3xl animate-ping"></div>
-              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 sm:border-6 border-pink-400 p-4 sm:p-6 lg:p-10 rounded-3xl overflow-hidden shadow-2xl shadow-pink-400/70">
+        {/* Main Layout (All Screen Sizes) */}
+        <div className="flex-1 flex flex-col px-4">
+          {/* MEGA JACKPOT */}
+          <div className="w-full max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto mt-8 lg:mt-12 xl:mt-16 mb-12 lg:mb-16 xl:mb-20">
+            <div className="relative">
+              <div className="absolute -inset-3 lg:-inset-4 xl:-inset-5 bg-gradient-to-r from-pink-500/40 via-yellow-400/50 via-cyan-500/40 to-green-500/40 rounded-3xl animate-pulse"></div>
+              <div className="absolute -inset-1 lg:-inset-2 xl:-inset-3 border-3 lg:border-4 xl:border-5 border-yellow-400 border-dashed rounded-3xl animate-ping"></div>
+              <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 lg:border-6 xl:border-8 border-pink-400 p-6 lg:p-8 xl:p-10 rounded-3xl overflow-hidden shadow-2xl shadow-pink-400/70">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-pink-400/30 to-cyan-400/20 animate-pulse"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-transparent to-green-500/20 animate-ping"></div>
                 
                 <div className="relative z-10 text-center">
-                  <div className="text-base sm:text-xl md:text-2xl lg:text-3xl font-black font-mono mb-2 sm:mb-4 flex items-center justify-center"
+                  <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black font-mono mb-3 lg:mb-4 xl:mb-5 flex items-center justify-center"
                        style={{
                          background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981)',
                          backgroundSize: '200% 200%',
@@ -442,12 +358,11 @@ export default function EpicRngWorldPage() {
                          animation: 'rainbow 3s ease-in-out infinite',
                          textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
                        }}>
-                    <Crown className="w-3 h-3 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mr-1 sm:mr-3 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
-                    <span className="hidden sm:inline">MEGA JACKPOT</span>
-                    <span className="sm:hidden text-sm">JACKPOT</span>
-                    <Crown className="w-3 h-3 sm:w-6 sm:h-6 lg:w-8 lg:h-8 ml-1 sm:ml-3 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
+                    <Crown className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10 mr-2 lg:mr-3 xl:mr-4 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
+                    <span>MEGA JACKPOT</span>
+                    <Crown className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10 ml-2 lg:ml-3 xl:ml-4 text-yellow-400 animate-spin" style={{animationDuration: '8s'}} />
                   </div>
-                  <div className={`text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl relative transition-all duration-500 ${
+                  <div className={`text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black font-mono animate-pulse text-yellow-400 drop-shadow-2xl relative transition-all duration-500 ${
                     isJackpotLoading ? 'blur-sm' : 'blur-0'
                   } ${showJackpotExplosion ? 'scale-150' : 'scale-100'}`}>
                     {isJackpotLoading ? '...' : `${jackpot?.toLocaleString()}EC`}
@@ -455,16 +370,15 @@ export default function EpicRngWorldPage() {
                     {/* Explosion effect */}
                     {showJackpotExplosion && (
                       <div className="absolute inset-0 pointer-events-none">
-                        {/* Multiple colorful explosion particles */}
                         {Array.from({length: 8}).map((_, i) => (
                           <div
                             key={i}
-                            className="absolute w-2 h-2 rounded-full animate-ping"
+                            className="absolute w-2 h-2 lg:w-3 lg:h-3 xl:w-4 xl:h-4 rounded-full animate-ping"
                             style={{
                               background: ['#FF69B4', '#00FFFF', '#FFD700', '#FF1493', '#00FF00', '#FF4500', '#9370DB', '#FF6347'][i],
                               left: '50%',
                               top: '50%',
-                              transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-30px)`,
+                              transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-25px)`,
                               animationDelay: `${i * 0.1}s`,
                               animationDuration: '0.8s'
                             }}
@@ -473,7 +387,7 @@ export default function EpicRngWorldPage() {
                       </div>
                     )}
                   </div>
-                  <div className="text-xs sm:text-lg lg:text-xl font-black font-mono mt-1 sm:mt-3 animate-bounce"
+                  <div className="text-sm lg:text-lg xl:text-xl font-black font-mono mt-2 lg:mt-3 xl:mt-4 animate-bounce"
                        style={{
                          background: 'linear-gradient(45deg, #06b6d4, #10b981, #f59e0b)',
                          backgroundClip: 'text',
@@ -481,305 +395,228 @@ export default function EpicRngWorldPage() {
                          color: 'transparent',
                          textShadow: '0 0 20px #06b6d4'
                        }}>
-                    <span className="hidden sm:inline">🔥🔴 LIVE • UPDATING • EXPLODING 🔴🔥</span>
-                    <span className="sm:hidden">🔥 LIVE 🔥</span>
+                    🔥🔴 LIVE • UPDATING • EXPLODING 🔴🔥
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* BOTTOM SECTION - My Gorbz Button */}
-        <div className="pb-4">
-          <div className="flex items-center justify-center">
-            <div className="relative px-4">
-              <div className="absolute -inset-8 border-4 border-yellow-400 border-dashed animate-pulse rounded-3xl opacity-60"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-pink-500/30 via-yellow-400/40 via-cyan-500/30 to-green-500/30 rounded-3xl animate-ping"></div>
+          {/* Games Grid */}
+          <div className="flex-1 flex flex-col space-y-4 lg:space-y-8 xl:space-y-10 px-2 lg:px-4 mt-8 lg:mt-12 xl:mt-16">
+            {/* Mobile: 3 rows (2-2-1), Desktop: 2 rows */}
+            
+            {/* First Row */}
+            <div className="flex space-x-2 sm:space-x-4 lg:space-x-6 xl:space-x-8 justify-center">
+              <a href="/epicrngworld/slots" className="block group transform hover:scale-105 transition-all duration-300 -rotate-6">
+                <div className="relative">
+                  <div className="absolute -inset-2 lg:-inset-3 xl:-inset-4 bg-gradient-to-r from-pink-400/40 to-cyan-400/40 rounded-2xl lg:rounded-3xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 lg:border-4 xl:border-5 border-pink-400 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-2xl lg:rounded-3xl hover:border-cyan-400 transition-colors shadow-2xl shadow-pink-400/60 group-hover:shadow-cyan-400/60 overflow-hidden w-32 sm:w-40 md:w-44 lg:w-48 xl:w-56 h-20 sm:h-24 lg:h-32 xl:h-36 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-pink-400/15 rounded-2xl lg:rounded-3xl group-hover:bg-cyan-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <Gem className="w-8 sm:w-10 lg:w-12 xl:w-14 h-8 sm:h-10 lg:h-12 xl:h-14 text-pink-400 mx-auto mb-1 lg:mb-2 xl:mb-3 group-hover:animate-pulse group-hover:text-cyan-400 transition-colors drop-shadow-xl" />
+                      <div className="text-pink-400 font-mono font-black text-xs sm:text-sm lg:text-lg xl:text-xl group-hover:text-cyan-400 transition-colors">SLOTS</div>
+                      <div className="text-pink-300 text-xs lg:text-sm xl:text-base font-mono font-bold group-hover:text-cyan-300 transition-colors">💎 777</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <a href="/epicrngworld/dice" className="block group transform hover:scale-105 transition-all duration-300 rotate-6">
+                <div className="relative">
+                  <div className="absolute -inset-2 lg:-inset-3 xl:-inset-4 bg-gradient-to-r from-cyan-400/40 to-green-400/40 rounded-2xl lg:rounded-3xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 lg:border-4 xl:border-5 border-cyan-400 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-2xl lg:rounded-3xl hover:border-green-400 transition-colors shadow-2xl shadow-cyan-400/60 group-hover:shadow-green-400/60 overflow-hidden w-32 sm:w-40 md:w-44 lg:w-48 xl:w-56 h-20 sm:h-24 lg:h-32 xl:h-36 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-cyan-400/15 rounded-2xl lg:rounded-3xl group-hover:bg-green-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <Coins className="w-8 sm:w-10 lg:w-12 xl:w-14 h-8 sm:h-10 lg:h-12 xl:h-14 text-cyan-400 mx-auto mb-1 lg:mb-2 xl:mb-3 group-hover:animate-bounce group-hover:text-green-400 transition-colors drop-shadow-xl" />
+                      <div className="text-cyan-400 font-mono font-black text-xs sm:text-sm lg:text-lg xl:text-xl group-hover:text-green-400 transition-colors">DICE</div>
+                      <div className="text-cyan-300 text-xs lg:text-sm xl:text-base font-mono font-bold group-hover:text-green-300 transition-colors">🎲 ROLL</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
               
-              <button 
-                onClick={() => user ? null : setShowAuthModal(true)}
-                className="relative bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border-4 sm:border-6 text-lg sm:text-2xl md:text-3xl lg:text-4xl px-6 sm:px-12 md:px-16 lg:px-20 py-4 sm:py-6 md:py-8 lg:py-10 font-black font-mono transition-all duration-300 transform hover:scale-110 shadow-2xl rounded-2xl overflow-hidden w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl"
-                style={{
-                  borderImage: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981, #8b5cf6) 1',
-                  background: 'linear-gradient(135deg, #000000, #1a1a1a, #000000)',
-                  boxShadow: '0 0 40px rgba(245, 158, 11, 0.5), 0 0 80px rgba(236, 72, 153, 0.3)'
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-pink-400/15 to-cyan-400/10 animate-pulse"></div>
+              {/* Desktop: Add Crash to first row */}
+              <a href="/epicrngworld/crash" className="hidden lg:block group transform hover:scale-105 transition-all duration-300">
+                <div className="relative">
+                  <div className="absolute -inset-3 xl:-inset-4 bg-gradient-to-r from-green-400/40 to-purple-400/40 rounded-3xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-4 xl:border-5 border-green-400 p-6 xl:p-8 rounded-3xl hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/60 group-hover:shadow-purple-400/60 overflow-hidden w-48 xl:w-56 h-32 xl:h-36 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-green-400/15 rounded-3xl group-hover:bg-purple-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <Star className="w-12 xl:w-14 h-12 xl:h-14 text-green-400 mx-auto mb-2 xl:mb-3 group-hover:animate-pulse group-hover:text-purple-400 transition-colors drop-shadow-xl" />
+                      <div className="text-green-400 font-mono font-black text-lg xl:text-xl group-hover:text-purple-400 transition-colors">CRASH</div>
+                      <div className="text-green-300 text-sm xl:text-base font-mono font-bold group-hover:text-purple-300 transition-colors">🚀 UP 🚀</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            {/* Second Row */}
+            <div className="flex space-x-2 sm:space-x-4 lg:space-x-6 xl:space-x-8 justify-center">
+              <a href="/epicrngworld/wheel" className="block group transform hover:scale-105 transition-all duration-300 -rotate-6">
+                <div className="relative">
+                  <div className="absolute -inset-2 lg:-inset-3 xl:-inset-4 bg-gradient-to-r from-yellow-400/40 to-pink-400/40 rounded-2xl lg:rounded-3xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 lg:border-4 xl:border-5 border-yellow-400 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-2xl lg:rounded-3xl hover:border-pink-400 transition-colors shadow-2xl shadow-yellow-400/60 group-hover:shadow-pink-400/60 overflow-hidden w-32 sm:w-40 md:w-44 lg:w-48 xl:w-56 h-20 sm:h-24 lg:h-32 xl:h-36 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-yellow-400/15 rounded-2xl lg:rounded-3xl group-hover:bg-pink-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <Shuffle className="w-8 sm:w-10 lg:w-12 xl:w-14 h-8 sm:h-10 lg:h-12 xl:h-14 text-yellow-400 mx-auto mb-1 lg:mb-2 xl:mb-3 group-hover:animate-spin group-hover:text-pink-400 transition-colors drop-shadow-xl" />
+                      <div className="text-yellow-400 font-mono font-black text-xs sm:text-sm lg:text-lg xl:text-xl group-hover:text-pink-400 transition-colors">WHEEL</div>
+                      <div className="text-yellow-300 text-xs lg:text-sm xl:text-base font-mono font-bold group-hover:text-pink-300 transition-colors">💥 SPIN</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <a href="/epicrngworld/plinko" className="block group transform hover:scale-105 transition-all duration-300 rotate-6">
+                <div className="relative">
+                  <div className="absolute -inset-2 lg:-inset-3 xl:-inset-4 bg-gradient-to-r from-purple-400/40 to-fuchsia-400/40 rounded-2xl lg:rounded-3xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 lg:border-4 xl:border-5 border-purple-400 p-3 sm:p-4 lg:p-6 xl:p-8 rounded-2xl lg:rounded-3xl hover:border-fuchsia-400 transition-colors shadow-2xl shadow-purple-400/60 group-hover:shadow-fuchsia-400/60 overflow-hidden w-32 sm:w-40 md:w-44 lg:w-48 xl:w-56 h-20 sm:h-24 lg:h-32 xl:h-36 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-purple-400/15 rounded-2xl lg:rounded-3xl group-hover:bg-fuchsia-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl mb-1 lg:mb-2 xl:mb-3 text-purple-400 group-hover:text-fuchsia-400 transition-colors drop-shadow-xl animate-bounce" style={{animationDuration: '3s'}}>🎯</div>
+                      <div className="text-purple-400 font-mono font-black text-xs sm:text-sm lg:text-lg xl:text-xl group-hover:text-fuchsia-400 transition-colors">PLINKO</div>
+                      <div className="text-purple-300 text-xs lg:text-sm xl:text-base font-mono font-bold group-hover:text-fuchsia-300 transition-colors">DROP</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            {/* Third Row - Mobile Only (Centered Crash) */}
+            <div className="flex justify-center lg:hidden">
+              <a href="/epicrngworld/crash" className="block group transform hover:scale-105 transition-all duration-300">
+                <div className="relative">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-green-400/40 to-purple-400/40 rounded-2xl animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-black via-purple-900 via-gray-900 to-black border-3 border-green-400 p-3 sm:p-4 rounded-2xl hover:border-purple-400 transition-colors shadow-2xl shadow-green-400/60 group-hover:shadow-purple-400/60 overflow-hidden w-40 sm:w-48 md:w-52 h-20 sm:h-24 flex flex-col justify-center">
+                    <div className="absolute inset-0 bg-green-400/15 rounded-2xl group-hover:bg-purple-400/15 transition-colors"></div>
+                    <div className="relative text-center">
+                      <Star className="w-8 sm:w-10 h-8 sm:h-10 text-green-400 mx-auto mb-1 group-hover:animate-pulse group-hover:text-purple-400 transition-colors drop-shadow-xl" />
+                      <div className="text-green-400 font-mono font-black text-xs sm:text-sm group-hover:text-purple-400 transition-colors">CRASH</div>
+                      <div className="text-green-300 text-xs font-mono font-bold group-hover:text-purple-300 transition-colors">🚀 UP 🚀</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          {/* MY GORBZ BUTTON */}
+          <div className="py-4 lg:py-6 xl:py-8 flex-shrink-0 pb-safe">
+            <div className="flex items-center justify-center px-4">
+              <div className="relative max-w-fit">
+                <div className="absolute -inset-3 lg:-inset-4 xl:-inset-5 border-3 lg:border-4 xl:border-5 border-yellow-400 border-dashed animate-pulse rounded-2xl lg:rounded-3xl opacity-60"></div>
+                <div className="absolute -inset-1 lg:-inset-2 xl:-inset-3 bg-gradient-to-r from-pink-500/30 via-yellow-400/40 via-cyan-500/30 to-green-500/30 rounded-2xl lg:rounded-3xl animate-ping"></div>
                 
-                <span className="relative flex items-center justify-center"
-                      style={{
-                        background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981, #8b5cf6)',
-                        backgroundSize: '300% 300%',
-                        backgroundClip: 'text',
-                        WebkitBackgroundClip: 'text',
-                        color: 'transparent',
-                        animation: 'rainbow 2s ease-in-out infinite',
-                        textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
-                      }}>
-                  <Zap className="mr-2 sm:mr-4 lg:mr-6 text-yellow-400 w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 animate-pulse" />
-                  <span className="font-black text-center whitespace-nowrap">{user ? "🎮🔥 MY GORBZ 🔥🎮" : "💥🎆 JOIN NOW 🎆💥"}</span>
-                  <Zap className="ml-2 sm:ml-4 lg:ml-6 text-yellow-400 w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 animate-pulse" />
-                </span>
-              </button>
-              
-              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-sm font-black font-mono animate-bounce text-center"
-                   style={{
-                     background: 'linear-gradient(45deg, #f59e0b, #ec4899, #8b5cf6)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     textShadow: '0 0 20px #f59e0b'
-                   }}>
-                ⚡🎆 {user ? "🔓 AUTHENTICATED LEGEND" : "🌟 QUANTUM ENABLED WARRIOR"} 🎆⚡
-              </div>
-              
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-sm font-black font-mono animate-bounce text-center" style={{animationDelay: '0.5s',
-                     background: 'linear-gradient(45deg, #06b6d4, #10b981, #f59e0b)',
-                     backgroundClip: 'text',
-                     WebkitBackgroundClip: 'text',
-                     color: 'transparent',
-                     textShadow: '0 0 20px #06b6d4'
-                   }}>
-                ⚡🚀 LUCK AMPLIFIED TO THE MAX 🚀⚡
+                <button 
+                  onClick={() => user ? null : setShowAuthModal(true)}
+                  className="relative bg-gradient-to-r from-black via-purple-900 via-gray-900 to-black border-4 lg:border-6 xl:border-7 text-lg lg:text-xl xl:text-2xl px-6 lg:px-10 xl:px-12 py-3 lg:py-4 xl:py-5 font-black font-mono transition-all duration-300 transform hover:scale-110 shadow-2xl rounded-xl lg:rounded-2xl xl:rounded-3xl overflow-hidden"
+                  style={{
+                    borderImage: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981, #8b5cf6) 1',
+                    background: 'linear-gradient(135deg, #000000, #1a1a1a, #000000)',
+                    boxShadow: '0 0 30px rgba(245, 158, 11, 0.5), 0 0 60px rgba(236, 72, 153, 0.3)'
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-pink-400/15 to-cyan-400/10 animate-pulse"></div>
+                  
+                  <span className="relative flex items-center justify-center"
+                        style={{
+                          background: 'linear-gradient(45deg, #f59e0b, #ec4899, #06b6d4, #10b981, #8b5cf6)',
+                          backgroundSize: '300% 300%',
+                          backgroundClip: 'text',
+                          WebkitBackgroundClip: 'text',
+                          color: 'transparent',
+                          animation: 'rainbow 2s ease-in-out infinite',
+                          textShadow: '0 0 30px #f59e0b, 0 0 60px #ec4899'
+                        }}>
+                    <Zap className="mr-2 lg:mr-3 xl:mr-4 text-yellow-400 w-5 h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 animate-pulse" />
+                    <span className="font-black text-center whitespace-nowrap">{user ? "🎮 MY GORBZ 🎮" : "💥 JOIN NOW 💥"}</span>
+                    <Zap className="ml-2 lg:ml-3 xl:ml-4 text-yellow-400 w-5 h-5 lg:w-6 lg:h-6 xl:w-7 xl:h-7 animate-pulse" />
+                  </span>
+                </button>
               </div>
             </div>
           </div>
         </div>
-
-        {/* OBNOXIOUS SATIRICAL ADVERTISEMENTS */}
-        
-        {/* Crazy Deal Banner - Top Left */}
-        <div className="hidden md:block absolute top-20 left-4 z-30">
-          <div className="bg-gradient-to-r from-red-500 to-pink-500 border-4 border-yellow-400 rounded-xl p-4 animate-bounce shadow-2xl shadow-red-500/70 transform rotate-12 max-w-64">
-            <div className="text-white text-center font-mono font-black">
-              <div className="text-2xl text-yellow-300 mb-2">🔥 HOT DEAL 🔥</div>
-              <div className="text-xl mb-1">DEPOSIT 1EC</div>
-              <div className="text-3xl font-black text-yellow-400">WIN 1,000,000EC*</div>
-              <div className="text-xs text-red-200 mt-1">*in monopoly money</div>
-              <div className="text-lg mt-2 animate-pulse">LIMITED TIME!**</div>
-              <div className="text-xs text-red-200">**forever</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Big Win Testimonial - Top Right */}
-        <div className="hidden lg:block absolute top-32 right-4 z-30">
-          <div className="bg-gradient-to-l from-green-500 to-lime-400 border-4 border-white rounded-2xl p-5 animate-pulse shadow-2xl shadow-green-500/70 transform -rotate-6 max-w-72">
-            <div className="text-black text-center font-mono font-black">
-              <div className="text-2xl mb-2">💰 MEGA WINNER 💰</div>
-              <div className="text-lg mb-2">"I WON BIG!"</div>
-              <div className="text-2xl font-black">999,999,999EC</div>
-              <div className="text-sm mb-2">- TotallyRealUser420</div>
-              <div className="text-xs text-green-800">*results not typical</div>
-              <div className="text-xs text-green-800">**user may be fictional</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Warning Banner - Left Side */}
-        {!hiddenAds.includes('warning-banner') && (
-          <div className="hidden xl:block absolute top-1/3 left-8 z-20">
-            <div className="bg-gradient-to-br from-orange-500 to-red-500 border-4 border-yellow-400 rounded-2xl p-4 animate-pulse shadow-2xl shadow-orange-500/50 transform rotate-3 max-w-64 relative">
-              <button 
-                onClick={() => hideAd('warning-banner')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-center font-mono font-black">
-                <div className="text-yellow-300 font-black mb-2 text-xl">⚠️ WARNING ⚠️</div>
-                <div className="mb-2 text-sm">GAMBLING MAY CAUSE:</div>
-                <div className="text-xs mb-1">• Empty wallet syndrome</div>
-                <div className="text-xs mb-1">• Broken dreams</div>
-                <div className="text-xs mb-1">• Questioning life choices</div>
-                <div className="text-xs mb-2">• Addiction to losing</div>
-                <div className="text-yellow-300 text-xs">But hey, you might win!*</div>
-                <div className="text-xs">*you won't</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Achievement Badge - Right Side */}
-        {!hiddenAds.includes('achievement-badge') && (
-          <div className="hidden xl:block absolute top-1/4 right-12 z-20">
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 border-4 border-yellow-400 rounded-full p-6 animate-spin shadow-2xl shadow-purple-500/70 relative" style={{animationDuration: '10s'}}>
-              <button 
-                onClick={() => hideAd('achievement-badge')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-center font-mono font-black leading-tight">
-                <div className="text-lg">🏆 WINNER 🏆</div>
-                <div className="text-sm">PARTICIPATION</div>
-                <div className="text-sm">TROPHY</div>
-                <div className="text-yellow-300 text-xs mt-1">you tried!</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Floating Promo Badges */}
-        {!hiddenAds.includes('promo-special') && (
-          <div className="absolute bottom-1/3 left-16 z-20 hidden lg:block">
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 border-4 border-red-500 rounded-xl p-3 animate-bounce shadow-2xl shadow-yellow-500/70 transform -rotate-12 relative">
-              <button 
-                onClick={() => hideAd('promo-special')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-black text-center font-mono font-black">
-                <div className="text-lg">🎰 SPECIAL 🎰</div>
-                <div className="text-sm">LOSE FASTER!</div>
-                <div className="text-sm">PREMIUM LOSSES</div>
-                <div className="text-xs text-red-600 mt-1">Now with extra regret!</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!hiddenAds.includes('vip-deluxe') && (
-          <div className="absolute bottom-1/4 right-20 z-20 hidden lg:block">
-            <div className="bg-gradient-to-l from-pink-500 to-purple-500 border-4 border-cyan-400 rounded-full p-4 animate-pulse shadow-2xl shadow-pink-500/70 transform rotate-12 relative">
-              <button 
-                onClick={() => hideAd('vip-deluxe')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-center font-mono font-black leading-tight">
-                <div className="text-lg">💎 VIP 💎</div>
-                <div className="text-sm">DELUXE</div>
-                <div className="text-sm">BANKRUPTCY</div>
-                <div className="text-cyan-300 text-xs mt-1">members only</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-
-        {/* Corner Achievement Badges */}
-        {!hiddenAds.includes('level-badge') && (
-          <div className="absolute top-2/3 left-4 hidden md:block z-20">
-            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 border-3 border-yellow-400 rounded-full p-3 animate-bounce shadow-xl shadow-blue-500/50 transform rotate-6 relative">
-              <button 
-                onClick={() => hideAd('level-badge')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-black font-mono text-center leading-tight">
-                <div>🏅 LEVEL 1 🏅</div>
-                <div>MONEY</div>
-                <div>BURNER</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!hiddenAds.includes('stonks-expert') && (
-          <div className="absolute top-3/4 right-8 hidden lg:block z-20">
-            <div className="bg-gradient-to-l from-green-500 to-teal-500 border-3 border-orange-400 rounded-lg p-3 animate-pulse shadow-xl shadow-green-500/50 transform -rotate-6 relative">
-              <button 
-                onClick={() => hideAd('stonks-expert')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-black font-mono text-center">
-                <div>📈 STONKS 📈</div>
-                <div>EXPERT</div>
-                <div className="text-red-300 text-[8px]">(going down)</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!hiddenAds.includes('addiction-warning') && (
-          <div className="absolute bottom-1/2 left-2 hidden xl:block z-20">
-            <div className="bg-gradient-to-r from-red-500 to-pink-500 border-3 border-white rounded-full p-3 animate-spin shadow-xl shadow-red-500/50 relative" style={{animationDuration: '8s'}}>
-              <button 
-                onClick={() => hideAd('addiction-warning')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-black font-mono text-center leading-tight">
-                <div>🚨 WARNING 🚨</div>
-                <div>ADDICTED</div>
-                <div>TO LOSING</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!hiddenAds.includes('speedrun-bankruptcy') && (
-          <div className="absolute bottom-1/3 right-4 hidden md:block z-20">
-            <div className="bg-gradient-to-br from-purple-500 to-indigo-500 border-3 border-yellow-400 rounded-lg p-3 animate-bounce shadow-xl shadow-purple-500/50 transform rotate-3 relative">
-              <button 
-                onClick={() => hideAd('speedrun-bankruptcy')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-black font-mono text-center">
-                <div>🎆 SPECIAL 🎆</div>
-                <div>BANKRUPTCY</div>
-                <div>SPEEDRUN</div>
-                <div className="text-yellow-300 text-[8px]">WR: 3 mins</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Mobile Testimonials */}
-        {!hiddenAds.includes('mobile-testimonial') && (
-          <div className="block md:hidden absolute bottom-32 left-4 right-4 z-20">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-2 border-yellow-400 rounded-lg p-3 animate-pulse shadow-lg shadow-purple-500/50 relative">
-              <button 
-                onClick={() => hideAd('mobile-testimonial')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-mono text-center">
-                <div className="text-yellow-300 font-black mb-1">★★★★★ "AMAZING!"</div>
-                <div>"Lost everything but gained life experience!"</div>
-                <div className="text-yellow-300 text-[10px] mt-1">- DefinitelyNotFakeReview</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Mobile Deal */}
-        {!hiddenAds.includes('mobile-deal') && (
-          <div className="block md:hidden absolute top-1/4 right-4 z-20">
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 border-2 border-yellow-400 rounded-lg p-2 animate-pulse shadow-lg shadow-orange-500/50 relative">
-              <button 
-                onClick={() => hideAd('mobile-deal')}
-                className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
-              >
-                ×
-              </button>
-              <div className="text-white text-xs font-black font-mono text-center">
-                <div>📱 MOBILE 📱</div>
-                <div>BANKRUPTCY</div>
-                <div>EDITION</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-
 
       </div>
 
+      {/* OBNOXIOUS SATIRICAL ADVERTISEMENTS */}
+      
+      {/* Crazy Deal Banner - Top Left */}
+      <div className="hidden md:block absolute top-20 left-4 z-30">
+        <div className="bg-gradient-to-r from-red-500 to-pink-500 border-4 border-yellow-400 rounded-xl p-4 animate-bounce shadow-2xl shadow-red-500/70 transform rotate-12 max-w-64">
+          <div className="text-white text-center font-mono font-black">
+            <div className="text-2xl text-yellow-300 mb-2">🔥 HOT DEAL 🔥</div>
+            <div className="text-xl mb-1">DEPOSIT 1EC</div>
+            <div className="text-3xl font-black text-yellow-400">WIN 1,000,000EC*</div>
+            <div className="text-xs text-red-200 mt-1">*in monopoly money</div>
+            <div className="text-lg mt-2 animate-pulse">LIMITED TIME!**</div>
+            <div className="text-xs text-red-200">**forever</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Big Win Testimonial - Top Right */}
+      <div className="hidden lg:block absolute top-32 right-4 z-30">
+        <div className="bg-gradient-to-l from-green-500 to-lime-400 border-4 border-white rounded-2xl p-5 animate-pulse shadow-2xl shadow-green-500/70 transform -rotate-6 max-w-72">
+          <div className="text-black text-center font-mono font-black">
+            <div className="text-2xl mb-2">💰 MEGA WINNER 💰</div>
+            <div className="text-lg mb-2">"I WON BIG!"</div>
+            <div className="text-2xl font-black">999,999,999EC</div>
+            <div className="text-sm mb-2">- TotallyRealUser420</div>
+            <div className="text-xs text-green-800">*results not typical</div>
+            <div className="text-xs text-green-800">**user may be fictional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Warning Banner - Left Side */}
+      {!hiddenAds.includes('warning-banner') && (
+        <div className="hidden xl:block absolute top-1/3 left-8 z-20">
+          <div className="bg-gradient-to-br from-orange-500 to-red-500 border-4 border-yellow-400 rounded-2xl p-4 animate-pulse shadow-2xl shadow-orange-500/50 transform rotate-3 max-w-64 relative">
+            <button 
+              onClick={() => hideAd('warning-banner')}
+              className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+            >
+              ×
+            </button>
+            <div className="text-white text-center font-mono font-black">
+              <div className="text-yellow-300 font-black mb-2 text-xl">⚠️ WARNING ⚠️</div>
+              <div className="mb-2 text-sm">GAMBLING MAY CAUSE:</div>
+              <div className="text-xs mb-1">• Empty wallet syndrome</div>
+              <div className="text-xs mb-1">• Broken dreams</div>
+              <div className="text-xs mb-1">• Questioning life choices</div>
+              <div className="text-xs mb-2">• Addiction to losing</div>
+              <div className="text-yellow-300 text-xs">But hey, you might win!*</div>
+              <div className="text-xs">*you won't</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Achievement Badge - Right Side */}
+      {!hiddenAds.includes('achievement-badge') && (
+        <div className="hidden xl:block absolute top-1/4 right-12 z-20">
+          <div className="bg-gradient-to-r from-purple-500 to-indigo-500 border-4 border-yellow-400 rounded-full p-6 animate-spin shadow-2xl shadow-purple-500/70 relative" style={{animationDuration: '10s'}}>
+            <button 
+              onClick={() => hideAd('achievement-badge')}
+              className="absolute -top-1 -right-1 w-3 h-3 bg-white text-black text-[6px] font-black rounded-full flex items-center justify-center hover:bg-gray-200"
+            >
+              ×
+            </button>
+            <div className="text-white text-center font-mono font-black leading-tight">
+              <div className="text-lg">🏆 WINNER 🏆</div>
+              <div className="text-sm">PARTICIPATION</div>
+              <div className="text-sm">TROPHY</div>
+              <div className="text-yellow-300 text-xs mt-1">you tried!</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Enhanced scanning line effects */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-10">
         {/* Multiple colorful scanning lines */}
         <div className="absolute top-0 left-0 w-full h-1 bg-pink-400 opacity-60 animate-ping"></div>
         <div className="absolute bottom-0 left-0 w-full h-1 bg-cyan-400 opacity-60 animate-ping"></div>
@@ -811,7 +648,6 @@ export default function EpicRngWorldPage() {
         ))}
       </div>
 
-
       {/* Auth Modal */}
       <AuthModal
         isOpen={showAuthModal}
@@ -821,6 +657,24 @@ export default function EpicRngWorldPage() {
           console.log('Authentication successful!')
         }}
       />
+
+      {/* Add CSS keyframes for animations */}
+      <style jsx>{`
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes rainbow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes scan {
+          0% { top: 0%; }
+          100% { top: 100%; }
+        }
+      `}</style>
     </div>
   )
 }
