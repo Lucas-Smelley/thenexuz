@@ -340,48 +340,30 @@ export default function CrashPage() {
           ) : (
             <div className="bg-black/80 border-2 border-red-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-red-400/50 backdrop-blur-sm">
               <div className="flex items-center space-x-1 sm:space-x-2">
-                <span className="text-xs sm:text-sm font-black text-red-400 whitespace-nowrap">📈 CRASH! 📈</span>
+                <span className="text-xs sm:text-sm font-black text-red-400 whitespace-nowrap">CRASH GAME</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* Main content - TRADING FLOOR LAYOUT */}
+        {/* Main content */}
         <div className="relative min-h-screen z-20">
           
-          {/* Trading Floor Header - Stock Market Style */}
+          {/* Game Header */}
           <div className="bg-gradient-to-r from-black via-red-900 to-black border-b-4 border-red-400 relative overflow-hidden">
-            {/* Market Ticker */}
-            <div className="bg-black/90 border-b-2 border-orange-400 py-2 relative overflow-hidden">
-              <div className="flex items-center animate-pulse">
-                <div className="text-red-400 font-mono text-xs sm:text-sm px-4 flex items-center space-x-4">
-                  <span className="flex items-center"><span className="w-2 h-2 bg-red-400 rounded-full animate-pulse mr-2"></span>LIVE</span>
-                  <span>📈 EPIC: {(42000 + Math.sin(multiplier) * 100).toFixed(2)}</span>
-                  <span>💥 CRASH: {(multiplier * 1000).toFixed(0)}</span>
-                  <span>🔥 VOL: HIGH</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Main Trading Floor Title */}
+            {/* Main Game Title */}
             <div className="text-center py-6 relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-orange-500/30 to-red-600/20 animate-pulse"></div>
-              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black font-mono tracking-wider text-red-400 drop-shadow-2xl relative z-10"
-                  style={{
-                    textShadow: '0 0 20px rgba(239, 68, 68, 1), 0 0 40px rgba(239, 68, 68, 0.6)'
-                  }}>
-                📈 EPIC CRASH TRADING 📉
+              <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-orange-500/30 to-red-600/20"></div>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-mono tracking-wider text-red-400 drop-shadow-2xl relative z-10">
+                CRASH GAME
               </h1>
-              <div className="text-orange-400 font-mono text-sm sm:text-lg font-bold mt-2 relative z-10">
-                WALL STREET • VOLATILITY EXTREME • RISK: MAXIMUM
-              </div>
             </div>
           </div>
 
-          {/* Trading Dashboard Layout */}
+          {/* Game Layout */}
           <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 p-4 min-h-[calc(100vh-200px)]">
             
-            {/* LEFT PANEL - Trading Chart (Main) */}
+            {/* LEFT PANEL - Game Chart (Main) */}
             <div className="xl:col-span-3 space-y-4">
               
               {/* Chart Window */}
@@ -389,17 +371,17 @@ export default function CrashPage() {
                 {/* Chart Header */}
                 <div className="bg-gradient-to-r from-green-800 to-green-900 border-b-2 border-green-400 p-3 flex justify-between items-center">
                   <div className="flex items-center space-x-4">
-                    <div className="text-green-400 font-mono font-black text-lg">EPIC/CRASH</div>
+                    <div className="text-green-400 font-mono font-black text-lg">CRASH</div>
                     <div className="flex items-center space-x-2 text-xs">
                       <div className={`w-2 h-2 rounded-full ${isRising ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
                       <span className="text-green-300 font-mono">{isRising ? 'RISING' : isCrashed ? 'CRASHED' : 'WAITING'}</span>
                     </div>
                   </div>
                   <div className="text-green-300 font-mono text-sm">
-                    {gameState === 'waiting' && '⏳ MARKET CLOSED'}
-                    {gameState === 'ready' && '🎯 READY TO TRADE'}
-                    {gameState === 'playing' && '🚀 TRADING ACTIVE'}
-                    {gameState === 'crashed' && '💥 MARKET CRASH'}
+                    {gameState === 'waiting' && 'WAITING'}
+                    {gameState === 'ready' && 'READY'}
+                    {gameState === 'playing' && 'ACTIVE'}
+                    {gameState === 'crashed' && 'CRASHED'}
                   </div>
                 </div>
                 
@@ -433,13 +415,10 @@ export default function CrashPage() {
                              textShadow: `0 0 20px currentColor, 0 0 40px currentColor`
                            }}>
                         {multiplier.toFixed(2)}x
-                        <div className="text-lg absolute -top-2 -right-16 text-green-400">
-                          ${(multiplier * 1000).toFixed(0)}
-                        </div>
                       </div>
                       {isCrashed && (
                         <div className="text-xl sm:text-3xl font-black text-red-400 animate-pulse mt-2">
-                          💥 MARKET CRASH! 💥
+                          CRASHED!
                         </div>
                       )}
                     </div>
@@ -448,43 +427,31 @@ export default function CrashPage() {
                     {isRising && (
                       <div className="absolute top-4 right-4">
                         <TrendingUp className="w-8 h-8 sm:w-12 sm:h-12 text-green-400 animate-bounce" />
-                        <div className="text-green-400 font-mono text-sm font-bold mt-1">BULL RUN</div>
+                        <div className="text-green-400 font-mono text-sm font-bold mt-1">RISING</div>
                       </div>
                     )}
-                    
-                    {/* Market Status Indicators */}
-                    <div className="absolute bottom-4 left-4 flex space-x-4">
-                      <div className="bg-black/80 border border-green-400 rounded px-2 py-1">
-                        <div className="text-green-400 font-mono text-xs">24H HIGH</div>
-                        <div className="text-white font-mono font-bold">100.00x</div>
-                      </div>
-                      <div className="bg-black/80 border border-red-400 rounded px-2 py-1">
-                        <div className="text-red-400 font-mono text-xs">24H LOW</div>
-                        <div className="text-white font-mono font-bold">1.00x</div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT PANEL - Trading Controls */}
+            {/* RIGHT PANEL - Game Controls */}
             <div className="xl:col-span-1 space-y-4">
               
-              {/* Combined Position & Trading Control */}
+              {/* Game Control Panel */}
               <div className="bg-black/95 border-4 border-blue-400 rounded-lg shadow-2xl shadow-blue-400/50">
                 <div className="bg-gradient-to-r from-blue-800 to-blue-900 border-b-2 border-blue-400 p-3">
                   <h3 className="text-blue-400 font-mono font-black text-lg">
-                    {gameState === 'waiting' ? '💼 POSITION' :
-                     gameState === 'ready' ? '🚀 EXECUTE TRADE' :
-                     gameState === 'playing' ? '💰 CLOSE POSITION' :
-                     '🔄 NEW TRADE'}
+                    {gameState === 'waiting' ? 'BET' :
+                     gameState === 'ready' ? 'START GAME' :
+                     gameState === 'playing' ? 'CASH OUT' :
+                     'NEW ROUND'}
                   </h3>
                 </div>
                 <div className="p-4 space-y-4">
-                  {/* Position Size Controls */}
+                  {/* Bet Amount Controls */}
                   <div>
-                    <label className="block text-blue-300 font-bold text-sm font-mono mb-2">POSITION SIZE (EC)</label>
+                    <label className="block text-blue-300 font-bold text-sm font-mono mb-2">BET AMOUNT (EC)</label>
                     <div className="space-y-2">
                       <div className="flex gap-2">
                         <button
@@ -518,16 +485,16 @@ export default function CrashPage() {
                           disabled={isRising}
                           className="w-full bg-gray-900 border-2 border-blue-400 rounded px-2 py-2 text-blue-300 font-mono text-sm font-bold focus:border-cyan-400 focus:outline-none"
                         >
-                          <option value={25}>💰 25 EC</option>
-                          <option value={50}>🎯 50 EC</option>
-                          <option value={100}>🔥 100 EC</option>
-                          <option value={250}>💎 250 EC</option>
-                          <option value={500}>💸 500 EC</option>
+                          <option value={25}>25 EC</option>
+                          <option value={50}>50 EC</option>
+                          <option value={100}>100 EC</option>
+                          <option value={250}>250 EC</option>
+                          <option value={500}>500 EC</option>
                         </select>
                       ) : (
                         <input
                           type="number"
-                          placeholder="Enter size..."
+                          placeholder="Enter amount..."
                           value={customBetAmount}
                           onChange={(e) => setCustomBetAmount(e.target.value)}
                           disabled={isRising}
@@ -569,35 +536,35 @@ export default function CrashPage() {
                   >
                     {/* Button text based on game state */}
                     {gameState === 'waiting' && (
-                      !user ? '🔐 LOGIN TO TRADE' :
-                      getCurrentBetAmount() <= 0 ? '📊 ENTER POSITION SIZE' :
-                      profile && profile.epic_coins < getCurrentBetAmount() ? '💸 INSUFFICIENT FUNDS' :
-                      `📈 LONG ${getCurrentBetAmount()} EC`
+                      !user ? 'LOGIN TO PLAY' :
+                      getCurrentBetAmount() <= 0 ? 'ENTER BET AMOUNT' :
+                      profile && profile.epic_coins < getCurrentBetAmount() ? 'INSUFFICIENT FUNDS' :
+                      `BET ${getCurrentBetAmount()} EC`
                     )}
-                    {gameState === 'ready' && '🚀 EXECUTE TRADE! 🚀'}
+                    {gameState === 'ready' && 'START GAME'}
                     {gameState === 'playing' && (
-                      hasCashedOut ? `💰 CLOSED AT ${cashOutMultiplier.toFixed(2)}x` :
-                      `💰 CLOSE ${(getCurrentBetAmount() * multiplier).toFixed(0)} EC`
+                      hasCashedOut ? `CASHED OUT AT ${cashOutMultiplier.toFixed(2)}x` :
+                      `CASH OUT ${(getCurrentBetAmount() * multiplier).toFixed(0)} EC`
                     )}
-                    {gameState === 'crashed' && '🔄 NEW POSITION'}
+                    {gameState === 'crashed' && 'NEW ROUND'}
                   </button>
                   
-                  {/* P&L Display when playing */}
+                  {/* Win Amount Display when playing */}
                   {gameState === 'playing' && !hasCashedOut && (
                     <div className="text-center bg-black/60 rounded p-3 border border-yellow-400/30">
-                      <div className="text-yellow-400 font-mono text-sm font-bold">UNREALIZED P&L</div>
+                      <div className="text-yellow-400 font-mono text-sm font-bold">POTENTIAL WIN</div>
                       <div className={`font-mono font-black text-2xl ${
                         (getCurrentBetAmount() * multiplier - getCurrentBetAmount()) > 0 ? 'text-green-400' : 'text-red-400'
                       }`}>
                         {(getCurrentBetAmount() * multiplier - getCurrentBetAmount()) > 0 ? '+' : ''}{(getCurrentBetAmount() * multiplier - getCurrentBetAmount()).toFixed(0)} EC
                       </div>
                       <div className="text-cyan-400 font-mono text-xs mt-1">
-                        {multiplier.toFixed(2)}x multiplier • {getCurrentBetAmount()} EC position
+                        {multiplier.toFixed(2)}x multiplier • {getCurrentBetAmount()} EC bet
                       </div>
                     </div>
                   )}
 
-                  {/* Trade Status Info */}
+                  {/* Game Status Info */}
                   {gameState !== 'waiting' && (
                     <div className="bg-black/40 rounded p-3 border border-blue-400/30">
                       <div className="grid grid-cols-2 gap-2 text-xs">
@@ -614,7 +581,7 @@ export default function CrashPage() {
                           </div>
                         </div>
                         <div>
-                          <div className="text-blue-300 font-mono">POSITION:</div>
+                          <div className="text-blue-300 font-mono">BET:</div>
                           <div className="text-white font-mono font-bold">{getCurrentBetAmount()} EC</div>
                         </div>
                         {gameState === 'playing' && (
@@ -635,10 +602,10 @@ export default function CrashPage() {
                 </div>
               </div>
 
-              {/* Market History */}
+              {/* Game History */}
               <div className="bg-black/95 border-4 border-purple-400 rounded-lg shadow-2xl shadow-purple-400/50">
                 <div className="bg-gradient-to-r from-purple-800 to-purple-900 border-b-2 border-purple-400 p-3">
-                  <h3 className="text-purple-400 font-mono font-black text-lg">📊 TRADE HISTORY</h3>
+                  <h3 className="text-purple-400 font-mono font-black text-lg">GAME HISTORY</h3>
                 </div>
                 <div className="p-4">
                   <div className="space-y-2 max-h-32 overflow-y-auto">
@@ -649,12 +616,12 @@ export default function CrashPage() {
                         crash < 10 ? 'bg-green-500/20 border-green-400 text-green-300' :
                         'bg-purple-500/20 border-purple-400 text-purple-300'
                       }`}>
-                        {crash.toFixed(2)}x {crash < 2 ? '📉' : crash > 10 ? '🚀' : '📈'}
+                        {crash.toFixed(2)}x
                       </div>
                     ))}
                     {gameHistory.length === 0 && (
                       <div className="text-gray-500 text-center font-mono text-xs">
-                        No trades yet...
+                        No games yet...
                       </div>
                     )}
                   </div>
@@ -696,7 +663,7 @@ export default function CrashPage() {
                     style={{
                       textShadow: '0 0 30px rgba(34, 197, 94, 1), 0 0 60px rgba(34, 197, 94, 0.8)'
                     }}>
-                  💰 CASHED OUT! 💰
+                  CASHED OUT!
                 </h2>
                 <div className="text-4xl sm:text-6xl md:text-8xl font-black font-mono mb-2 sm:mb-4 animate-pulse bg-black/95 px-3 sm:px-6 py-2 sm:py-4 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white whitespace-nowrap"
                      style={{
@@ -706,35 +673,13 @@ export default function CrashPage() {
                   +{winAmount.toLocaleString()} EC
                 </div>
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-white animate-pulse whitespace-nowrap">
-                  📈 PERFECT TIMING! 📈
+                  PERFECT TIMING!
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Floating crash symbols */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={i}
-              className={`absolute font-mono text-2xl font-bold animate-pulse ${
-                i % 5 === 0 ? 'text-red-400' :
-                i % 5 === 1 ? 'text-orange-400' :
-                i % 5 === 2 ? 'text-yellow-400' :
-                i % 5 === 3 ? 'text-green-400' : 'text-gray-400'
-              }`}
-              style={{
-                left: `${(i * 14.7) % 100}%`,
-                top: `${(i * 23.1) % 100}%`,
-                animationDelay: `${(i * 0.4) % 8}s`,
-                textShadow: '0 0 10px currentColor'
-              }}
-            >
-              {['📈', '💥', '🚀', '💰', '📉', '🎯', '💸', '🔥'][i % 8]}
-            </div>
-          ))}
-        </div>
       </div>
     </>
   )

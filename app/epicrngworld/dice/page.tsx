@@ -328,10 +328,8 @@ export default function DicePage() {
             
             {/* Cohesive promotional banners */}
             <div className="absolute top-2 left-4 bg-green-600/90 border-2 border-yellow-400 px-3 py-1 rounded-lg animate-bounce transform -rotate-12">
-              <div className="text-yellow-100 font-black text-xs font-mono">🔥 HOT TABLES! 🔥</div>
             </div>
             <div className="absolute top-2 right-4 bg-emerald-600/90 border-2 border-gold-400 px-3 py-1 rounded-lg animate-bounce transform rotate-12" style={{animationDelay: '0.5s'}}>
-              <div className="text-gold-100 font-black text-xs font-mono">💎 VIP DICE! 💎</div>
             </div>
             
             <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider relative z-10"
@@ -491,6 +489,30 @@ export default function DicePage() {
                           Ready for next roll
                         </div>
                       )}
+                    </div>
+
+                    {/* Roll Button - Mobile responsive */}
+                    <div className="mt-6 lg:hidden">
+                      <button
+                        onClick={rollDice}
+                        disabled={isRolling || (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)}
+                        className={`w-full py-6 text-xl font-black font-mono rounded-xl transition-all duration-300 transform ${
+                          isRolling
+                            ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                            : (!user || (profile && profile.epic_coins < getCurrentBetAmount()) || getCurrentBetAmount() <= 0)
+                            ? 'bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed'
+                            : 'bg-gradient-to-br from-red-500 to-red-700 border-4 border-yellow-400 text-yellow-100 hover:scale-105 hover:shadow-2xl shadow-red-500/50 animate-pulse'
+                        }`}
+                      >
+                        {isRolling ? '🎲 ROLLING' : '🎯 ROLL DICE'}
+                      </button>
+                      
+                      <div className="mt-3 text-gold-300 font-mono text-sm">
+                        {!user ? 'LOGIN TO PLAY' : 
+                         getCurrentBetAmount() <= 0 ? 'PLACE YOUR BET' :
+                         profile && profile.epic_coins < getCurrentBetAmount() ? 'INSUFFICIENT FUNDS' : 
+                         `${getCurrentBetAmount()} EC • ${prediction.toUpperCase()} ${targetNumber}`}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -699,7 +721,7 @@ export default function DicePage() {
               <div className="lg:col-span-1">
                 
                 {/* Enhanced Roll Button with Mega Neon */}
-                <div className="bg-gradient-to-br from-black via-gray-900 to-black border-4 border-gold-400 rounded-2xl p-6 shadow-2xl text-center relative overflow-hidden" style={{
+                <div className="hidden lg:block bg-gradient-to-br from-black via-gray-900 to-black border-4 border-gold-400 rounded-2xl p-6 shadow-2xl text-center relative overflow-hidden" style={{
                   boxShadow: '0 0 50px rgba(251, 191, 36, 0.6), 0 0 100px rgba(251, 191, 36, 0.3), inset 0 0 40px rgba(251, 191, 36, 0.1)'
                 }}>
                   {/* Animated border glow */}
@@ -891,50 +913,6 @@ export default function DicePage() {
           ))}
         </div>
         
-        {/* Cohesive Satirical Gambling Advertisements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Corner Advertisements - Green/Gold theme */}
-          <div className="absolute top-16 left-8 bg-green-600/95 border-2 border-yellow-400 px-4 py-2 rounded-lg transform -rotate-12 animate-pulse">
-            <div className="text-yellow-100 font-black text-sm font-mono text-center">
-              💸 LOSE MONEY FAST! 💸<br/>
-              <span className="text-xs">Bankruptcy in 3 rolls!</span>
-            </div>
-          </div>
-          
-          <div className="absolute top-24 right-8 bg-emerald-600/95 border-2 border-gold-400 px-4 py-2 rounded-lg transform rotate-12 animate-bounce" style={{animationDelay: '1s'}}>
-            <div className="text-gold-100 font-black text-sm font-mono text-center">
-              🎰 ADDICTION GUARANTEED! 🎰<br/>
-              <span className="text-xs">Call 1-800-BROKE-NOW</span>
-            </div>
-          </div>
-          
-          <div className="absolute bottom-32 left-8 bg-teal-600/95 border-2 border-yellow-400 px-4 py-2 rounded-lg transform rotate-6 animate-pulse" style={{animationDelay: '2s'}}>
-            <div className="text-yellow-100 font-black text-sm font-mono text-center">
-              😱 99% LOSE EVERYTHING! 😱<br/>
-              <span className="text-xs">The house always wins!</span>
-            </div>
-          </div>
-          
-          <div className="absolute bottom-40 right-8 bg-green-700/95 border-2 border-orange-400 px-4 py-2 rounded-lg transform -rotate-6 animate-bounce" style={{animationDelay: '3s'}}>
-            <div className="text-orange-100 font-black text-sm font-mono text-center">
-              💵 EMPTY WALLET SPEEDRUN! 💵<br/>
-              <span className="text-xs">World record: 2 minutes!</span>
-            </div>
-          </div>
-          
-          {/* Middle screen testimonials - cohesive colors */}
-          <div className="absolute top-1/3 left-4 bg-emerald-600/90 border-2 border-cyan-400 px-3 py-2 rounded-lg transform -rotate-3 animate-pulse" style={{animationDelay: '4s'}}>
-            <div className="text-cyan-100 font-black text-xs font-mono">
-              🗣️ "Lost my house but gained life experience!" - Dave
-            </div>
-          </div>
-          
-          <div className="absolute top-2/3 right-4 bg-teal-600/90 border-2 border-lime-400 px-3 py-2 rounded-lg transform rotate-3 animate-bounce" style={{animationDelay: '5s'}}>
-            <div className="text-lime-100 font-black text-xs font-mono">
-              🗣️ "My kids hate me but the dice love me!" - Karen
-            </div>
-          </div>
-        </div>
       </div>
     </>
   )

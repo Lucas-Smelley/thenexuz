@@ -5,7 +5,7 @@ import { ArrowLeft, Coins, User, LogOut, ChevronDown } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase"
 
-const multipliers = [0.5, 0.5, 1, 1.5, 2, 10, 2, 1.5, 1, 0.5, 0.5]
+const multipliers = [0.5, 0.5, 1, 1.5, 2, 5, 2, 1.5, 1, 0.5, 0.5]
 
 export default function PlinkoPage() {
   const { user, profile, signOut, refreshProfile } = useAuth()
@@ -30,17 +30,34 @@ export default function PlinkoPage() {
   const ROWS = 12
   const SLOT_WIDTH = BOARD_WIDTH / multipliers.length
 
-  // Generate peg positions
+  // Generate peg positions covering full width with alternating pattern
   const generatePegs = () => {
     const pegs = []
+    const margin = 45  // Balanced margin from edges
+    const usableWidth = BOARD_WIDTH - (margin * 2)
+    const pegsPerRow = 9  // Balanced peg count for good coverage
+    const pegSpacing = usableWidth / (pegsPerRow - 1)
+    
     for (let row = 0; row < ROWS; row++) {
-      const pegsInRow = row + 3
-      const spacing = BOARD_WIDTH / (pegsInRow + 1)
-      for (let i = 0; i < pegsInRow; i++) {
-        pegs.push({
-          x: spacing * (i + 1),
-          y: 80 + row * 35
-        })
+      const isEvenRow = row % 2 === 0
+      
+      if (isEvenRow) {
+        // Even rows: pegs from edge to edge
+        for (let i = 0; i < pegsPerRow; i++) {
+          pegs.push({
+            x: margin + (i * pegSpacing),
+            y: 180 + row * 35
+          })
+        }
+      } else {
+        // Odd rows: pegs offset by half spacing, covering full width
+        const offsetSpacing = pegSpacing / 2
+        for (let i = 0; i < pegsPerRow - 1; i++) {
+          pegs.push({
+            x: margin + offsetSpacing + (i * pegSpacing),
+            y: 180 + row * 35
+          })
+        }
       }
     }
     return pegs
@@ -135,35 +152,50 @@ export default function PlinkoPage() {
           const dy = ball.y - peg.y
           const distance = Math.sqrt(dx * dx + dy * dy)
           
-          // Bounce off peg
+          // Improved bounce off peg
           const nx = dx / distance
           const ny = dy / distance
           
-          // Add some randomness to the bounce
-          ball.vx = nx * (2 + Math.random() * 2) + (Math.random() - 0.5) * 1
-          ball.vy = Math.abs(ny * 1.5) + Math.random() * 1
+          // Calculate bounce velocity with better physics
+          const bounceForce = 2 + Math.random() * 1.5
+          ball.vx = nx * bounceForce + (Math.random() - 0.5) * 0.8
+          ball.vy = Math.max(0.5, Math.abs(ny * 1.2) + Math.random() * 0.8)  // Ensure downward motion
           
-          // Move ball away from peg
-          ball.x = peg.x + nx * (BALL_RADIUS + PEG_RADIUS + 1)
-          ball.y = peg.y + ny * (BALL_RADIUS + PEG_RADIUS + 1)
+          // Move ball away from peg with extra buffer
+          const separation = BALL_RADIUS + PEG_RADIUS + 3
+          ball.x = peg.x + nx * separation
+          ball.y = peg.y + ny * separation
+          
+          // Prevent balls from getting too close to edges when bouncing
+          ball.x = Math.max(BALL_RADIUS + 5, Math.min(BOARD_WIDTH - BALL_RADIUS - 5, ball.x))
         }
       }
 
-      // Boundary collision
+      // Improved boundary collision with momentum preservation
       if (ball.x - BALL_RADIUS < 0) {
-        ball.x = BALL_RADIUS
-        ball.vx = Math.abs(ball.vx) * 0.8
+        ball.x = BALL_RADIUS + 2  // Add small buffer
+        ball.vx = Math.abs(ball.vx) * 0.7 + 1  // Ensure minimum bounce velocity
+        ball.vy = Math.abs(ball.vy) + 0.5  // Add downward momentum
       }
       if (ball.x + BALL_RADIUS > BOARD_WIDTH) {
-        ball.x = BOARD_WIDTH - BALL_RADIUS
-        ball.vx = -Math.abs(ball.vx) * 0.8
+        ball.x = BOARD_WIDTH - BALL_RADIUS - 2  // Add small buffer
+        ball.vx = -Math.abs(ball.vx) * 0.7 - 1  // Ensure minimum bounce velocity
+        ball.vy = Math.abs(ball.vy) + 0.5  // Add downward momentum
+      }
+
+      // Add velocity damping to prevent endless bouncing
+      ball.vx *= 0.98
+      
+      // Ensure minimum downward velocity to prevent getting stuck
+      if (Math.abs(ball.vy) < 1) {
+        ball.vy = Math.sign(ball.vy) * 1 || 1
       }
 
       // Update ball position
       setBalls(prev => prev.map(b => b.id === ball.id ? ball : b))
 
       // Check if ball reached bottom
-      if (ball.y > BOARD_HEIGHT - 50) {
+      if (ball.y > BOARD_HEIGHT + 50) {
         // Determine which slot the ball landed in
         const slotIndex = Math.floor(ball.x / SLOT_WIDTH)
         const finalSlot = Math.max(0, Math.min(multipliers.length - 1, slotIndex))
@@ -382,7 +414,7 @@ export default function PlinkoPage() {
           ) : (
             <div className="bg-black/80 border-2 border-purple-400 px-2 sm:px-4 py-1 sm:py-2 font-mono rounded-lg shadow-2xl shadow-purple-400/50 backdrop-blur-sm">
               <div className="flex items-center space-x-1 sm:space-x-2">
-                <span className="text-xs sm:text-sm font-black text-purple-400 whitespace-nowrap">🎯 PLINKO! 🎯</span>
+                <span className="text-xs sm:text-sm font-black text-purple-400 whitespace-nowrap">PLINKO</span>
               </div>
             </div>
           )}
@@ -394,16 +426,8 @@ export default function PlinkoPage() {
           balls.length > 0 ? 'z-30' : 'z-20'
         }`}>
           
-          {/* Casino Header */}
+          {/* Game Header */}
           <div className="text-center py-8 bg-gradient-to-b from-black/80 to-transparent relative">
-            {/* Promotional banners */}
-            <div className="absolute top-2 left-4 bg-green-600/95 border-2 border-yellow-400 px-3 py-1 rounded-lg animate-bounce transform -rotate-12">
-              <div className="text-yellow-100 font-black text-xs font-mono">🎯 DROP ZONE! 🎯</div>
-            </div>
-            <div className="absolute top-2 right-4 bg-emerald-600/95 border-2 border-gold-400 px-3 py-1 rounded-lg animate-bounce transform rotate-12" style={{animationDelay: '0.5s'}}>
-              <div className="text-gold-100 font-black text-xs font-mono">💰 BIG WINS! 💰</div>
-            </div>
-            
             <h1 className="text-2xl sm:text-4xl md:text-6xl font-black font-mono tracking-wider relative z-10"
                 style={{
                   background: 'linear-gradient(45deg, #10b981, #06b6d4, #8b5cf6, #ec4899, #f59e0b)',
@@ -414,7 +438,7 @@ export default function PlinkoPage() {
                   animation: 'gradient 3s ease infinite',
                   textShadow: '0 0 30px rgba(34, 197, 94, 0.8)'
                 }}>
-              🎯 EPIC PLINKO PARADISE 🎯
+              Plinko
             </h1>
           </div>
           
@@ -423,7 +447,7 @@ export default function PlinkoPage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
               
               {/* Plinko Board - Center */}
-              <div className="lg:col-span-2 order-2 lg:order-2">
+              <div className="lg:col-span-2 order-1 lg:order-2">
                 <div className="bg-gradient-to-br from-green-800 via-green-700 to-green-900 border-4 border-yellow-400 rounded-2xl p-6 shadow-2xl relative overflow-hidden" style={{
                   boxShadow: '0 0 40px rgba(34, 197, 94, 0.6), 0 0 80px rgba(34, 197, 94, 0.3)'
                 }}>
@@ -434,7 +458,7 @@ export default function PlinkoPage() {
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
                       textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
-                    }}>🎯 PLINKO BOARD 🎯</h3>
+                    }}>PLINKO BOARD</h3>
                   </div>
                   
                   {/* Plinko Board SVG */}
@@ -463,7 +487,7 @@ export default function PlinkoPage() {
                         <g key={index}>
                           <rect
                             x={index * SLOT_WIDTH}
-                            y={BOARD_HEIGHT - 40}
+                            y={BOARD_HEIGHT + 60}
                             width={SLOT_WIDTH}
                             height={40}
                             fill={multiplier >= 3 ? "#10b981" : multiplier >= 2 ? "#06b6d4" : multiplier >= 1 ? "#fbbf24" : "#ef4444"}
@@ -473,7 +497,7 @@ export default function PlinkoPage() {
                           />
                           <text
                             x={index * SLOT_WIDTH + SLOT_WIDTH / 2}
-                            y={BOARD_HEIGHT - 15}
+                            y={BOARD_HEIGHT + 85}
                             textAnchor="middle"
                             fill="white"
                             fontSize="14"
@@ -542,7 +566,7 @@ export default function PlinkoPage() {
                           : 'bg-gradient-to-br from-pink-500 to-pink-700 border-4 border-yellow-400 text-yellow-100 hover:scale-105 hover:shadow-2xl shadow-pink-500/50 animate-pulse'
                       }`}
                     >
-                      {isDropping ? '🎯 DROPPING...' : '🎯 DROP BALL'}
+                      {isDropping ? 'DROPPING...' : 'DROP BALL'}
                     </button>
                     
                     <div className="mt-4 text-gold-300 font-mono text-sm text-center">
@@ -556,7 +580,7 @@ export default function PlinkoPage() {
               </div>
 
               {/* Left Side - Betting Controls */}
-              <div className="lg:col-span-1 order-1 lg:order-1">
+              <div className="lg:col-span-1 order-2 lg:order-1">
                 <div className="bg-gradient-to-br from-green-900 via-emerald-800 to-green-900 border-4 border-yellow-400 rounded-2xl p-6 shadow-2xl relative overflow-hidden" style={{
                   boxShadow: '0 0 40px rgba(251, 191, 36, 0.4), 0 0 80px rgba(34, 197, 94, 0.3)'
                 }}>
@@ -567,7 +591,7 @@ export default function PlinkoPage() {
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
                       textShadow: '0 0 20px rgba(251, 191, 36, 0.8)'
-                    }}>💰 PLACE YOUR BET 💰</h3>
+                    }}>PLACE YOUR BET</h3>
                   </div>
 
                   {/* Bet Type Selection */}
@@ -652,7 +676,7 @@ export default function PlinkoPage() {
                     backgroundClip: 'text',
                     animation: 'gradient 2s ease infinite',
                     textShadow: '0 0 25px rgba(6, 182, 212, 0.8)'
-                  }}>🏆 WIN TRACKER 🏆</h3>
+                  }}>WIN TRACKER</h3>
                   
 
                   {/* Recent Drops */}
@@ -704,49 +728,6 @@ export default function PlinkoPage() {
         </div>
 
 
-        {/* Enhanced Satirical Gambling Advertisements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-16 left-8 bg-purple-600/95 border-2 border-pink-400 px-4 py-2 rounded-lg transform -rotate-12 animate-pulse">
-            <div className="text-pink-100 font-black text-sm font-mono text-center">
-              🎯 GRAVITY NEVER LIES! 🎯<br/>
-              <span className="text-xs">Physics = Profits?</span>
-            </div>
-          </div>
-          
-          <div className="absolute top-24 right-8 bg-fuchsia-600/95 border-2 border-gold-400 px-4 py-2 rounded-lg transform rotate-12 animate-bounce" style={{animationDelay: '1s'}}>
-            <div className="text-gold-100 font-black text-sm font-mono text-center">
-              💰 BALLS OF STEEL! 💰<br/>
-              <span className="text-xs">Drop everything you have!</span>
-            </div>
-          </div>
-          
-          <div className="absolute bottom-32 left-8 bg-violet-600/95 border-2 border-yellow-400 px-4 py-2 rounded-lg transform rotate-6 animate-pulse" style={{animationDelay: '2s'}}>
-            <div className="text-yellow-100 font-black text-sm font-mono text-center">
-              🎯 99% GRAVITY SUCCESS! 🎯<br/>
-              <span className="text-xs">What goes up must lose money!</span>
-            </div>
-          </div>
-          
-          <div className="absolute bottom-40 right-8 bg-purple-700/95 border-2 border-orange-400 px-4 py-2 rounded-lg transform -rotate-6 animate-bounce" style={{animationDelay: '3s'}}>
-            <div className="text-orange-100 font-black text-sm font-mono text-center">
-              🎱 BALL DROPPING CHAMPION! 🎱<br/>
-              <span className="text-xs">World record holder!</span>
-            </div>
-          </div>
-          
-          {/* Additional floating testimonials */}
-          <div className="absolute top-1/3 left-4 bg-purple-600/90 border-2 border-fuchsia-400 px-3 py-2 rounded-lg transform -rotate-3 animate-pulse" style={{animationDelay: '4s'}}>
-            <div className="text-fuchsia-100 font-black text-xs font-mono">
-              🗣️ "Lost my savings but found my passion!" - Dave
-            </div>
-          </div>
-          
-          <div className="absolute top-2/3 right-4 bg-violet-600/90 border-2 border-purple-400 px-3 py-2 rounded-lg transform rotate-3 animate-bounce" style={{animationDelay: '5s'}}>
-            <div className="text-purple-100 font-black text-xs font-mono">
-              🗣️ "Plinko changed my life... financially!" - Karen
-            </div>
-          </div>
-        </div>
 
         {/* Add CSS keyframes for gradient animation */}
         <style jsx>{`
