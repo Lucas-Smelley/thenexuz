@@ -33,8 +33,57 @@ export default function ShopPage() {
   const [randomSpinDistance, setRandomSpinDistance] = useState<number>(0)
   const supabase = createClient()
 
-  // Single spin configuration
-  const SPIN_COST = 1000
+  // Spin tier configurations
+  const spinTiers = {
+    basic: {
+      name: 'BASIC SPIN',
+      cost: 500,
+      color: 'gray',
+      rarityOdds: {
+        RayOfSunshine: 0.01, // 1%
+        Epic: 0.04,          // 4% 
+        Bombaclat: 0.15,     // 15%
+        Crusty: 0.30,        // 30%
+        Ahh: 0.50            // 50%
+      }
+    },
+    premium: {
+      name: 'PREMIUM SPIN',
+      cost: 1500,
+      color: 'blue',
+      rarityOdds: {
+        RayOfSunshine: 0.02, // 2%
+        Epic: 0.08,          // 8%
+        Bombaclat: 0.20,     // 20%
+        Crusty: 0.35,        // 35%
+        Ahh: 0.35            // 35%
+      }
+    },
+    elite: {
+      name: 'ELITE SPIN',
+      cost: 3000,
+      color: 'purple',
+      rarityOdds: {
+        RayOfSunshine: 0.05, // 5%
+        Epic: 0.15,          // 15%
+        Bombaclat: 0.25,     // 25%
+        Crusty: 0.30,        // 30%
+        Ahh: 0.25            // 25%
+      }
+    },
+    legendary: {
+      name: 'LEGENDARY SPIN',
+      cost: 5000,
+      color: 'yellow',
+      rarityOdds: {
+        RayOfSunshine: 0.10, // 10%
+        Epic: 0.20,          // 20%
+        Bombaclat: 0.30,     // 30%
+        Crusty: 0.25,        // 25%
+        Ahh: 0.15            // 15%
+      }
+    }
+  }
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -66,12 +115,13 @@ export default function ShopPage() {
     }
   }
 
-  const openSpinModal = () => {
+  const openSpinModal = (tier: keyof typeof spinTiers) => {
+    setSelectedTier(tier)
     setShowSpinModal(true)
   }
 
   const startSpin = () => {
-    if (!profile || profile.epic_coins < SPIN_COST) return
+    if (!profile || !selectedTier || profile.epic_coins < spinTiers[selectedTier as keyof typeof spinTiers].cost) return
     setIsSpinning(true)
     
     // Generate random spin distance (3000-6000px for variety)
@@ -83,26 +133,57 @@ export default function ShopPage() {
       setSpinClass('spinning')
     }, 500)
     
-    // Handle the spin logic - pass the distance directly
-    spinForGorb(randomDistance)
+    // Handle the spin logic - pass the distance and tier directly
+    spinForGorb(randomDistance, selectedTier as keyof typeof spinTiers)
   }
 
-  // Simple rarity generation - no weights, just position based
-  const generateRarityAtSegment = (segmentIndex: number): string => {
+  // Tier-based rarity generation using odds
+  const generateRarityForTier = (tier: keyof typeof spinTiers): string => {
+    const odds = spinTiers[tier].rarityOdds
+    const random = Math.random()
+    
+    // Use cumulative probability to select rarity
+    let cumulative = 0
+    for (const [rarity, probability] of Object.entries(odds)) {
+      cumulative += probability
+      if (random <= cumulative) {
+        return rarity
+      }
+    }
+    
+    return 'Ahh' // Fallback
+  }
+
+  // Visual rarity generation - distribute based on tier odds
+  const generateRarityAtSegment = (segmentIndex: number, tier: keyof typeof spinTiers): string => {
+    const odds = spinTiers[tier].rarityOdds
     const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
-    return rarities[segmentIndex % 5]
+    
+    // Create weighted distribution based on odds
+    const segments = []
+    for (const [rarity, probability] of Object.entries(odds)) {
+      const count = Math.round(probability * 400) // Distribute across 400 segments
+      for (let i = 0; i < count; i++) {
+        segments.push(rarity)
+      }
+    }
+    
+    // Use deterministic selection so visual matches calculation
+    const seedValue = (segmentIndex * 7 + 13) % segments.length
+    return segments[seedValue] || 'Ahh'
   }
 
-  const spinForGorb = async (spinDistance: number) => {
+  const spinForGorb = async (spinDistance: number, tier: keyof typeof spinTiers) => {
     if (!profile) return
     
     setSpinResult(null)
+    const tierConfig = spinTiers[tier]
 
     try {
       // Deduct Epic Coins for the spin
       const { error: updateError } = await supabase
         .from('users')
-        .update({ epic_coins: profile.epic_coins - SPIN_COST })
+        .update({ epic_coins: profile.epic_coins - tierConfig.cost })
         .eq('id', user?.id)
 
       if (updateError) throw updateError
@@ -123,8 +204,8 @@ export default function ShopPage() {
       const finalCenterSegmentRaw = (initialCenterSegment + segmentsMoved) % 400
       const finalCenterSegment = Math.floor(finalCenterSegmentRaw) // Round down to whole number
       
-      // Use that exact segment to determine rarity
-      const wonRarity = generateRarityAtSegment(finalCenterSegment)
+      // Use that exact segment with the tier to determine rarity
+      const wonRarity = generateRarityAtSegment(finalCenterSegment, tier)
       
       console.log('🎯 RESPONSIVE CALCULATION:', {
         windowWidth: window.innerWidth,
@@ -290,39 +371,86 @@ export default function ShopPage() {
           Discover all {allGorbz.length} available Gorbz
         </div>
 
-        {/* Simple Spin Button */}
-        <div className="flex justify-center">
-          <div className="relative group">
-            <div className="absolute -inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 bg-purple-500/60 shadow-purple-500/50"></div>
-            
-            <button
-              onClick={openSpinModal}
-              disabled={!profile || profile.epic_coins < SPIN_COST}
-              className="relative bg-gradient-to-br from-black via-purple-900 to-black border-2 border-purple-400 hover:border-purple-300 rounded-xl p-8 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl shadow-purple-400/50"
-            >
-              <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
-              
-              <div className="text-center space-y-4">
-                <h3 className="text-3xl font-mono font-black text-purple-400">
-                  SPIN FOR GORBZ
-                </h3>
+        {/* Spin Tiers */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {Object.entries(spinTiers).map(([tierId, tierConfig]) => {
+            const canAfford = profile && profile.epic_coins >= tierConfig.cost
+            const tierColorClasses = {
+              gray: {
+                border: 'border-gray-400',
+                bg: 'from-gray-600 via-gray-700 to-gray-600',
+                text: 'text-gray-300',
+                glow: 'shadow-gray-400/50'
+              },
+              blue: {
+                border: 'border-blue-400',
+                bg: 'from-blue-600 via-blue-700 to-blue-600',
+                text: 'text-blue-300',
+                glow: 'shadow-blue-400/50'
+              },
+              purple: {
+                border: 'border-purple-400',
+                bg: 'from-purple-600 via-purple-700 to-purple-600',
+                text: 'text-purple-300',
+                glow: 'shadow-purple-400/50'
+              },
+              yellow: {
+                border: 'border-yellow-400',
+                bg: 'from-yellow-600 via-yellow-700 to-yellow-600',
+                text: 'text-yellow-300',
+                glow: 'shadow-yellow-400/50'
+              }
+            }
+            const colorClass = tierColorClasses[tierConfig.color as keyof typeof tierColorClasses] || tierColorClasses.gray
+
+            return (
+              <div key={tierId} className="relative group">
+                <div className={`absolute -inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 bg-gradient-to-r ${colorClass.bg} ${colorClass.glow}`}></div>
                 
-                <div className="text-4xl font-mono font-black text-purple-300">
-                  {SPIN_COST}EC
-                </div>
-                
-                <div className="text-lg font-mono font-bold text-purple-400">
-                  GET RANDOM GORB!
-                </div>
-                
-                {(!profile || profile.epic_coins < SPIN_COST) && (
-                  <div className="text-red-400 text-sm font-mono font-black">
-                    INSUFFICIENT EC
+                <button
+                  onClick={() => openSpinModal(tierId as keyof typeof spinTiers)}
+                  disabled={!canAfford}
+                  className={`relative bg-gradient-to-br from-black via-gray-900 to-black border-2 ${colorClass.border} hover:${colorClass.border.replace('border-', 'border-').replace('-400', '-300')} rounded-xl p-6 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl ${colorClass.glow} w-full`}
+                >
+                  <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
+                  
+                  <div className="text-center space-y-3">
+                    <h3 className={`text-xl font-mono font-black ${colorClass.text}`}>
+                      {tierConfig.name}
+                    </h3>
+                    
+                    <div className={`text-2xl font-mono font-black ${colorClass.text}`}>
+                      {tierConfig.cost.toLocaleString()}EC
+                    </div>
+                    
+                    <div className="text-sm space-y-1">
+                      <div className="text-yellow-300 font-mono font-bold">
+                        {Math.round(tierConfig.rarityOdds.RayOfSunshine * 100)}% Ray of Sunshine
+                      </div>
+                      <div className="text-purple-300 font-mono font-bold">
+                        {Math.round(tierConfig.rarityOdds.Epic * 100)}% Epic
+                      </div>
+                      <div className="text-red-300 font-mono font-bold">
+                        {Math.round(tierConfig.rarityOdds.Bombaclat * 100)}% Bombaclat
+                      </div>
+                      <div className="text-cyan-300 font-mono font-bold">
+                        {Math.round(tierConfig.rarityOdds.Crusty * 100)}% Crusty
+                      </div>
+                      <div className="text-gray-300 font-mono font-bold">
+                        {Math.round(tierConfig.rarityOdds.Ahh * 100)}% Ahh
+                      </div>
+                    </div>
+                    
+                    {!canAfford && (
+                      <div className="text-red-400 text-sm font-mono font-black">
+                        INSUFFICIENT EC
+                      </div>
+                    )}
                   </div>
-                )}
+                </button>
               </div>
-            </button>
-          </div>
+            )
+          })}
         </div>
       </div>
 
@@ -363,10 +491,10 @@ export default function ShopPage() {
               {/* Spin Info */}
               <div>
                 <h2 className="text-4xl font-mono font-black text-yellow-400 mb-2">
-                  SPIN FOR GORBZ
+                  {selectedTier && spinTiers[selectedTier as keyof typeof spinTiers].name}
                 </h2>
                 <div className="text-xl font-mono text-cyan-400">
-                  Cost: {SPIN_COST}EC
+                  Cost: {selectedTier && spinTiers[selectedTier as keyof typeof spinTiers].cost.toLocaleString()}EC
                 </div>
               </div>
 
@@ -387,10 +515,10 @@ export default function ShopPage() {
                       transform: spinClass === 'spinning' ? `translateX(-${randomSpinDistance}px)` : 'translateX(0px)'
                     }}
                   >
-                    {/* Create segments with simple pattern */}
+                    {/* Create segments with tier-based pattern */}
                     {Array.from({length: 400}, (_, i) => {
-                      // Use the simple rarity generation
-                      const rarity = generateRarityAtSegment(i)
+                      // Use the tier-based rarity generation
+                      const rarity = selectedTier ? generateRarityAtSegment(i, selectedTier as keyof typeof spinTiers) : 'Ahh'
                       const config = getRarityConfig(rarity)
 
                       const Icon = config.icon
@@ -421,7 +549,7 @@ export default function ShopPage() {
                   <div className="text-xl font-mono font-bold text-white">
                     Ready to spin for amazing Gorbz?
                   </div>
-                  {profile && profile.epic_coins >= SPIN_COST ? (
+                  {profile && selectedTier && profile.epic_coins >= spinTiers[selectedTier as keyof typeof spinTiers].cost ? (
                     <button
                       onClick={startSpin}
                       className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-mono font-black rounded-lg transition-all duration-300 transform hover:scale-105 text-2xl shadow-2xl shadow-green-500/50"
