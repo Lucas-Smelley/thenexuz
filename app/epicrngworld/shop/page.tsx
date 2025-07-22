@@ -471,7 +471,7 @@ export default function ShopPage() {
           ></div>
           
           {/* Modal Content */}
-          <div className="relative bg-gradient-to-br from-purple-900 via-black to-blue-900 border-2 border-yellow-400 rounded-2xl p-8 max-w-4xl w-full mx-4 shadow-2xl shadow-yellow-400/50">
+          <div className="relative bg-gradient-to-br from-purple-900 via-black to-blue-900 border-2 border-yellow-400 rounded-2xl p-4 sm:p-6 lg:p-8 max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-4xl w-full mx-4 shadow-2xl shadow-yellow-400/50">
             {/* X Close Button */}
             {!isSpinning && (
               <button
@@ -481,27 +481,27 @@ export default function ShopPage() {
                   setSpinClass('')
                   setIsNewGorb(false)
                 }}
-                className="absolute top-4 right-4 w-8 h-8 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-200 hover:scale-110"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 w-6 h-6 sm:w-8 sm:h-8 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center font-bold text-lg sm:text-xl transition-all duration-200 hover:scale-110"
               >
                 ×
               </button>
             )}
             
-            <div className="text-center space-y-8">
+            <div className="text-center space-y-4 sm:space-y-6 lg:space-y-8">
               {/* Spin Info */}
               <div>
-                <h2 className="text-4xl font-mono font-black text-yellow-400 mb-2">
+                <h2 className="text-xl sm:text-3xl lg:text-4xl font-mono font-black text-yellow-400 mb-2">
                   {selectedTier && spinTiers[selectedTier as keyof typeof spinTiers].name}
                 </h2>
-                <div className="text-xl font-mono text-cyan-400">
+                <div className="text-sm sm:text-lg lg:text-xl font-mono text-cyan-400">
                   Cost: {selectedTier && spinTiers[selectedTier as keyof typeof spinTiers].cost.toLocaleString()}EC
                 </div>
               </div>
 
               {/* Horizontal Spin Bar */}
-              <div className="relative w-full max-w-3xl mx-auto">
+              <div className="relative w-full max-w-xs sm:max-w-lg md:max-w-xl lg:max-w-3xl mx-auto">
                 {/* Spin Track */}
-                <div className="relative h-24 bg-gradient-to-r from-black via-purple-900 to-black border-2 border-gray-600 rounded-lg overflow-hidden shadow-2xl">
+                <div className="relative h-16 sm:h-20 lg:h-24 bg-gradient-to-r from-black via-purple-900 to-black border-2 border-gray-600 rounded-lg overflow-hidden shadow-2xl">
                   {/* Selection Pointer */}
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-full bg-yellow-400 shadow-2xl shadow-yellow-400/80 z-10">
                     <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-yellow-400"></div>
@@ -531,7 +531,7 @@ export default function ShopPage() {
                           title={`Segment ${i}: ${rarity}`}
                         >
                           <div className="text-center">
-                            <Icon className={`w-6 h-6 ${config.textColor} mx-auto`} />
+                            <Icon className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 ${config.textColor} mx-auto`} />
                             {i % 10 === 0 && (
                               <div className="text-xs text-white font-bold">{i}</div>
                             )}
@@ -545,25 +545,25 @@ export default function ShopPage() {
 
               {/* Spin Status */}
               {!isSpinning && !spinResult ? (
-                <div className="space-y-6">
-                  <div className="text-xl font-mono font-bold text-white">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="text-sm sm:text-lg lg:text-xl font-mono font-bold text-white">
                     Ready to spin for amazing Gorbz?
                   </div>
                   {profile && selectedTier && profile.epic_coins >= spinTiers[selectedTier as keyof typeof spinTiers].cost ? (
                     <button
                       onClick={startSpin}
-                      className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-mono font-black rounded-lg transition-all duration-300 transform hover:scale-105 text-2xl shadow-2xl shadow-green-500/50"
+                      className="px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-mono font-black rounded-lg transition-all duration-300 transform hover:scale-105 text-lg sm:text-xl lg:text-2xl shadow-2xl shadow-green-500/50"
                     >
                       🎰 SPIN NOW 🎰
                     </button>
                   ) : (
-                    <div className="text-red-400 font-mono font-black text-lg">
+                    <div className="text-red-400 font-mono font-black text-sm sm:text-base lg:text-lg">
                       INSUFFICIENT EPIC COINS
                     </div>
                   )}
                 </div>
               ) : isSpinning ? (
-                <div className="text-2xl font-mono font-black text-yellow-400 animate-pulse">
+                <div className="text-lg sm:text-xl lg:text-2xl font-mono font-black text-yellow-400 animate-pulse">
                   SPINNING...
                 </div>
               ) : spinResult ? (
@@ -576,19 +576,19 @@ export default function ShopPage() {
                       return (
                         <>
                           {isNewGorb ? (
-                            <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                            <div className="text-xl sm:text-2xl lg:text-3xl font-mono font-black text-green-400 animate-bounce">
                               🎉 YOU WON! 🎉
                             </div>
                           ) : (
-                            <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
+                            <div className="text-lg sm:text-xl lg:text-2xl font-mono font-black text-orange-400 animate-pulse">
                               😔 AWW DUPLICATE 😔
                             </div>
                           )}
                           <div>
-                            <div className="text-2xl font-mono font-black text-yellow-400">
+                            <div className="text-lg sm:text-xl lg:text-2xl font-mono font-black text-yellow-400">
                               {gorb.name}
                             </div>
-                            <div className={`text-xl font-mono ${getRarityConfig(gorb.rarity).textColor}`}>
+                            <div className={`text-base sm:text-lg lg:text-xl font-mono ${getRarityConfig(gorb.rarity).textColor}`}>
                               {getRarityConfig(gorb.rarity).label}
                             </div>
                           </div>
@@ -600,14 +600,14 @@ export default function ShopPage() {
                       const config = getRarityConfig(rarity)
                       return (
                         <>
-                          <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                          <div className="text-xl sm:text-2xl lg:text-3xl font-mono font-black text-green-400 animate-bounce">
                             🎉 YOU WON! 🎉
                           </div>
                           <div>
-                            <div className="text-2xl font-mono font-black text-yellow-400">
+                            <div className="text-lg sm:text-xl lg:text-2xl font-mono font-black text-yellow-400">
                               Random {config.label} Gorb
                             </div>
-                            <div className={`text-xl font-mono ${config.textColor}`}>
+                            <div className={`text-base sm:text-lg lg:text-xl font-mono ${config.textColor}`}>
                               {config.label}
                             </div>
                           </div>
@@ -622,7 +622,7 @@ export default function ShopPage() {
                       setSpinClass('')
                       setIsNewGorb(false)
                     }}
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-mono font-black rounded-lg hover:from-green-400 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105"
+                    className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-mono font-black rounded-lg hover:from-green-400 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                   >
                     COLLECT GORB
                   </button>
