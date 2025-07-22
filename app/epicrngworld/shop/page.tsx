@@ -372,7 +372,7 @@ export default function ShopPage() {
         </div>
 
         {/* Spin Tiers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 max-w-sm sm:max-w-2xl lg:max-w-6xl mx-auto">
           {Object.entries(spinTiers).map(([tierId, tierConfig]) => {
             const canAfford = profile && profile.epic_coins >= tierConfig.cost
             const tierColorClasses = {
@@ -405,25 +405,25 @@ export default function ShopPage() {
 
             return (
               <div key={tierId} className="relative group">
-                <div className={`absolute -inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 bg-gradient-to-r ${colorClass.bg} ${colorClass.glow}`}></div>
+                <div className={`absolute -inset-2 sm:-inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 bg-gradient-to-r ${colorClass.bg} ${colorClass.glow}`}></div>
                 
                 <button
                   onClick={() => openSpinModal(tierId as keyof typeof spinTiers)}
                   disabled={!canAfford}
-                  className={`relative bg-gradient-to-br from-black via-gray-900 to-black border-2 ${colorClass.border} hover:${colorClass.border.replace('border-', 'border-').replace('-400', '-300')} rounded-xl p-6 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl ${colorClass.glow} w-full`}
+                  className={`relative bg-gradient-to-br from-black via-gray-900 to-black border-2 ${colorClass.border} hover:${colorClass.border.replace('border-', 'border-').replace('-400', '-300')} rounded-xl p-3 sm:p-4 lg:p-6 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl ${colorClass.glow} w-full`}
                 >
                   <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
                   
-                  <div className="text-center space-y-3">
-                    <h3 className={`text-xl font-mono font-black ${colorClass.text}`}>
+                  <div className="text-center space-y-2 sm:space-y-3">
+                    <h3 className={`text-sm sm:text-lg lg:text-xl font-mono font-black ${colorClass.text}`}>
                       {tierConfig.name}
                     </h3>
                     
-                    <div className={`text-2xl font-mono font-black ${colorClass.text}`}>
+                    <div className={`text-lg sm:text-xl lg:text-2xl font-mono font-black ${colorClass.text}`}>
                       {tierConfig.cost.toLocaleString()}EC
                     </div>
                     
-                    <div className="text-sm space-y-1">
+                    <div className="text-xs sm:text-sm space-y-1">
                       <div className="text-yellow-300 font-mono font-bold">
                         {Math.round(tierConfig.rarityOdds.RayOfSunshine * 100)}% Ray of Sunshine
                       </div>
@@ -442,7 +442,7 @@ export default function ShopPage() {
                     </div>
                     
                     {!canAfford && (
-                      <div className="text-red-400 text-sm font-mono font-black">
+                      <div className="text-red-400 text-xs sm:text-sm font-mono font-black">
                         INSUFFICIENT EC
                       </div>
                     )}
@@ -634,8 +634,8 @@ export default function ShopPage() {
       )}
 
       {/* Gorbz Grid */}
-      <div className="relative z-20 px-8 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      <div className="relative z-20 px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 max-w-xs sm:max-w-2xl lg:max-w-4xl xl:max-w-7xl mx-auto">
           {allGorbz.map((gorb) => {
             const config = getRarityConfig(gorb.rarity)
             const Icon = config.icon
@@ -644,47 +644,47 @@ export default function ShopPage() {
             return (
               <div key={gorb.id} className="relative group">
                 {/* Rarity Halo */}
-                <div className={`absolute -inset-4 bg-gradient-to-r ${config.bg} rounded-xl ${config.glow} ${config.animation} opacity-75`}></div>
+                <div className={`absolute -inset-2 sm:-inset-3 lg:-inset-4 bg-gradient-to-r ${config.bg} rounded-xl ${config.glow} ${config.animation} opacity-75`}></div>
                 
                 {/* Owned Indicator */}
                 {isOwned && (
-                  <div className="absolute -top-2 -right-2 z-30">
-                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
-                      <span className="text-white font-black text-sm">✓</span>
+                  <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 z-30">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
+                      <span className="text-white font-black text-xs sm:text-sm">✓</span>
                     </div>
                   </div>
                 )}
 
                 {/* Gorb Card */}
-                <div className="relative bg-gradient-to-br from-black via-purple-900 to-black border-2 border-gray-600 rounded-xl p-6 shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                <div className="relative bg-gradient-to-br from-black via-purple-900 to-black border-2 border-gray-600 rounded-xl p-3 sm:p-4 lg:p-6 shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden">
                   <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
                   
                   {/* Gorb Preview */}
-                  <div className="flex justify-center mb-4">
+                  <div className="flex justify-center mb-2 sm:mb-3 lg:mb-4">
                     <div
-                      className={`w-20 h-20 rounded-full border-4 ${config.border} ${config.glow} transition-all duration-500 transform group-hover:rotate-12 overflow-hidden`}
+                      className={`w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full border-2 sm:border-3 lg:border-4 ${config.border} ${config.glow} transition-all duration-500 transform group-hover:rotate-12 overflow-hidden`}
                       style={{
                         background: `linear-gradient(45deg, ${gorb.style_data.colors.join(', ')})`,
                       }}
                     >
-                      <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/30 to-transparent"></div>
-                      <div className="absolute inset-4 rounded-full bg-gradient-to-tl from-white/50 to-transparent animate-pulse"></div>
+                      <div className="absolute inset-1 sm:inset-2 rounded-full bg-gradient-to-br from-white/30 to-transparent"></div>
+                      <div className="absolute inset-2 sm:inset-3 lg:inset-4 rounded-full bg-gradient-to-tl from-white/50 to-transparent animate-pulse"></div>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Icon className={`w-6 h-6 ${config.textColor} animate-pulse`} />
+                        <Icon className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 ${config.textColor} animate-pulse`} />
                       </div>
                     </div>
                   </div>
 
                   {/* Gorb Info */}
-                  <div className="text-center space-y-2">
-                    <h3 className="text-xl font-mono font-black text-white">{gorb.name}</h3>
+                  <div className="text-center space-y-1 sm:space-y-2">
+                    <h3 className="text-sm sm:text-base lg:text-xl font-mono font-black text-white">{gorb.name}</h3>
                     
-                    <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full border ${config.border} ${config.bg}`}>
-                      <Icon className={`w-4 h-4 ${config.textColor}`} />
-                      <span className={`text-sm font-mono font-black ${config.textColor}`}>{config.label}</span>
+                    <div className={`inline-flex items-center space-x-1 px-2 sm:px-3 py-1 rounded-full border ${config.border} ${config.bg}`}>
+                      <Icon className={`w-3 h-3 sm:w-4 sm:h-4 ${config.textColor}`} />
+                      <span className={`text-xs sm:text-sm font-mono font-black ${config.textColor}`}>{config.label}</span>
                     </div>
                     
-                    <div className="text-sm font-mono text-gray-300 px-2">
+                    <div className="text-xs sm:text-sm font-mono text-gray-300 px-1 sm:px-2">
                       {gorb.description}
                     </div>
                     
@@ -693,7 +693,7 @@ export default function ShopPage() {
                     </div>
 
                     {isOwned && (
-                      <div className="text-sm font-mono font-black text-green-400 animate-pulse">
+                      <div className="text-xs sm:text-sm font-mono font-black text-green-400 animate-pulse">
                         ✓ OWNED
                       </div>
                     )}
