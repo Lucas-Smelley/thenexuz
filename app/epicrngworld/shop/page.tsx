@@ -29,6 +29,8 @@ export default function ShopPage() {
   const [showSpinModal, setShowSpinModal] = useState(false)
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [spinClass, setSpinClass] = useState<string>('')
+  const [isNewGorb, setIsNewGorb] = useState<boolean>(false)
+  const [randomSpinDistance, setRandomSpinDistance] = useState<number>(4000)
   const supabase = createClient()
 
   // Spin tier configurations
@@ -91,16 +93,23 @@ export default function ShopPage() {
 
   const openSpinModal = (tier: keyof typeof spinTiers) => {
     setSelectedTier(tier)
-    setShowSpinModal(true)
+    // Small delay to ensure tier is set before opening modal
+    setTimeout(() => {
+      setShowSpinModal(true)
+    }, 10)
   }
 
   const startSpin = () => {
     if (!profile || !selectedTier || profile.epic_coins < spinTiers[selectedTier].cost) return
     setIsSpinning(true)
     
-    // Start the CSS animation after a delay
+    // Generate random spin distance (3000-6000px for variety)
+    const randomDistance = Math.random() * 3000 + 3000
+    setRandomSpinDistance(randomDistance)
+    
+    // Start the animation with inline transform after a delay
     setTimeout(() => {
-      setSpinClass('spin-wheel')
+      setSpinClass('spinning')
     }, 500)
     
     // Handle the spin logic
@@ -125,28 +134,44 @@ export default function ShopPage() {
       // Simulate spin duration
       await new Promise(resolve => setTimeout(resolve, 6500))
 
-      // Determine rarity based on tier weights (same logic as visual)
+      // Instead of trying to calculate position, let's use the random distance to seed the same RNG
+      // This ensures both visual and result use the same underlying randomness
+      const tierWeights = tierConfig.weights
       const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
       const weights = [
-        tierConfig.weights.RayOfSunshine,
-        tierConfig.weights.Epic,
-        tierConfig.weights.Bombaclat,
-        tierConfig.weights.Crusty,
-        tierConfig.weights.Ahh
+        tierWeights.RayOfSunshine,
+        tierWeights.Epic,
+        tierWeights.Bombaclat,
+        tierWeights.Crusty,
+        tierWeights.Ahh
       ]
       
-      // Create weighted array for proper distribution
+      // Create weighted array for proper distribution (same as visual)
       const weightedRarities: string[] = []
       weights.forEach((weight, idx) => {
-        const count = Math.round(weight * 1000) // Use 1000 for better precision
+        const count = Math.round(weight * 400) // Scale for 400 segments
         for (let j = 0; j < count; j++) {
           weightedRarities.push(rarities[idx])
         }
       })
       
-      // Random selection from weighted array
-      const randomIndex = Math.floor(Math.random() * weightedRarities.length)
-      const wonRarity = weightedRarities[randomIndex] || 'Ahh'
+      // Use the spin distance as a seed to pick from the same distribution as visual
+      const spinBasedSeed = Math.floor(randomSpinDistance / 80) // Convert distance to "segment-like" number
+      const seedValue = (spinBasedSeed * 7 + 13) % weightedRarities.length
+      const wonRarity = weightedRarities[seedValue] || 'Ahh'
+      const segmentAtCenter = spinBasedSeed % 400 // For debugging
+      
+      console.log('🎯 Spin Debug:', {
+        tier: tier,
+        selectedTier: selectedTier,
+        tierConfigWeights: tierConfig.weights,
+        randomSpinDistance,
+        spinBasedSeed,
+        segmentAtCenter,
+        wonRarity,
+        seedValue,
+        rarityAtThatSeed: weightedRarities[seedValue]
+      })
 
       // Get a random Gorb of the won rarity (regardless of ownership)
       const availableGorbz = allGorbz.filter(gorb => gorb.rarity === wonRarity)
@@ -167,6 +192,9 @@ export default function ShopPage() {
               gorbz_collected_total: (profile.gorbz_collected_total || 0) + 1
             })
             .eq('id', user?.id)
+          setIsNewGorb(true) // Mark as new Gorb
+        } else {
+          setIsNewGorb(false) // Mark as duplicate
         }
         
         // Always set the result to show the gorb (whether new or duplicate)
@@ -383,6 +411,7 @@ export default function ShopPage() {
                 setSpinResult(null)
                 setSelectedTier(null)
                 setSpinClass('')
+                setIsNewGorb(false)
               }
             }}
           ></div>
@@ -397,6 +426,7 @@ export default function ShopPage() {
                   setSpinResult(null)
                   setSelectedTier(null)
                   setSpinClass('')
+                  setIsNewGorb(false)
                 }}
                 className="absolute top-4 right-4 w-8 h-8 bg-red-500 hover:bg-red-400 text-white rounded-full flex items-center justify-center font-bold text-xl transition-all duration-200 hover:scale-110"
               >
@@ -426,14 +456,23 @@ export default function ShopPage() {
 
                   {/* Spinning Rarity Strip */}
                   <div 
-                    className={`flex h-full ${spinClass}`}
+                    className={`flex h-full transition-transform duration-6000 ease-out`}
                     style={{
-                      width: '1600px'
+                      width: '32000px', // 400 segments * 80px each
+                      transform: spinClass === 'spinning' ? `translateX(-${randomSpinDistance}px)` : 'translateX(0px)'
                     }}
                   >
                     {/* Create segments based on selected tier weights */}
-                    {Array.from({length: 100}, (_, i) => {
+                    {Array.from({length: 400}, (_, i) => {
                       const tierWeights = spinTiers[selectedTier as keyof typeof spinTiers].weights
+                      
+                      // Debug first segment only
+                      if (i === 0) {
+                        console.log('🎨 Visual Debug:', {
+                          selectedTier: selectedTier,
+                          visualTierWeights: tierWeights
+                        })
+                      }
                       
                       // Create a pseudo-random but consistent distribution
                       const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
@@ -448,7 +487,7 @@ export default function ShopPage() {
                       // Create weighted array for proper distribution
                       const weightedRarities: string[] = []
                       weights.forEach((weight, idx) => {
-                        const count = Math.round(weight * 100)
+                        const count = Math.round(weight * 400) // Scale for 400 segments
                         for (let j = 0; j < count; j++) {
                           weightedRarities.push(rarities[idx])
                         }
@@ -464,15 +503,15 @@ export default function ShopPage() {
                       return (
                         <div 
                           key={i}
-                          className={`flex-shrink-0 w-20 h-full flex items-center justify-center border-r border-gray-700 ${config.bg}`}
+                          className={`flex-shrink-0 h-full flex items-center justify-center border-r border-gray-700 ${config.bg}`}
+                          style={{ width: '80px' }}
+                          title={`Segment ${i}: ${rarity}`}
                         >
                           <div className="text-center">
-                            <Icon className={`w-6 h-6 ${config.textColor} mx-auto mb-1`} />
-                            <div className={`text-xs font-mono font-black ${config.textColor} leading-tight`}>
-                              {config.label.split(' ').map((word: string, idx: number) => (
-                                <div key={idx}>{word}</div>
-                              ))}
-                            </div>
+                            <Icon className={`w-6 h-6 ${config.textColor} mx-auto`} />
+                            {i % 10 === 0 && (
+                              <div className="text-xs text-white font-bold">{i}</div>
+                            )}
                           </div>
                         </div>
                       )
@@ -508,13 +547,13 @@ export default function ShopPage() {
                 <div className="space-y-4">
                   {allGorbz.find(g => g.id === spinResult) ? (
                     <>
-                      {profile?.gorbz?.includes(spinResult) ? (
-                        <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
-                          😔 AWW DUPLICATE 😔
-                        </div>
-                      ) : (
+                      {isNewGorb ? (
                         <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
                           🎉 YOU WON! 🎉
+                        </div>
+                      ) : (
+                        <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
+                          😔 AWW DUPLICATE 😔
                         </div>
                       )}
                       <div>
@@ -537,6 +576,7 @@ export default function ShopPage() {
                       setSpinResult(null)
                       setSelectedTier(null)
                       setSpinClass('')
+                      setIsNewGorb(false)
                     }}
                     className="px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-mono font-black rounded-lg hover:from-green-400 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105"
                   >
@@ -622,17 +662,9 @@ export default function ShopPage() {
       </div>
 
       <style jsx>{`
-        @keyframes spin-wheel {
-          0% {
-            transform: translateX(0px);
-          }
-          100% {
-            transform: translateX(-4000px);
-          }
-        }
-        
-        .spin-wheel {
-          animation: spin-wheel 6s cubic-bezier(0.15, 0.3, 0.25, 0.995) forwards;
+        .duration-6000 {
+          transition-duration: 6s;
+          transition-timing-function: cubic-bezier(0.15, 0.3, 0.25, 0.995);
         }
       `}</style>
     </div>
