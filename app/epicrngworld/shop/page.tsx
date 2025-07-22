@@ -30,36 +30,11 @@ export default function ShopPage() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [spinClass, setSpinClass] = useState<string>('')
   const [isNewGorb, setIsNewGorb] = useState<boolean>(false)
-  const [randomSpinDistance, setRandomSpinDistance] = useState<number>(4000)
+  const [randomSpinDistance, setRandomSpinDistance] = useState<number>(0)
   const supabase = createClient()
 
-  // Spin tier configurations
-  const spinTiers = {
-    basic: {
-      name: 'BASIC SPIN',
-      cost: 500,
-      color: 'gray',
-      weights: { RayOfSunshine: 0.0001, Epic: 0.002, Bombaclat: 0.017, Crusty: 0.087, Ahh: 0.894 }
-    },
-    premium: {
-      name: 'PREMIUM SPIN',
-      cost: 500,
-      color: 'blue', 
-      weights: { RayOfSunshine: 0.001, Epic: 0.01, Bombaclat: 0.05, Crusty: 0.2, Ahh: 0.739 }
-    },
-    elite: {
-      name: 'ELITE SPIN',
-      cost: 5000,
-      color: 'purple',
-      weights: { RayOfSunshine: 0.005, Epic: 0.03, Bombaclat: 0.1, Crusty: 0.35, Ahh: 0.515 }
-    },
-    legendary: {
-      name: 'LEGENDARY SPIN',
-      cost: 10000,
-      color: 'yellow',
-      weights: { RayOfSunshine: 0.02, Epic: 0.1, Bombaclat: 0.2, Crusty: 0.5, Ahh: 0.18 }
-    }
-  }
+  // Single spin configuration
+  const SPIN_COST = 1000
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -91,16 +66,12 @@ export default function ShopPage() {
     }
   }
 
-  const openSpinModal = (tier: keyof typeof spinTiers) => {
-    setSelectedTier(tier)
-    // Small delay to ensure tier is set before opening modal
-    setTimeout(() => {
-      setShowSpinModal(true)
-    }, 10)
+  const openSpinModal = () => {
+    setShowSpinModal(true)
   }
 
   const startSpin = () => {
-    if (!profile || !selectedTier || profile.epic_coins < spinTiers[selectedTier].cost) return
+    if (!profile || profile.epic_coins < SPIN_COST) return
     setIsSpinning(true)
     
     // Generate random spin distance (3000-6000px for variety)
@@ -112,21 +83,26 @@ export default function ShopPage() {
       setSpinClass('spinning')
     }, 500)
     
-    // Handle the spin logic
-    spinForGorb(selectedTier)
+    // Handle the spin logic - pass the distance directly
+    spinForGorb(randomDistance)
   }
 
-  const spinForGorb = async (tier: keyof typeof spinTiers) => {
+  // Simple rarity generation - no weights, just position based
+  const generateRarityAtSegment = (segmentIndex: number): string => {
+    const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
+    return rarities[segmentIndex % 5]
+  }
+
+  const spinForGorb = async (spinDistance: number) => {
     if (!profile) return
     
-    const tierConfig = spinTiers[tier]
     setSpinResult(null)
 
     try {
       // Deduct Epic Coins for the spin
       const { error: updateError } = await supabase
         .from('users')
-        .update({ epic_coins: profile.epic_coins - tierConfig.cost })
+        .update({ epic_coins: profile.epic_coins - SPIN_COST })
         .eq('id', user?.id)
 
       if (updateError) throw updateError
@@ -134,43 +110,32 @@ export default function ShopPage() {
       // Simulate spin duration
       await new Promise(resolve => setTimeout(resolve, 6500))
 
-      // Instead of trying to calculate position, let's use the random distance to seed the same RNG
-      // This ensures both visual and result use the same underlying randomness
-      const tierWeights = tierConfig.weights
-      const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
-      const weights = [
-        tierWeights.RayOfSunshine,
-        tierWeights.Epic,
-        tierWeights.Bombaclat,
-        tierWeights.Crusty,
-        tierWeights.Ahh
-      ]
+      // Calculate exactly which segment lands at the center pointer
+      const segmentWidth = 80
       
-      // Create weighted array for proper distribution (same as visual)
-      const weightedRarities: string[] = []
-      weights.forEach((weight, idx) => {
-        const count = Math.round(weight * 400) // Scale for 400 segments
-        for (let j = 0; j < count; j++) {
-          weightedRarities.push(rarities[idx])
-        }
-      })
+      // Get the actual container width (responsive)
+      // max-w-3xl = 768px max, but could be smaller on mobile
+      const containerWidth = Math.min(window.innerWidth * 0.9, 768) // 90% of screen or 768px max
+      const centerPositionPx = containerWidth / 2 // Center of container
+      const initialCenterSegment = centerPositionPx / segmentWidth // Which segment is at center initially
       
-      // Use the spin distance as a seed to pick from the same distribution as visual
-      const spinBasedSeed = Math.floor(randomSpinDistance / 80) // Convert distance to "segment-like" number
-      const seedValue = (spinBasedSeed * 7 + 13) % weightedRarities.length
-      const wonRarity = weightedRarities[seedValue] || 'Ahh'
-      const segmentAtCenter = spinBasedSeed % 400 // For debugging
+      const segmentsMoved = spinDistance / segmentWidth
+      const finalCenterSegmentRaw = (initialCenterSegment + segmentsMoved) % 400
+      const finalCenterSegment = Math.floor(finalCenterSegmentRaw) // Round down to whole number
       
-      console.log('🎯 Spin Debug:', {
-        tier: tier,
-        selectedTier: selectedTier,
-        tierConfigWeights: tierConfig.weights,
-        randomSpinDistance,
-        spinBasedSeed,
-        segmentAtCenter,
-        wonRarity,
-        seedValue,
-        rarityAtThatSeed: weightedRarities[seedValue]
+      // Use that exact segment to determine rarity
+      const wonRarity = generateRarityAtSegment(finalCenterSegment)
+      
+      console.log('🎯 RESPONSIVE CALCULATION:', {
+        windowWidth: window.innerWidth,
+        containerWidth,
+        centerPositionPx,
+        initialCenterSegment,
+        spinDistance,
+        segmentsMoved,
+        finalCenterSegmentRaw,
+        finalCenterSegment,
+        wonRarity
       })
 
       // Get a random Gorb of the won rarity (regardless of ownership)
@@ -199,15 +164,18 @@ export default function ShopPage() {
         
         // Always set the result to show the gorb (whether new or duplicate)
         setSpinResult(wonGorb.id)
+        console.log('✅ Set spin result:', { wonGorbId: wonGorb.id, wonGorbName: wonGorb.name, isNewGorb: !isOwned })
       } else {
         // Fallback - just show the rarity
         setSpinResult(wonRarity)
+        console.log('✅ Set spin result (fallback):', { wonRarity })
       }
 
     } catch (error) {
       console.error('Spin error:', error)
     } finally {
       setIsSpinning(false)
+      console.log('✅ Spin finished - isSpinning set to false')
     }
   }
 
@@ -322,85 +290,44 @@ export default function ShopPage() {
           Discover all {allGorbz.length} available Gorbz
         </div>
 
-        {/* Spin Tiers Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {Object.entries(spinTiers).map(([tierKey, tier]) => {
-            const canAfford = profile && profile.epic_coins >= tier.cost
+        {/* Simple Spin Button */}
+        <div className="flex justify-center">
+          <div className="relative group">
+            <div className="absolute -inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 bg-purple-500/60 shadow-purple-500/50"></div>
             
-            return (
-              <div key={tierKey} className="relative group">
-                {/* Tier Glow */}
-                <div className={`absolute -inset-3 rounded-xl animate-pulse shadow-2xl opacity-60 ${
-                  tier.color === 'gray' ? 'bg-gray-500/60 shadow-gray-500/50' :
-                  tier.color === 'blue' ? 'bg-blue-500/60 shadow-blue-500/50' :
-                  tier.color === 'purple' ? 'bg-purple-500/60 shadow-purple-500/50' :
-                  'bg-yellow-500/60 shadow-yellow-500/50'
-                }`}></div>
+            <button
+              onClick={openSpinModal}
+              disabled={!profile || profile.epic_coins < SPIN_COST}
+              className="relative bg-gradient-to-br from-black via-purple-900 to-black border-2 border-purple-400 hover:border-purple-300 rounded-xl p-8 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-xl shadow-purple-400/50"
+            >
+              <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
+              
+              <div className="text-center space-y-4">
+                <h3 className="text-3xl font-mono font-black text-purple-400">
+                  SPIN FOR GORBZ
+                </h3>
                 
-                <button
-                  onClick={() => openSpinModal(tierKey as keyof typeof spinTiers)}
-                  disabled={!canAfford}
-                  className={`relative w-full bg-gradient-to-br from-black via-gray-900 to-black border-2 rounded-xl p-6 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
-                    tier.color === 'gray' ? 'border-gray-400 hover:border-gray-300 shadow-xl shadow-gray-400/50' :
-                    tier.color === 'blue' ? 'border-blue-400 hover:border-blue-300 shadow-xl shadow-blue-400/50' :
-                    tier.color === 'purple' ? 'border-purple-400 hover:border-purple-300 shadow-xl shadow-purple-400/50' :
-                    'border-yellow-400 hover:border-yellow-300 shadow-xl shadow-yellow-400/50'
-                  }`}
-                >
-                  <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-white/20 to-transparent rounded-tr-xl"></div>
-                  
-                  <div className="text-center space-y-4">
-                    <h3 className={`text-xl font-mono font-black ${
-                      tier.color === 'gray' ? 'text-gray-400' :
-                      tier.color === 'blue' ? 'text-blue-400' :
-                      tier.color === 'purple' ? 'text-purple-400' :
-                      'text-yellow-400'
-                    }`}>
-                      {tier.name}
-                    </h3>
-                    
-                    <div className={`text-3xl font-mono font-black ${
-                      tier.color === 'gray' ? 'text-gray-300' :
-                      tier.color === 'blue' ? 'text-blue-300' :
-                      tier.color === 'purple' ? 'text-purple-300' :
-                      'text-yellow-300'
-                    }`}>
-                      {tier.cost}EC
-                    </div>
-                    
-                    <div className="space-y-2 text-sm">
-                      <div className={`font-mono font-bold ${
-                        tier.color === 'gray' ? 'text-gray-400' :
-                        tier.color === 'blue' ? 'text-blue-400' :
-                        tier.color === 'purple' ? 'text-purple-400' :
-                        'text-yellow-400'
-                      }`}>
-                        BETTER ODDS:
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                        <div className="text-yellow-300">☀️ {(tier.weights.RayOfSunshine * 100).toFixed(2)}%</div>
-                        <div className="text-purple-300">⭐ {(tier.weights.Epic * 100).toFixed(1)}%</div>
-                        <div className="text-red-300">⚡ {(tier.weights.Bombaclat * 100).toFixed(1)}%</div>
-                        <div className="text-cyan-300">💎 {(tier.weights.Crusty * 100).toFixed(1)}%</div>
-                      </div>
-                    </div>
-                    
-                    {!canAfford && (
-                      <div className="text-red-400 text-sm font-mono font-black">
-                        INSUFFICIENT EC
-                      </div>
-                    )}
+                <div className="text-4xl font-mono font-black text-purple-300">
+                  {SPIN_COST}EC
+                </div>
+                
+                <div className="text-lg font-mono font-bold text-purple-400">
+                  GET RANDOM GORB!
+                </div>
+                
+                {(!profile || profile.epic_coins < SPIN_COST) && (
+                  <div className="text-red-400 text-sm font-mono font-black">
+                    INSUFFICIENT EC
                   </div>
-                </button>
+                )}
               </div>
-            )
-          })}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Spin Modal Overlay */}
-      {showSpinModal && selectedTier && (
+      {showSpinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Background Blur */}
           <div 
@@ -409,7 +336,6 @@ export default function ShopPage() {
               if (!isSpinning) {
                 setShowSpinModal(false)
                 setSpinResult(null)
-                setSelectedTier(null)
                 setSpinClass('')
                 setIsNewGorb(false)
               }
@@ -424,7 +350,6 @@ export default function ShopPage() {
                 onClick={() => {
                   setShowSpinModal(false)
                   setSpinResult(null)
-                  setSelectedTier(null)
                   setSpinClass('')
                   setIsNewGorb(false)
                 }}
@@ -435,13 +360,13 @@ export default function ShopPage() {
             )}
             
             <div className="text-center space-y-8">
-              {/* Tier Info */}
+              {/* Spin Info */}
               <div>
                 <h2 className="text-4xl font-mono font-black text-yellow-400 mb-2">
-                  {spinTiers[selectedTier as keyof typeof spinTiers].name}
+                  SPIN FOR GORBZ
                 </h2>
                 <div className="text-xl font-mono text-cyan-400">
-                  Cost: {spinTiers[selectedTier as keyof typeof spinTiers].cost}EC
+                  Cost: {SPIN_COST}EC
                 </div>
               </div>
 
@@ -462,40 +387,10 @@ export default function ShopPage() {
                       transform: spinClass === 'spinning' ? `translateX(-${randomSpinDistance}px)` : 'translateX(0px)'
                     }}
                   >
-                    {/* Create segments based on selected tier weights */}
+                    {/* Create segments with simple pattern */}
                     {Array.from({length: 400}, (_, i) => {
-                      const tierWeights = spinTiers[selectedTier as keyof typeof spinTiers].weights
-                      
-                      // Debug first segment only
-                      if (i === 0) {
-                        console.log('🎨 Visual Debug:', {
-                          selectedTier: selectedTier,
-                          visualTierWeights: tierWeights
-                        })
-                      }
-                      
-                      // Create a pseudo-random but consistent distribution
-                      const rarities = ['RayOfSunshine', 'Epic', 'Bombaclat', 'Crusty', 'Ahh']
-                      const weights = [
-                        tierWeights.RayOfSunshine,
-                        tierWeights.Epic,
-                        tierWeights.Bombaclat,
-                        tierWeights.Crusty,
-                        tierWeights.Ahh
-                      ]
-                      
-                      // Create weighted array for proper distribution
-                      const weightedRarities: string[] = []
-                      weights.forEach((weight, idx) => {
-                        const count = Math.round(weight * 400) // Scale for 400 segments
-                        for (let j = 0; j < count; j++) {
-                          weightedRarities.push(rarities[idx])
-                        }
-                      })
-                      
-                      // Use position-based pseudo-random selection for consistent but mixed distribution
-                      const seedValue = (i * 7 + 13) % weightedRarities.length
-                      const rarity = weightedRarities[seedValue] || 'Ahh'
+                      // Use the simple rarity generation
+                      const rarity = generateRarityAtSegment(i)
                       const config = getRarityConfig(rarity)
 
                       const Icon = config.icon
@@ -526,7 +421,7 @@ export default function ShopPage() {
                   <div className="text-xl font-mono font-bold text-white">
                     Ready to spin for amazing Gorbz?
                   </div>
-                  {profile && selectedTier && profile.epic_coins >= spinTiers[selectedTier].cost ? (
+                  {profile && profile.epic_coins >= SPIN_COST ? (
                     <button
                       onClick={startSpin}
                       className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-mono font-black rounded-lg transition-all duration-300 transform hover:scale-105 text-2xl shadow-2xl shadow-green-500/50"
@@ -545,36 +440,57 @@ export default function ShopPage() {
                 </div>
               ) : spinResult ? (
                 <div className="space-y-4">
-                  {allGorbz.find(g => g.id === spinResult) ? (
-                    <>
-                      {isNewGorb ? (
-                        <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
-                          🎉 YOU WON! 🎉
-                        </div>
-                      ) : (
-                        <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
-                          😔 AWW DUPLICATE 😔
-                        </div>
-                      )}
-                      <div>
-                        <div className="text-2xl font-mono font-black text-yellow-400">
-                          {allGorbz.find(g => g.id === spinResult)?.name}
-                        </div>
-                        <div className={`text-xl font-mono ${getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').textColor}`}>
-                          {getRarityConfig(allGorbz.find(g => g.id === spinResult)?.rarity || '').label}
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
-                      🎉 YOU WON! 🎉
-                    </div>
-                  )}
+                  {/* Check if spinResult is a Gorb ID or just a rarity string */}
+                  {(() => {
+                    const gorb = allGorbz.find(g => g.id === spinResult)
+                    if (gorb) {
+                      // We have a specific Gorb
+                      return (
+                        <>
+                          {isNewGorb ? (
+                            <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                              🎉 YOU WON! 🎉
+                            </div>
+                          ) : (
+                            <div className="text-2xl font-mono font-black text-orange-400 animate-pulse">
+                              😔 AWW DUPLICATE 😔
+                            </div>
+                          )}
+                          <div>
+                            <div className="text-2xl font-mono font-black text-yellow-400">
+                              {gorb.name}
+                            </div>
+                            <div className={`text-xl font-mono ${getRarityConfig(gorb.rarity).textColor}`}>
+                              {getRarityConfig(gorb.rarity).label}
+                            </div>
+                          </div>
+                        </>
+                      )
+                    } else {
+                      // spinResult is just a rarity string (fallback case)
+                      const rarity = spinResult as string
+                      const config = getRarityConfig(rarity)
+                      return (
+                        <>
+                          <div className="text-3xl font-mono font-black text-green-400 animate-bounce">
+                            🎉 YOU WON! 🎉
+                          </div>
+                          <div>
+                            <div className="text-2xl font-mono font-black text-yellow-400">
+                              Random {config.label} Gorb
+                            </div>
+                            <div className={`text-xl font-mono ${config.textColor}`}>
+                              {config.label}
+                            </div>
+                          </div>
+                        </>
+                      )
+                    }
+                  })()}
                   <button
                     onClick={() => {
                       setShowSpinModal(false)
                       setSpinResult(null)
-                      setSelectedTier(null)
                       setSpinClass('')
                       setIsNewGorb(false)
                     }}
