@@ -279,7 +279,7 @@ export default function BirthdayPage() {
               &lt;david.celebrate() /&gt;
             </div>
             <div className="flex items-center justify-center space-x-4 text-lg text-purple-400">
-              <span className="font-mono">Best. Mentor. Ever.</span>
+              <span className="font-mono">Best. Mentor/Boss. Ever.</span>
             </div>
           </div>
         </div>
@@ -444,7 +444,7 @@ export default function BirthdayPage() {
           {[
             'Thank you so much for everything you\'ve done for me!',
             'Happy Birthday!',
-            'I\'m very lucky having a mentor/boss/friend like you!',
+            'I\'m very lucky having a mentor/boss like you!',
             'Have a great day/night!',
             'These messages were NOT written by AI, I actually wrote these :)',
             'THANK YOUU!!'
