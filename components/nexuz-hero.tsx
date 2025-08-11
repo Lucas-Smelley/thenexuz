@@ -72,6 +72,8 @@ export default function NexuzHero({
         window.location.href = "/deathbooty"
       } else if (planetData.title === "EPIC RNG WORLD") {
         window.location.href = "/epicrngworld"
+      } else if (planetData.title === "DAVID B-DAY") {
+        window.location.href = "/birthday"
       } else {
         setShowPlanetPage(true)
       }
@@ -339,6 +341,20 @@ export default function NexuzHero({
               orbitSpeed={0.35}
               orbitOffset={3 * Math.PI / 2}
               isActive={activePlanet === "EPIC RNG WORLD"}
+              onPositionUpdate={handlePlanetPositionUpdate}
+            />
+
+            <Planet
+              size={85}
+              color="bg-gradient-to-br from-yellow-300 via-pink-500 to-purple-500"
+              glowColor="rgba(255, 215, 0, 0.9)"
+              title="DAVID B-DAY"
+              description="🎉 David's Birthday Celebration! 🎂 Interactive terminal with fun effects!"
+              onClick={handlePlanetClick}
+              orbitRadius={isMobile ? 160 : 350}
+              orbitSpeed={0.6}
+              orbitOffset={Math.PI / 4}
+              isActive={activePlanet === "DAVID B-DAY"}
               onPositionUpdate={handlePlanetPositionUpdate}
             />
           </>

@@ -320,6 +320,116 @@ const Planet = ({
             </div>
           )}
 
+          {/* Birthday Planet specific content */}
+          {title === "DAVID B-DAY" && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* Bright birthday border */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background: `
+                    conic-gradient(
+                      from 0deg,
+                      #FFD700 0deg, #FF69B4 30deg, #FFD700 60deg,
+                      #FF1493 90deg, #FFD700 120deg, #FF69B4 150deg,
+                      #FFD700 180deg, #FF1493 210deg, #FFD700 240deg,
+                      #FF69B4 270deg, #FFD700 300deg, #FF1493 330deg,
+                      #FFD700 360deg
+                    )
+                  `,
+                  mask: `radial-gradient(circle, transparent ${size * 0.42}px, black ${size * 0.44}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
+                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.42}px, black ${size * 0.44}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
+                  animation: 'spin 4s linear infinite',
+                  filter: 'drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 25px #FF69B4)',
+                }}
+              />
+              
+              {/* Birthday background */}
+              <div
+                className="absolute inset-2 rounded-full"
+                style={{
+                  background: `
+                    radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 70%, rgba(255, 105, 180, 0.25) 0%, transparent 50%),
+                    linear-gradient(135deg, rgba(30, 20, 40, 0.9) 0%, rgba(50, 30, 60, 0.8) 50%, rgba(20, 10, 30, 0.9) 100%)
+                  `,
+                  backgroundImage: `
+                    repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255, 215, 0, 0.1) 8px, rgba(255, 215, 0, 0.1) 9px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255, 105, 180, 0.1) 8px, rgba(255, 105, 180, 0.1) 9px)
+                  `,
+                }}
+              >
+                {/* Birthday celebration symbols */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative text-center">
+                    <div 
+                      className="text-yellow-300 font-bold animate-pulse"
+                      style={{ 
+                        fontSize: `${size * 0.12}px`, 
+                        textShadow: '0 0 15px #FFD700, 0 0 25px #FF69B4',
+                        fontFamily: 'system-ui'
+                      }}
+                    >
+                      🎉
+                    </div>
+                    <div 
+                      className="text-pink-300 font-bold mt-1"
+                      style={{ 
+                        fontSize: `${size * 0.08}px`,
+                        textShadow: '0 0 10px currentColor'
+                      }}
+                    >
+                      DAVID
+                    </div>
+                    <div 
+                      className="absolute -top-3 -left-6 text-yellow-400 animate-bounce"
+                      style={{ 
+                        animationDelay: '0.3s',
+                        fontSize: `${size * 0.06}px`
+                      }}
+                    >
+                      🎂
+                    </div>
+                    <div 
+                      className="absolute -bottom-3 -right-6 text-pink-400 animate-bounce"
+                      style={{ 
+                        animationDelay: '0.8s',
+                        fontSize: `${size * 0.06}px`
+                      }}
+                    >
+                      🎈
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rotating birthday elements around the edge */}
+                {['🎁', '🎊', '✨', '🎯', '🌟', '🎪', '💫', '🎭'].map((symbol, index) => {
+                  const angle = index * 45
+                  const radius = size * 0.28
+                  const x = Math.cos((angle * Math.PI) / 180) * radius
+                  const y = Math.sin((angle * Math.PI) / 180) * radius
+                  
+                  return (
+                    <div
+                      key={symbol}
+                      className="absolute opacity-90 animate-pulse"
+                      style={{
+                        left: '50%',
+                        top: '50%',
+                        transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
+                        textShadow: '0 0 8px rgba(255, 215, 0, 0.8)',
+                        animationDelay: `${index * 0.15}s`,
+                        fontSize: `${size * 0.05}px`
+                      }}
+                    >
+                      {symbol}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Death Booty specific content */}
           {title === "DEATH BOOTY" && (
             <div className="absolute inset-0 flex items-center justify-center">
