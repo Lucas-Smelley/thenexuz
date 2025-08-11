@@ -15,6 +15,7 @@ export default function BirthdayPage() {
   })
   const [awaitingTermination, setAwaitingTermination] = useState<string | null>(null)
   const [suggestion, setSuggestion] = useState("")
+  const [isMobile, setIsMobile] = useState(false)
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -151,10 +152,12 @@ export default function BirthdayPage() {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      const output = executeFunction(currentInput)
+      // If there's a suggestion, use the completed function
+      const inputToExecute = suggestion ? currentInput + suggestion : currentInput
+      const output = executeFunction(inputToExecute)
       setTerminalHistory(prev => [
         ...prev,
-        `C:\\Users\\David\\Birthday>${currentInput}`,
+        `C:\\Users\\David\\Birthday>${inputToExecute}`,
         output,
         ""
       ])
@@ -183,6 +186,16 @@ export default function BirthdayPage() {
       "",
       "C:\\Users\\David\\Birthday>rem Type help() to see available functions"
     ])
+    
+    // Check if mobile on mount
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   useEffect(() => {
@@ -273,28 +286,28 @@ export default function BirthdayPage() {
 
         {/* Command Prompt Terminal */}
         <div className="bg-black border border-gray-600 rounded shadow-2xl max-w-2xl w-full mb-12 font-mono">
-          <div className="bg-blue-600 px-3 py-1 flex items-center justify-between">
+          <div className="bg-blue-600 px-3 py-2 sm:py-1 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 bg-white rounded-sm flex items-center justify-center">
-                <Terminal className="w-2 h-2 text-black" />
+              <div className="w-6 h-6 sm:w-4 sm:h-4 bg-white rounded-sm flex items-center justify-center">
+                <Terminal className="w-3 h-3 sm:w-2 sm:h-2 text-black" />
               </div>
-              <span className="text-white text-sm font-bold">Command Prompt - David's Birthday</span>
+              <span className="text-white text-xs sm:text-sm font-bold">Command Prompt - David's Birthday</span>
             </div>
-            <div className="flex space-x-1">
-              <div className="w-4 h-4 bg-gray-400 hover:bg-gray-300 cursor-pointer flex items-center justify-center">
-                <span className="text-black text-xs">_</span>
+            <div className="flex space-x-2 sm:space-x-1">
+              <div className="w-6 h-6 sm:w-4 sm:h-4 bg-gray-400 hover:bg-gray-300 cursor-pointer flex items-center justify-center touch-manipulation">
+                <span className="text-black text-sm sm:text-xs">_</span>
               </div>
-              <div className="w-4 h-4 bg-gray-400 hover:bg-gray-300 cursor-pointer flex items-center justify-center">
-                <span className="text-black text-xs">□</span>
+              <div className="w-6 h-6 sm:w-4 sm:h-4 bg-gray-400 hover:bg-gray-300 cursor-pointer flex items-center justify-center touch-manipulation">
+                <span className="text-black text-sm sm:text-xs">□</span>
               </div>
-              <div className="w-4 h-4 bg-red-500 hover:bg-red-400 cursor-pointer flex items-center justify-center">
-                <span className="text-white text-xs">×</span>
+              <div className="w-6 h-6 sm:w-4 sm:h-4 bg-red-500 hover:bg-red-400 cursor-pointer flex items-center justify-center touch-manipulation">
+                <span className="text-white text-sm sm:text-xs">×</span>
               </div>
             </div>
           </div>
           <div 
             ref={terminalRef} 
-            className="p-4 bg-black text-white text-sm min-h-[300px] max-h-[400px] overflow-y-auto cursor-text" 
+            className="p-3 sm:p-4 bg-black text-white text-sm min-h-[250px] sm:min-h-[300px] max-h-[350px] sm:max-h-[400px] overflow-y-auto cursor-text" 
             onClick={focusInput}
           >
             {/* Command Prompt Header */}
@@ -382,7 +395,7 @@ export default function BirthdayPage() {
       {effects.thankYou && (
         <div className="fixed inset-0 pointer-events-none z-40">
           {/* Confetti shooting from center */}
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 50 : 80 }).map((_, i) => (
             <div
               key={i}
               className="absolute"
@@ -405,7 +418,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Random falling confetti from top */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 35 : 60 }).map((_, i) => (
             <div
               key={`falling-${i}`}
               className="absolute"
@@ -462,7 +475,7 @@ export default function BirthdayPage() {
       {effects.partyTime && (
         <div className="fixed inset-0 pointer-events-none z-40">
           {/* Center spawn point - MASSIVE */}
-          {Array.from({ length: 150 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 80 : 150 }).map((_, i) => (
             <div
               key={`center-${i}`}
               className="absolute"
@@ -488,7 +501,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Top-left spawn point */}
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 40 : 80 }).map((_, i) => (
             <div
               key={`top-left-${i}`}
               className="absolute"
@@ -514,7 +527,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Top-right spawn point */}
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 40 : 80 }).map((_, i) => (
             <div
               key={`top-right-${i}`}
               className="absolute"
@@ -540,7 +553,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Bottom-left spawn point */}
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 40 : 80 }).map((_, i) => (
             <div
               key={`bottom-left-${i}`}
               className="absolute"
@@ -566,7 +579,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Bottom-right spawn point */}
-          {Array.from({ length: 80 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 40 : 80 }).map((_, i) => (
             <div
               key={`bottom-right-${i}`}
               className="absolute"
@@ -593,7 +606,7 @@ export default function BirthdayPage() {
 
           {/* Extra side spawns for MORE MADNESS */}
           {/* Left edge */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`left-${i}`}
               className="absolute"
@@ -619,7 +632,7 @@ export default function BirthdayPage() {
           ))}
 
           {/* Right edge */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`right-${i}`}
               className="absolute"
@@ -645,7 +658,7 @@ export default function BirthdayPage() {
           ))}
 
           {/* Top edge */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`top-${i}`}
               className="absolute"
@@ -671,7 +684,7 @@ export default function BirthdayPage() {
           ))}
 
           {/* Bottom edge */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`bottom-${i}`}
               className="absolute"
@@ -701,7 +714,7 @@ export default function BirthdayPage() {
       {effects.rageMode && (
         <div className="fixed inset-0 pointer-events-none z-40">
           {/* Center spawn point - RAGE EXPLOSION */}
-          {Array.from({ length: 120 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 60 : 120 }).map((_, i) => (
             <div
               key={`center-${i}`}
               className="absolute"
@@ -727,7 +740,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Top-left corner rage */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`top-left-${i}`}
               className="absolute"
@@ -753,7 +766,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Top-right corner rage */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`top-right-${i}`}
               className="absolute"
@@ -779,7 +792,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Bottom-left corner rage */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`bottom-left-${i}`}
               className="absolute"
@@ -805,7 +818,7 @@ export default function BirthdayPage() {
           ))}
           
           {/* Bottom-right corner rage */}
-          {Array.from({ length: 60 }).map((_, i) => (
+          {Array.from({ length: isMobile ? 30 : 60 }).map((_, i) => (
             <div
               key={`bottom-right-${i}`}
               className="absolute"
@@ -881,20 +894,25 @@ export default function BirthdayPage() {
             "Why did the cookie go to the doctor? Because it felt crumbly!",
             "What's orange and sounds like a parrot? A carrot!",
             "Why don't programmers like nature? It has too many bugs!"
-          ].map((joke, i) => (
+          ].slice(0, isMobile ? 8 : 18).map((joke, i) => (
             <div
               key={joke}
-              className="absolute bg-yellow-300 text-black p-4 rounded-lg shadow-lg w-48 text-center font-bold border-2 border-orange-400"
+              className="absolute bg-yellow-300 text-black p-3 sm:p-4 rounded-lg shadow-lg w-40 sm:w-48 text-center font-bold border-2 border-orange-400"
               style={{
-                left: `${[8, 28, 52, 75, 12, 35, 62, 82, 5, 25, 48, 68, 15, 38, 58, 78, 22, 45][i] || 65}%`,
-                top: `${[15, 8, 12, 18, 32, 28, 35, 25, 48, 52, 45, 42, 65, 68, 62, 58, 75, 72][i] || 80}%`,
+                left: isMobile 
+                  ? `${[10, 60, 15, 65, 20, 70, 25, 75][i] || 50}%`
+                  : `${[8, 28, 52, 75, 12, 35, 62, 82, 5, 25, 48, 68, 15, 38, 58, 78, 22, 45][i] || 65}%`,
+                top: isMobile 
+                  ? `${[5, 8, 75, 78, 82, 85, 10, 12][i] || 80}%`
+                  : `${[15, 8, 12, 18, 32, 28, 35, 25, 48, 52, 45, 42, 65, 68, 62, 58, 75, 72][i] || 80}%`,
                 animationName: 'jokeFloat',
                 animationDuration: `${3.5 + (i * 0.15) % 3}s`,
                 animationTimingFunction: 'ease-in-out',
                 animationIterationCount: 'infinite',
                 animationDelay: `${(i * 0.3) % 4}s`,
-                fontSize: '12px',
-                zIndex: 41 + i
+                fontSize: isMobile ? '10px' : '12px',
+                zIndex: 41 + i,
+                maxWidth: isMobile ? '160px' : '192px'
               }}
             >
               {joke}

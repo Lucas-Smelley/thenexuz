@@ -152,7 +152,7 @@ export default function NexuzHero({
     const translateX = (50 - leftPercent) * 2 // Multiply for more dramatic movement
     const translateY = (50 - topPercent) * 2
 
-    return `translate(${translateX}vw, ${translateY}vh) scale(3)`
+    return `translate(${translateX}vw, ${translateY}vh) scale(${isMobile ? 2.2 : 3})`
   }
 
   // Planet page component
@@ -289,7 +289,7 @@ export default function NexuzHero({
         {mounted && (
           <>
             <Planet
-              size={80}
+              size={isMobile ? 60 : 80}
               color="bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600"
               glowColor="rgba(59, 130, 246, 0.8)"
               title="Aqua Nexus"
@@ -303,7 +303,7 @@ export default function NexuzHero({
             />
 
             <Planet
-              size={85}
+              size={isMobile ? 65 : 85}
               color="bg-gradient-to-br from-red-500 via-pink-500 to-red-600"
               glowColor="rgba(236, 72, 153, 0.8)"
               title="DEATH BOOTY"
@@ -317,7 +317,7 @@ export default function NexuzHero({
             />
 
             <Planet
-              size={85}
+              size={isMobile ? 65 : 85}
               color="bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600"
               glowColor="rgba(16, 185, 129, 0.8)"
               title="Verdant Sphere"
@@ -331,7 +331,7 @@ export default function NexuzHero({
             />
 
             <Planet
-              size={70}
+              size={isMobile ? 55 : 70}
               color="bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600"
               glowColor="rgba(251, 191, 36, 0.8)"
               title="EPIC RNG WORLD"
@@ -345,7 +345,7 @@ export default function NexuzHero({
             />
 
             <Planet
-              size={85}
+              size={isMobile ? 70 : 85}
               color="bg-gradient-to-br from-yellow-300 via-pink-500 to-purple-500"
               glowColor="rgba(255, 215, 0, 0.9)"
               title="DAVID B-DAY"
