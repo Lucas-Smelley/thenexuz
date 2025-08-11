@@ -451,18 +451,23 @@ export default function BirthdayPage() {
           ].map((msg, i) => (
             <div
               key={msg}
-              className="absolute text-2xl font-bold text-white bg-black/40 px-4 py-2 rounded-lg backdrop-blur-sm"
+              className="absolute text-lg sm:text-2xl font-bold text-white bg-black/40 px-3 sm:px-4 py-2 rounded-lg backdrop-blur-sm"
               style={{
-                left: `${5 + (i * 15) % 80}%`,
-                top: `${15 + (i * 12) % 70}%`,
+                left: isMobile 
+                  ? `${[5, 55, 10, 60, 15, 65][i] || 50}%`
+                  : `${5 + (i * 15) % 80}%`,
+                top: isMobile 
+                  ? `${[3, 6, 75, 78, 85, 88][i] || 90}%`
+                  : `${15 + (i * 12) % 70}%`,
                 textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                maxWidth: '300px',
+                maxWidth: isMobile ? '200px' : '300px',
                 textAlign: 'center',
                 animationName: 'gentleFloat',
                 animationDuration: `${3 + (i * 0.2)}s`,
                 animationTimingFunction: 'ease-in-out',
                 animationIterationCount: 'infinite',
-                animationDelay: `${i * 0.4}s`
+                animationDelay: `${i * 0.4}s`,
+                fontSize: isMobile ? '14px' : undefined
               }}
             >
               {msg}
