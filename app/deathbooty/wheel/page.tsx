@@ -7,21 +7,41 @@ import SceneTape from "@/components/deathbooty/scene-tape"
 import BloodBackground from "@/components/deathbooty/blood-background"
 
 // ─── Wheel config ────────────────────────────────────────────────────
-// To add/remove items: edit this array.
+// To add/remove items: edit RAW_SEGMENTS below.
 // weight is relative — higher = more likely to land on.
-// Example: weight 30 out of total 100 = 30% chance.
 type WheelSegment = { label: string; color: string; weight: number }
 
-const SEGMENTS: WheelSegment[] = [
-  { label: "BAIL",        color: "#3b0000", weight: 28 },
-  { label: "GLORY",       color: "#7f1d1d", weight: 22 },
-  { label: "BAIL HARD",   color: "#450a0a", weight: 18 },
-  { label: "FACE PLANT",  color: "#991b1b", weight: 13 },
-  { label: "HONOR",       color: "#5a0a0a", weight: 10 },
-  { label: "RIDE OR DIE", color: "#7f0000", weight: 5  },
-  { label: "LEGEND",      color: "#2d0000", weight: 3  },
-  { label: "DEATH RIDE",  color: "#1a0000", weight: 1  },
+const COLORS = [
+  "#3b0000","#6b0000","#1a0000","#7f1d1d","#5a0a0a",
+  "#2d0000","#991b1b","#450a0a","#7f0000","#3b1010",
 ]
+
+const SEGMENTS: WheelSegment[] = [
+  { label: "Go in the river",                        weight: 1 },
+  { label: "Wear I like men shirt",                  weight: 1 },
+  { label: "Get pantsed",                            weight: 3 },
+  { label: "Gun to the bollocks",                    weight: 1 },
+  { label: "Draw on your hands and nipples as eyes", weight: 3 },
+  { label: "Post Death Booty video",                 weight: 1 },
+  { label: "Make Death Booty design",                weight: 1 },
+  { label: "Make the stickers",                      weight: 1 },
+  { label: "Make Death Booty poster",                weight: 2 },
+  { label: "Eat a spicy",                            weight: 3 },
+  { label: "Chug a Sprite",                          weight: 3 },
+  { label: "Eat something sour",                     weight: 3 },
+  { label: "Attack a goose",                         weight: 2 },
+  { label: "Shot of koolaid",                        weight: 2 },
+  { label: "Energy drink before skate",              weight: 1 },
+  { label: "Trip then apologize then run",           weight: 2 },
+  { label: "Clean the streets",                      weight: 2 },
+  { label: "1 purple nurple",                        weight: 2 },
+  { label: "2 purple nurple",                        weight: 1 },
+  { label: "3 Purple nurples",                       weight: 1 },
+  { label: "Compliment a stranger",                  weight: 1 },
+  { label: "Eff Abel (get creative)",                weight: 1 },
+  { label: "EVIL SPIN (+2)",                         weight: 1 },
+  { label: "Ask for directions then leave",          weight: 2 },
+].map((seg, i) => ({ ...seg, color: COLORS[i % COLORS.length] }))
 // ─────────────────────────────────────────────────────────────────────
 
 const SPIN_DURATION = 4000
@@ -40,6 +60,14 @@ function buildGeometry(segments: WheelSegment[]): SegmentGeometry[] {
     cumAngle += arc
     return { ...seg, startAngle, arc }
   })
+}
+
+function contrastColor(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b
+  return luminance > 128 ? "#1a0000" : "#ffffff"
 }
 
 function segmentPath(startAngle: number, arc: number): string {
@@ -144,9 +172,12 @@ export default function WheelPage() {
               {GEOMETRY.map((seg, i) => {
                 const midAngle = seg.startAngle + seg.arc / 2
                 const midRad   = (midAngle - 90) * (Math.PI / 180)
-                const textR    = R * 0.62
+                const textR = R * 0.55
                 const tx = CX + textR * Math.cos(midRad)
                 const ty = CY + textR * Math.sin(midRad)
+                const display = seg.label.length > 24
+                  ? seg.label.slice(0, 23) + "…"
+                  : seg.label
                 return (
                   <g key={i}>
                     <path
@@ -155,21 +186,18 @@ export default function WheelPage() {
                       stroke="#dc2626"
                       strokeWidth="1.5"
                     />
-                    {seg.arc >= 15 && (
-                      <text
-                        x={tx} y={ty}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fill="#fca5a5"
-                        fontSize={seg.arc < 30 ? "8" : "10"}
-                        fontWeight="bold"
-                        fontFamily="Impact, Arial Black, sans-serif"
-                        letterSpacing="1"
-                        transform={`rotate(${midAngle}, ${tx}, ${ty})`}
-                      >
-                        {seg.label}
-                      </text>
-                    )}
+                    <text
+                      x={tx} y={ty}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fill={contrastColor(seg.color)}
+                      fontSize="10"
+                      fontFamily="Impact, Arial Black, sans-serif"
+                      letterSpacing="0.5"
+                      transform={`rotate(${midAngle > 90 && midAngle <= 270 ? midAngle + 90 : midAngle - 90}, ${tx}, ${ty})`}
+                    >
+                      {display}
+                    </text>
                   </g>
                 )
               })}
