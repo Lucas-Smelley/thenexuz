@@ -9,50 +9,38 @@ const Planet = ({
   color,
   glowColor,
   title,
-  description,
   onClick,
   orbitRadius,
   orbitSpeed,
   orbitOffset,
   isActive,
-  onPositionUpdate,
 }: {
   size: number
   color: string
   glowColor: string
   title: string
-  description: string
-  onClick: (planetData: { top: string; left: string; title: string; description: string }) => void
+  onClick: (planetData: { top: string; left: string; title: string }) => void
   orbitRadius: number
   orbitSpeed: number
   orbitOffset: number
   isActive: boolean
-  onPositionUpdate: (position: { x: number; y: number }) => void
 }) => {
   const [isHovered, setIsHovered] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0, z: 0 })
   const [frozenPosition, setFrozenPosition] = useState<{ x: number; y: number; z: number } | null>(null)
-  const [wheelRotation, setWheelRotation] = useState(0)
-  const [isSpinning, setIsSpinning] = useState(false)
   const startTimeRef = useRef(Date.now() * 0.001)
 
   useEffect(() => {
     if (isActive) {
-      // Store current position and freeze
       if (frozenPosition === null) {
         setFrozenPosition(position)
-        console.log(`[${title}] CLICKED - FROZEN at position: x=${position.x.toFixed(2)}, y=${position.y.toFixed(2)}`)
       }
       return
     }
 
-    // Not active - animate normally
     if (frozenPosition) {
-      // Calculate what orbital angle this position corresponds to
       const angle = Math.atan2(frozenPosition.y / (orbitRadius * 0.4), frozenPosition.x / orbitRadius)
-      // Set the start time so that the current time produces this angle
       startTimeRef.current = Date.now() * 0.001 - (angle - orbitOffset) / orbitSpeed
-      console.log(`[${title}] UNCLICKED - RESUMING from stored position: x=${frozenPosition.x.toFixed(2)}, y=${frozenPosition.y.toFixed(2)}, calculated angle=${angle.toFixed(4)}`)
       setFrozenPosition(null)
     }
 
@@ -68,73 +56,34 @@ const Planet = ({
     return () => clearInterval(interval)
   }, [isActive, orbitRadius, orbitSpeed, orbitOffset, frozenPosition])
 
-  // Update parent position without callback dependency
-  useEffect(() => {
-    if (!isActive) return
-
-    const centerX = 50
-    const centerY = 50
-    const currentX = centerX + (position.x / (typeof window !== 'undefined' ? window.innerWidth : 1920)) * 100
-    const currentY = centerY + (position.y / (typeof window !== 'undefined' ? window.innerHeight : 1080)) * 100
-    
-    const timeoutId = setTimeout(() => {
-      if (onPositionUpdate) {
-        onPositionUpdate({ x: currentX, y: currentY })
-      }
-    }, 50)
-    
-    return () => clearTimeout(timeoutId)
-  }, [position.x, position.y, isActive])
-
-  const centerX = 50 // Center of screen as percentage
+  const centerX = 50
   const centerY = 50
   const currentX = centerX + (position.x / (typeof window !== 'undefined' ? window.innerWidth : 1920)) * 100
   const currentY = centerY + (position.y / (typeof window !== 'undefined' ? window.innerHeight : 1080)) * 100
   const depth = position.z
   const isInFront = depth > 0
-  
-  // Calculate distance from center for perspective scaling
+
   const distanceFromCenter = Math.sqrt(position.x * position.x + position.y * position.y)
-  const maxDistance = orbitRadius
-  const perspectiveScale = 1 - (distanceFromCenter / maxDistance) * 0.4 // Scale down by up to 40%
-  
-  const scale = (0.6 + (depth * 0.4)) * perspectiveScale // Combine depth and distance scaling
-  const opacity = 0.5 + (Math.abs(depth) * 0.5) // Enhanced opacity range
+  const perspectiveScale = 1 - (distanceFromCenter / orbitRadius) * 0.4
+  const scale = (0.6 + (depth * 0.4)) * perspectiveScale
+  const opacity = 0.5 + (Math.abs(depth) * 0.5)
 
   return (
     <>
-      {/* Planet */}
       <div
         className="absolute transition-all duration-300 ease-out cursor-pointer"
-        style={{ 
+        style={{
           left: `${currentX}%`,
           top: `${currentY}%`,
           transform: `translate(-50%, -50%) scale(${isHovered ? scale * 1.1 : scale})`,
-          zIndex: isInFront ? 30 : 5, // In front of or behind title
+          zIndex: isInFront ? 30 : 5,
           opacity: opacity,
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => {
           e.stopPropagation()
-          
-          // Special handling for EPIC RNG WORLD - spin the wheel
-          if (title === "EPIC RNG WORLD") {
-            setIsSpinning(true)
-            const randomRotation = 360 * 3 + Math.random() * 360 // 3+ full rotations
-            setWheelRotation(prev => prev + randomRotation)
-            
-            setTimeout(() => {
-              setIsSpinning(false)
-            }, 2000)
-          }
-          
-          onClick({ 
-            top: `${currentY}%`, 
-            left: `${currentX}%`, 
-            title, 
-            description 
-          })
+          onClick({ top: `${currentY}%`, left: `${currentX}%`, title })
         }}
       >
         <div
@@ -152,366 +101,124 @@ const Planet = ({
             `,
           }}
         >
-          {/* Spiky metal border for Death Booty planet */}
-          {title === "DEATH BOOTY" && (
+          {/* Spiky metal border */}
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              background: `
+                conic-gradient(
+                  from 0deg,
+                  #8B0000 0deg, #FF0000 15deg, #8B0000 30deg,
+                  #FF0000 45deg, #8B0000 60deg, #FF0000 75deg,
+                  #8B0000 90deg, #FF0000 105deg, #8B0000 120deg,
+                  #FF0000 135deg, #8B0000 150deg, #FF0000 165deg,
+                  #8B0000 180deg, #FF0000 195deg, #8B0000 210deg,
+                  #FF0000 225deg, #8B0000 240deg, #FF0000 255deg,
+                  #8B0000 270deg, #FF0000 285deg, #8B0000 300deg,
+                  #FF0000 315deg, #8B0000 330deg, #FF0000 345deg,
+                  #8B0000 360deg
+                )
+              `,
+              mask: `radial-gradient(circle, transparent ${size * 0.45}px, black ${size * 0.47}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
+              WebkitMask: `radial-gradient(circle, transparent ${size * 0.45}px, black ${size * 0.47}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
+              animation: 'spin 20s linear infinite',
+            }}
+          />
+
+          {/* Outer spiky ring */}
+          <div
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              background: `
+                repeating-conic-gradient(
+                  from 0deg,
+                  transparent 0deg,
+                  #FF0000 3deg,
+                  #8B0000 6deg,
+                  #FF4444 9deg,
+                  transparent 12deg
+                )
+              `,
+              mask: `radial-gradient(circle, transparent ${size * 0.48}px, black ${size * 0.49}px, black ${size * 0.51}px, transparent ${size * 0.52}px)`,
+              WebkitMask: `radial-gradient(circle, transparent ${size * 0.48}px, black ${size * 0.49}px, black ${size * 0.51}px, transparent ${size * 0.52}px)`,
+              animation: 'spin 15s linear infinite reverse',
+              filter: 'drop-shadow(0 0 10px #FF0000)',
+            }}
+          />
+
+          {/* Planet content */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            {/* Dark background with skull pattern */}
+            <div className="absolute inset-0 bg-black/60 rounded-full">
+              <div className="absolute inset-0 opacity-15">
+                <Skull
+                  size={size * 0.4}
+                  className="absolute top-1/4 left-1/4 text-red-300 rotate-12 animate-pulse"
+                />
+                <Skull
+                  size={size * 0.35}
+                  className="absolute bottom-1/4 right-1/4 text-red-300 -rotate-12 animate-pulse"
+                  style={{ animationDelay: '1s' }}
+                />
+              </div>
+            </div>
+
             <div
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background: `
-                  conic-gradient(
-                    from 0deg,
-                    #8B0000 0deg, #FF0000 15deg, #8B0000 30deg,
-                    #FF0000 45deg, #8B0000 60deg, #FF0000 75deg,
-                    #8B0000 90deg, #FF0000 105deg, #8B0000 120deg,
-                    #FF0000 135deg, #8B0000 150deg, #FF0000 165deg,
-                    #8B0000 180deg, #FF0000 195deg, #8B0000 210deg,
-                    #FF0000 225deg, #8B0000 240deg, #FF0000 255deg,
-                    #8B0000 270deg, #FF0000 285deg, #8B0000 300deg,
-                    #FF0000 315deg, #8B0000 330deg, #FF0000 345deg,
-                    #8B0000 360deg
-                  )
-                `,
-                mask: `radial-gradient(circle, transparent ${size * 0.45}px, black ${size * 0.47}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
-                WebkitMask: `radial-gradient(circle, transparent ${size * 0.45}px, black ${size * 0.47}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
-                animation: 'spin 20s linear infinite',
-              }}
-            />
-          )}
-          
-          {/* Additional spiky outer ring for Death Booty */}
-          {title === "DEATH BOOTY" && (
-            <div
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background: `
-                  repeating-conic-gradient(
-                    from 0deg,
-                    transparent 0deg,
-                    #FF0000 3deg,
-                    #8B0000 6deg,
-                    #FF4444 9deg,
-                    transparent 12deg
-                  )
-                `,
-                mask: `radial-gradient(circle, transparent ${size * 0.48}px, black ${size * 0.49}px, black ${size * 0.51}px, transparent ${size * 0.52}px)`,
-                WebkitMask: `radial-gradient(circle, transparent ${size * 0.48}px, black ${size * 0.49}px, black ${size * 0.51}px, transparent ${size * 0.52}px)`,
-                animation: 'spin 15s linear infinite reverse',
-                filter: 'drop-shadow(0 0 10px #FF0000)',
-              }}
-            />
-          )}
-          {/* EPIC RNG WORLD specific content */}
-          {title === "EPIC RNG WORLD" && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Animated border rings */}
+              className="absolute inset-0 flex items-center justify-center rounded-full"
+              style={{ width: `${size}px`, height: `${size}px` }}
+            >
               <div
-                className="absolute inset-0 rounded-full pointer-events-none"
+                className="absolute inset-0 rounded-full spike-border"
                 style={{
-                  background: `
-                    conic-gradient(
-                      from 0deg,
-                      #FFD700 0deg, #FFA500 45deg, #FFD700 90deg,
-                      #FF8C00 135deg, #FFD700 180deg, #FFA500 225deg,
-                      #FFD700 270deg, #FF8C00 315deg, #FFD700 360deg
-                    )
-                  `,
-                  mask: `radial-gradient(circle, transparent ${size * 0.44}px, black ${size * 0.46}px, black ${size * 0.48}px, transparent ${size * 0.5}px)`,
-                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.44}px, black ${size * 0.46}px, black ${size * 0.48}px, transparent ${size * 0.5}px)`,
-                  animation: 'spin 8s linear infinite',
-                  filter: 'drop-shadow(0 0 8px #FFD700)',
-                }}
-              />
-              
-              {/* Outer tech border */}
-              <div
-                className="absolute inset-0 rounded-full pointer-events-none"
-                style={{
-                  background: `
-                    repeating-conic-gradient(
-                      from 0deg,
-                      transparent 0deg,
-                      #FFD700 2deg,
-                      #000000 4deg,
-                      #FFA500 6deg,
-                      transparent 8deg
-                    )
-                  `,
-                  mask: `radial-gradient(circle, transparent ${size * 0.47}px, black ${size * 0.48}px, black ${size * 0.5}px, transparent ${size * 0.51}px)`,
-                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.47}px, black ${size * 0.48}px, black ${size * 0.5}px, transparent ${size * 0.51}px)`,
-                  animation: 'spin 12s linear infinite reverse',
-                  filter: 'drop-shadow(0 0 6px #FFD700)',
+                  background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(139,0,0,0.7) 50%, rgba(0,0,0,0.7) 100%)',
+                  border: '3px solid #ff0000',
+                  boxShadow: '0 0 20px rgba(255,0,0,0.7), inset 0 0 15px rgba(255,0,0,0.4)',
                 }}
               />
 
-              {/* Main spin wheel */}
-              <div
-                className="absolute inset-2 rounded-full bg-black border-2 border-yellow-400"
+              <Image
+                src="/media/death-booty/images/death-booty.png"
+                alt="Death Booty"
+                width={size * 4}
+                height={size * 4}
+                className="object-contain relative z-10"
                 style={{
-                  transform: `rotate(${wheelRotation}deg)`,
-                  transition: isSpinning ? 'transform 2s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
-                  background: `
-                    conic-gradient(
-                      from 0deg,
-                      #FFD700 0deg, #000000 30deg,
-                      #FFA500 60deg, #000000 90deg,
-                      #FFD700 120deg, #000000 150deg,
-                      #FF8C00 180deg, #000000 210deg,
-                      #FFD700 240deg, #000000 270deg,
-                      #FFA500 300deg, #000000 330deg
-                    )
-                  `,
-                  boxShadow: 'inset 0 0 20px rgba(255, 215, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5)',
+                  filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9)) brightness(1.3) contrast(1.3)',
                 }}
-              >
-                {/* Wheel segments with numbers */}
-                <div className="absolute inset-0 rounded-full">
-                  {[1, 2, 5, 10, 25, 50, 100, 500, 1000, 'RNG', '💎', '⚡'].map((value, index) => (
-                    <div
-                      key={index}
-                      className="absolute text-black font-bold font-mono"
-                      style={{
-                        fontSize: `${size * 0.08}px`,
-                        top: '50%',
-                        left: '50%',
-                        transform: `rotate(${index * 30}deg) translateY(-${size * 0.3}px) rotate(-${index * 30}deg)`,
-                        transformOrigin: '0 0',
-                        textShadow: '0 0 2px #FFD700',
-                      }}
-                    >
-                      {value}
-                    </div>
-                  ))}
-                </div>
+              />
 
-                {/* Center hub */}
+              <div className="absolute z-20 text-center">
                 <div
-                  className="absolute top-1/2 left-1/2 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 border-2 border-black"
+                  className="text-white font-bold tracking-wider"
                   style={{
-                    width: `${size * 0.2}px`,
-                    height: `${size * 0.2}px`,
-                    transform: 'translate(-50%, -50%)',
-                    boxShadow: '0 0 10px rgba(255, 215, 0, 0.8)',
+                    fontSize: `${size * 0.12}px`,
+                    fontFamily: 'Nosifer, "Metal Mania", UnifrakturCook, fantasy',
+                    textShadow: '0 0 6px #000, 0 0 12px #ff0000, 0 0 18px #ff0000, 3px 3px 6px rgba(0,0,0,0.9)',
+                    transform: 'rotate(-2deg)',
+                    lineHeight: '0.8',
+                    fontWeight: '900',
                   }}
                 >
-                  <div className="absolute inset-1 rounded-full bg-black flex items-center justify-center">
-                    <span
-                      className="text-yellow-400 font-bold font-mono"
-                      style={{ fontSize: `${size * 0.06}px` }}
-                    >
-                      RNG
-                    </span>
-                  </div>
+                  DEATH<br />BOOTY
                 </div>
-              </div>
-
-              {/* Wheel pointer */}
-              <div
-                className="absolute top-0 left-1/2 transform -translate-x-1/2"
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderLeft: `${size * 0.06}px solid transparent`,
-                  borderRight: `${size * 0.06}px solid transparent`,
-                  borderTop: `${size * 0.12}px solid #FFD700`,
-                  filter: 'drop-shadow(0 0 4px #FFD700)',
-                  zIndex: 10,
-                }}
-              />
-            </div>
-          )}
-
-          {/* Birthday Planet specific content */}
-          {title === "DAVID B-DAY" && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Bright birthday border */}
-              <div
-                className="absolute inset-0 rounded-full pointer-events-none"
-                style={{
-                  background: `
-                    conic-gradient(
-                      from 0deg,
-                      #FFD700 0deg, #FF69B4 30deg, #FFD700 60deg,
-                      #FF1493 90deg, #FFD700 120deg, #FF69B4 150deg,
-                      #FFD700 180deg, #FF1493 210deg, #FFD700 240deg,
-                      #FF69B4 270deg, #FFD700 300deg, #FF1493 330deg,
-                      #FFD700 360deg
-                    )
-                  `,
-                  mask: `radial-gradient(circle, transparent ${size * 0.42}px, black ${size * 0.44}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
-                  WebkitMask: `radial-gradient(circle, transparent ${size * 0.42}px, black ${size * 0.44}px, black ${size * 0.5}px, transparent ${size * 0.52}px)`,
-                  animation: 'spin 4s linear infinite',
-                  filter: 'drop-shadow(0 0 15px #FFD700) drop-shadow(0 0 25px #FF69B4)',
-                }}
-              />
-              
-              {/* Birthday background */}
-              <div
-                className="absolute inset-2 rounded-full"
-                style={{
-                  background: `
-                    radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
-                    radial-gradient(circle at 70% 70%, rgba(255, 105, 180, 0.25) 0%, transparent 50%),
-                    linear-gradient(135deg, rgba(30, 20, 40, 0.9) 0%, rgba(50, 30, 60, 0.8) 50%, rgba(20, 10, 30, 0.9) 100%)
-                  `,
-                  backgroundImage: `
-                    repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255, 215, 0, 0.1) 8px, rgba(255, 215, 0, 0.1) 9px),
-                    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255, 105, 180, 0.1) 8px, rgba(255, 105, 180, 0.1) 9px)
-                  `,
-                }}
-              >
-                {/* Birthday celebration symbols */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative text-center">
-                    <div 
-                      className="text-yellow-300 font-bold animate-pulse"
-                      style={{ 
-                        fontSize: `${size * 0.12}px`, 
-                        textShadow: '0 0 15px #FFD700, 0 0 25px #FF69B4',
-                        fontFamily: 'system-ui'
-                      }}
-                    >
-                      🎉
-                    </div>
-                    <div 
-                      className="text-pink-300 font-bold mt-1"
-                      style={{ 
-                        fontSize: `${size * 0.08}px`,
-                        textShadow: '0 0 10px currentColor'
-                      }}
-                    >
-                      DAVID
-                    </div>
-                    <div 
-                      className="absolute -top-3 -left-6 text-yellow-400 animate-bounce"
-                      style={{ 
-                        animationDelay: '0.3s',
-                        fontSize: `${size * 0.06}px`
-                      }}
-                    >
-                      🎂
-                    </div>
-                    <div 
-                      className="absolute -bottom-3 -right-6 text-pink-400 animate-bounce"
-                      style={{ 
-                        animationDelay: '0.8s',
-                        fontSize: `${size * 0.06}px`
-                      }}
-                    >
-                      🎈
-                    </div>
-                  </div>
-                </div>
-
-                {/* Rotating birthday elements around the edge */}
-                {['🎁', '🎊', '✨', '🎯', '🌟', '🎪', '💫', '🎭'].map((symbol, index) => {
-                  const angle = index * 45
-                  const radius = size * 0.28
-                  const x = Math.cos((angle * Math.PI) / 180) * radius
-                  const y = Math.sin((angle * Math.PI) / 180) * radius
-                  
-                  return (
-                    <div
-                      key={symbol}
-                      className="absolute opacity-90 animate-pulse"
-                      style={{
-                        left: '50%',
-                        top: '50%',
-                        transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
-                        textShadow: '0 0 8px rgba(255, 215, 0, 0.8)',
-                        animationDelay: `${index * 0.15}s`,
-                        fontSize: `${size * 0.05}px`
-                      }}
-                    >
-                      {symbol}
-                    </div>
-                  )
-                })}
               </div>
             </div>
-          )}
 
-          {/* Death Booty specific content */}
-          {title === "DEATH BOOTY" && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* Dark background with skull pattern */}
-              <div className="absolute inset-0 bg-black/60 rounded-full">
-                <div className="absolute inset-0 opacity-15">
-                  <Skull 
-                    size={size * 0.4} 
-                    className="absolute top-1/4 left-1/4 text-red-300 rotate-12 animate-pulse" 
-                  />
-                  <Skull 
-                    size={size * 0.35} 
-                    className="absolute bottom-1/4 right-1/4 text-red-300 -rotate-12 animate-pulse" 
-                    style={{ animationDelay: '1s' }}
-                  />
-                </div>
-              </div>
-              
-              {/* Death Booty container */}
-              <div 
-                className="absolute inset-0 flex items-center justify-center rounded-full"
-                style={{
-                  width: `${size}px`,
-                  height: `${size}px`,
-                }}
-              >
-                {/* Dark background layer */}
-                <div
-                  className="absolute inset-0 rounded-full spike-border"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(139,0,0,0.7) 50%, rgba(0,0,0,0.7) 100%)',
-                    border: '3px solid #ff0000',
-                    boxShadow: '0 0 20px rgba(255,0,0,0.7), inset 0 0 15px rgba(255,0,0,0.4)',
-                  }}
-                />
-                
-                {/* Death Booty image - in front of background */}
-                <Image
-                  src="/media/death-booty/images/death-booty.png"
-                  alt="Death Booty"
-                  width={size * 4}
-                  height={size * 4}
-                  className="object-contain relative z-10"
-                  style={{
-                    filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.9)) brightness(1.3) contrast(1.3)',
-                  }}
-                />
-                
-                {/* DEATH BOOTY text overlay - on top of everything */}
-                <div className="absolute z-20 text-center">
-                  <div 
-                    className="text-white font-bold tracking-wider"
-                    style={{
-                      fontSize: `${size * 0.12}px`,
-                      fontFamily: 'Nosifer, "Metal Mania", UnifrakturCook, fantasy',
-                      color: '#ffffff',
-                      textShadow: '0 0 6px #000, 0 0 12px #ff0000, 0 0 18px #ff0000, 3px 3px 6px rgba(0,0,0,0.9)',
-                      transform: 'rotate(-2deg)',
-                      lineHeight: '0.8',
-                      fontWeight: '900',
-                    }}
-                  >
-                    DEATH<br/>BOOTY
-                  </div>
-                </div>
-              </div>
-              
-              {/* Blood splatter effect */}
-              <div 
-                className="absolute inset-0 opacity-40 rounded-full animate-splatter"
-                style={{
-                  background: `
-                    radial-gradient(circle at 15% 85%, rgba(220, 38, 38, 0.6) 0%, transparent 30%),
-                    radial-gradient(circle at 85% 15%, rgba(185, 28, 28, 0.5) 0%, transparent 25%),
-                    radial-gradient(circle at 60% 40%, rgba(239, 68, 68, 0.4) 0%, transparent 20%),
-                    radial-gradient(circle at 30% 70%, rgba(127, 29, 29, 0.7) 0%, transparent 15%)
-                  `,
-                }}
-              />
-            </div>
-          )}
+            {/* Blood splatter */}
+            <div
+              className="absolute inset-0 opacity-40 rounded-full animate-splatter"
+              style={{
+                background: `
+                  radial-gradient(circle at 15% 85%, rgba(220, 38, 38, 0.6) 0%, transparent 30%),
+                  radial-gradient(circle at 85% 15%, rgba(185, 28, 28, 0.5) 0%, transparent 25%),
+                  radial-gradient(circle at 60% 40%, rgba(239, 68, 68, 0.4) 0%, transparent 20%),
+                  radial-gradient(circle at 30% 70%, rgba(127, 29, 29, 0.7) 0%, transparent 15%)
+                `,
+              }}
+            />
+          </div>
         </div>
+
         {/* Orbital ring */}
         <div
           className="absolute top-1/2 left-1/2 rounded-full animate-spin-slow transition-all duration-300"

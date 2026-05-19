@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
-import { Skull, ArrowLeft, AlertTriangle, X } from "lucide-react"
+import { Skull, X } from "lucide-react"
+import BackButton from "@/components/deathbooty/back-button"
+import BloodBackground from "@/components/deathbooty/blood-background"
 
 export default function MerchPage() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
@@ -53,14 +54,7 @@ export default function MerchPage() {
         </div>
       </div>
 
-      {/* Back button - messy placement */}
-      <Link
-        href="/deathbooty"
-        className="fixed top-16 left-4 z-50 flex items-center space-x-2 px-3 py-2 bg-black border-2 border-red-800 hover:bg-red-950 transition-all duration-300 text-red-300 hover:text-white font-bold transform -rotate-6 skew-x-6"
-      >
-        <ArrowLeft size={16} />
-        <span className="text-sm metal-text">BACK</span>
-      </Link>
+      <BackButton fixed label="BACK" />
 
       {/* Random warning signs scattered */}
       <div className="absolute top-20 right-10 text-yellow-400 text-xs caution-text transform rotate-12 skew-y-6">
@@ -73,12 +67,7 @@ export default function MerchPage() {
         CASH ONLY
       </div>
 
-      {/* Blood splatter effects */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-16 left-32 w-16 h-16 bg-red-900 rounded-full opacity-40 blur-sm animate-splatter"></div>
-        <div className="absolute top-40 right-16 w-12 h-12 bg-red-950 rounded-full opacity-30 animate-splatter"></div>
-        <div className="absolute bottom-32 left-16 w-20 h-20 bg-red-900 rounded-full opacity-25 blur-sm animate-splatter"></div>
-      </div>
+      <BloodBackground />
 
       {/* Main content */}
       <div className="relative z-20 pt-20 px-4">

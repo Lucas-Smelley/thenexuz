@@ -121,13 +121,13 @@ export default function HomePage() {
         <div className="relative mb-8">
           <div className="absolute -inset-4 border-2 border-red-500 border-dashed animate-pulse rounded-lg"></div>
           <div className="absolute -inset-2 bg-red-600/20 rounded-lg"></div>
-          <button className="relative bg-black border-4 border-red-600 text-red-500 font-black text-xl px-8 py-4 rounded-lg hover:bg-red-900 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-2xl metal-text">
+          <a href="/deathbooty/wheel" className="relative bg-black border-4 border-red-600 text-red-500 font-black text-xl px-8 py-4 rounded-lg hover:bg-red-900 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-2xl metal-text block">
             <span className="flex items-center">
               <Skull className="mr-2" size={24} />
               DEATH WHEEL
               <Skull className="ml-2" size={24} />
             </span>
-          </button>
+          </a>
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-yellow-400 text-xs font-bold caution-text">
             ⚠️ CAUTION ⚠️
           </div>

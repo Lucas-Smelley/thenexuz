@@ -3,6 +3,9 @@
 import { useState } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, Skull, AlertTriangle, User } from "lucide-react"
+import BackButton from "@/components/deathbooty/back-button"
+import SceneTape from "@/components/deathbooty/scene-tape"
+import BloodBackground from "@/components/deathbooty/blood-background"
 
 // Sample member data - replace with actual data
 const members = [
@@ -73,16 +76,7 @@ export default function MembersPage() {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Crime scene tape */}
-      <div className="absolute top-0 left-0 w-full h-16 bg-red-800 transform -rotate-1 -translate-y-4 z-10">
-        <div className="flex items-center justify-center h-full">
-          <div className="flex items-center space-x-8 text-yellow-200 font-bold text-lg tracking-wider">
-            <span>⚠️ MOST WANTED ⚠️</span>
-            <span>⚠️ MOST WANTED ⚠️</span>
-            <span>⚠️ MOST WANTED ⚠️</span>
-          </div>
-        </div>
-      </div>
+      <SceneTape text="MOST WANTED" position="top" rotation="-rotate-1" />
 
       {/* Prison bar shadows */}
       <div className="absolute inset-0 pointer-events-none z-5">
@@ -95,25 +89,9 @@ export default function MembersPage() {
         ))}
       </div>
 
-      {/* Blood splatter background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-24 h-24 bg-red-600 rounded-full opacity-30 blur-sm animate-splatter"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-red-600 rounded-full opacity-25 blur-sm animate-splatter"></div>
-        <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-red-600 rounded-full opacity-20 blur-sm animate-splatter"></div>
-      </div>
+      <BloodBackground />
 
-      {/* Back button */}
-      <div className="absolute top-4 left-4 z-30">
-        <a
-          href="/deathbooty"
-          className="flex items-center space-x-2 px-4 py-2 bg-black border-2 border-red-800 hover:bg-red-950 transition-all duration-300 text-red-300 hover:text-white font-bold transform -rotate-2 skew-x-2"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          <span className="text-sm metal-text">BACK TO DEATH BOOTY</span>
-        </a>
-      </div>
+      <BackButton />
 
       {/* Main content */}
       <div className="relative z-20 pt-24 pb-16 px-4">
@@ -130,15 +108,6 @@ export default function MembersPage() {
         {/* Mugshot carousel - stacked cards */}
         <div className="max-w-5xl mx-auto">
           <div className="relative h-[700px] md:h-[600px] md:overflow-visible overflow-y-auto overflow-x-hidden">
-            {/* Page title - mobile only, scrollable - HIDDEN */}
-            <div className="text-center mb-6 hidden">
-              <h1 className="text-4xl font-black text-red-500 mb-2 metal-text transform -rotate-1">
-                DEATH BOOTY SQUAD
-              </h1>
-              <div className="text-red-400 text-sm font-bold tracking-widest caution-text">
-                WANTED • DANGEROUS • ARMED WITH BOARDS
-              </div>
-            </div>
             {members.map((memberData, index) => {
               const isActive = index === currentMember
               const isNext = index === (currentMember + 1) % members.length
@@ -259,26 +228,17 @@ export default function MembersPage() {
                             ${index === 2 ? 'bg-gradient-to-b from-gray-600 to-black border-gray-500' : ''}
                             ${index === 3 ? 'bg-gradient-to-b from-black to-red-950 border-red-800' : ''}
                           `}>
-                            {memberData.mugshot ? (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <User size={isActive ? 80 : 60} className="text-red-500" />
+                            </div>
+                            {memberData.mugshot && (
                               <Image
                                 src={memberData.mugshot}
                                 alt={`${memberData.name} mugshot`}
                                 fill
                                 className="object-cover"
-                                onError={(e) => {
-                                  // Fallback to User icon if image fails to load
-                                  e.currentTarget.style.display = 'none'
-                                }}
                               />
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <User size={isActive ? 80 : 60} className="text-red-500" />
-                              </div>
                             )}
-                            {/* Fallback User icon (hidden by default, shown if image fails) */}
-                            <div className="absolute inset-0 flex items-center justify-center" style={{ display: 'none' }}>
-                              <User size={isActive ? 80 : 60} className="text-red-500" />
-                            </div>
                             <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black text-white px-1 py-1 text-xs font-bold z-10">
                               {memberData.prisonId}
                             </div>
@@ -437,16 +397,7 @@ export default function MembersPage() {
         <AlertTriangle size={16} className="ml-1 md:ml-2 md:w-5 md:h-5" />
       </div>
 
-      {/* Bottom crime scene tape */}
-      <div className="absolute bottom-0 left-0 w-full h-16 bg-red-800 transform rotate-1 translate-y-4 z-10">
-        <div className="flex items-center justify-center h-full">
-          <div className="flex items-center space-x-8 text-yellow-200 font-bold text-lg tracking-wider">
-            <span>⚠️ DANGEROUS CRIMINALS ⚠️</span>
-            <span>⚠️ DANGEROUS CRIMINALS ⚠️</span>
-            <span>⚠️ DANGEROUS CRIMINALS ⚠️</span>
-          </div>
-        </div>
-      </div>
+      <SceneTape text="DANGEROUS CRIMINALS" position="bottom" rotation="rotate-1" />
     </div>
   )
 }

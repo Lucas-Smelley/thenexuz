@@ -1,52 +1,43 @@
 "use client"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Star from "./star"
 import Planet from "./planet"
-import DescriptionPanel from "./description-panel"
 
-export default function NexuzHero({ 
-  onHoverChange 
-}: { 
-  onHoverChange?: (isHovered: boolean, center: { x: number; y: number }) => void 
+export default function NexuzHero({
+  onHoverChange
+}: {
+  onHoverChange?: (isHovered: boolean, center: { x: number; y: number }) => void
 } = {}) {
   const [hoveredPlanet, setHoveredPlanet] = useState<{
     isHovered: boolean
     top: string
     left: string
-    title: string
-    description: string
   }>({
     isHovered: false,
     top: "50%",
     left: "50%",
-    title: "",
-    description: "",
   })
-  
+
   const [activePlanet, setActivePlanet] = useState<string | null>(null)
-  const [showPlanetPage, setShowPlanetPage] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    
-    // Check if mobile on mount
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
+
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Generate fewer stars for better performance (memoized to prevent position changes)
   const stars = useMemo(() => {
     if (!mounted) return []
-    // Reduced from 200 to 75 stars for better performance
     return Array.from({ length: 75 }, (_, i) => ({
       id: i,
       size: Math.random() * 2.5 + 0.5,
@@ -57,34 +48,21 @@ export default function NexuzHero({
     }))
   }, [mounted])
 
-
-
-
-  const [activePlanetPosition, setActivePlanetPosition] = useState({ x: 50, y: 50 })
-
-
-  const handlePlanetClick = (planetData: { top: string; left: string; title: string; description: string }) => {
+  const handlePlanetClick = (planetData: { top: string; left: string; title: string }) => {
     const isCurrentlyActive = activePlanet === planetData.title
-    
+
     if (isCurrentlyActive) {
-      // If already zoomed in, navigate to planet page
       if (planetData.title === "DEATH BOOTY") {
         window.location.href = "/deathbooty"
-      } else if (planetData.title === "EPIC RNG WORLD") {
-        window.location.href = "/epicrngworld"
-      } else if (planetData.title === "DAVID B-DAY") {
-        window.location.href = "/birthday"
-      } else {
-        setShowPlanetPage(true)
       }
     } else {
-      // Zoom in to new planet
       setActivePlanet(planetData.title)
       setHoveredPlanet({
         isHovered: true,
-        ...planetData,
+        top: planetData.top,
+        left: planetData.left,
       })
-      
+
       if (onHoverChange) {
         onHoverChange(true, {
           x: Number.parseFloat(planetData.left),
@@ -94,155 +72,37 @@ export default function NexuzHero({
     }
   }
 
-  const handleBackToMain = () => {
-    setShowPlanetPage(false)
-    setActivePlanet(null)
-    setHoveredPlanet({
-      isHovered: false,
-      top: "50%",
-      left: "50%",
-      title: "",
-      description: "",
-    })
-    
-    if (onHoverChange) {
-      onHoverChange(false, { x: 50, y: 50 })
-    }
-  }
-
-  const handlePlanetPositionUpdate = useCallback((position: { x: number; y: number }) => {
-    setActivePlanetPosition(position)
-    
-    // Schedule zoom update for next frame to avoid render-time setState
-    requestAnimationFrame(() => {
-      if (onHoverChange) {
-        onHoverChange(true, position)
-      }
-    })
-  }, [onHoverChange])
-
   const handleBackgroundClick = () => {
-    // Zoom out when clicking background
     if (activePlanet) {
       setActivePlanet(null)
       setHoveredPlanet({
         isHovered: false,
         top: "50%",
         left: "50%",
-        title: "",
-        description: "",
       })
-      
+
       if (onHoverChange) {
         onHoverChange(false, { x: 50, y: 50 })
       }
     }
   }
 
-
-  // Calculate transform for smooth camera movement
   const getTransform = () => {
     if (!hoveredPlanet.isHovered) return "translate(0, 0) scale(1)"
 
-    // Convert percentage to actual position for transform calculation
     const topPercent = Number.parseFloat(hoveredPlanet.top)
     const leftPercent = Number.parseFloat(hoveredPlanet.left)
-
-    // Calculate the offset needed to center the planet
-    const translateX = (50 - leftPercent) * 2 // Multiply for more dramatic movement
+    const translateX = (50 - leftPercent) * 2
     const translateY = (50 - topPercent) * 2
 
     return `translate(${translateX}vw, ${translateY}vh) scale(${isMobile ? 2.2 : 3})`
   }
 
-  // Planet page component
-  const PlanetPage = () => {
-    if (!activePlanet) return null
-    
-    const getPlanetConfig = (title: string) => {
-      const configs = {
-        "Aqua Nexus": {
-          color: "from-cyan-400 via-blue-500 to-purple-600",
-          glowColor: "rgba(59, 130, 246, 0.8)",
-          description: "A crystalline world where liquid starlight flows through quantum channels.",
-        },
-        "DEATH BOOTY": {
-          color: "from-red-500 via-pink-500 to-red-600",
-          glowColor: "rgba(236, 72, 153, 0.8)",
-          description: "A hardcore skating brand with a metal and grunge aesthetic.",
-        },
-        "Verdant Sphere": {
-          color: "from-emerald-400 via-green-500 to-teal-600",
-          glowColor: "rgba(16, 185, 129, 0.8)",
-          description: "An ancient sanctuary where the universe's heartbeat resonates through crystalline forests.",
-        },
-        "EPIC RNG WORLD": {
-          color: "from-yellow-400 via-amber-500 to-yellow-600",
-          glowColor: "rgba(251, 191, 36, 0.8)",
-          description: "A quantum realm where luck is amplified and fortune favors the bold.",
-        }
-      }
-      return configs[title as keyof typeof configs] || configs["Aqua Nexus"]
-    }
-
-    const config = getPlanetConfig(activePlanet)
-
-    // Default planet page
-    return (
-      <div className="fixed inset-0 z-50 bg-black">
-        {/* Background gradient */}
-        <div 
-          className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-20`}
-        />
-        
-        {/* Back button */}
-        <button
-          onClick={handleBackToMain}
-          className="fixed top-8 left-8 z-50 flex items-center space-x-2 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 hover:bg-black/70 transition-all duration-300 text-white"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          <span className="text-sm font-medium">Back to Nexuz</span>
-        </button>
-
-        {/* Planet page content */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center max-w-4xl mx-auto px-8">
-            <h1 
-              className="text-6xl md:text-8xl font-bold mb-8 tracking-wide"
-              style={{
-                background: `linear-gradient(45deg, ${config.color})`,
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                textShadow: `0 0 40px ${config.glowColor}`,
-              }}
-            >
-              {activePlanet}
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed">
-              {config.description}
-            </p>
-            <div className="text-gray-400">
-              <p className="text-lg">Planet details and content coming soon...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (showPlanetPage) {
-    return <PlanetPage />
-  }
-
   return (
-    <div 
+    <div
       className="relative w-full h-screen bg-black overflow-hidden"
       onClick={handleBackgroundClick}
     >
-
       {/* Background stars with parallax effect */}
       <div
         className="absolute inset-0"
@@ -255,7 +115,6 @@ export default function NexuzHero({
           willChange: hoveredPlanet.isHovered ? "transform" : "auto",
         }}
       >
-        {/* Enhanced Starfield Background */}
         <div className="absolute inset-0">
           {stars.map((star) => (
             <Star
@@ -268,14 +127,13 @@ export default function NexuzHero({
             />
           ))}
         </div>
-
       </div>
 
       {/* Static nebula gradient overlays */}
       <div className="absolute inset-0 bg-gradient-radial from-purple-900/20 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-blue-900/10 to-transparent" />
 
-      {/* Main cosmic container that transforms with smooth easing */}
+      {/* Main cosmic container */}
       <div
         className="absolute inset-0"
         style={{
@@ -285,87 +143,24 @@ export default function NexuzHero({
           willChange: hoveredPlanet.isHovered ? "transform" : "auto",
         }}
       >
-        {/* Orbiting Planets */}
         {mounted && (
-          <>
-            <Planet
-              size={isMobile ? 60 : 80}
-              color="bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600"
-              glowColor="rgba(59, 130, 246, 0.8)"
-              title="Aqua Nexus"
-              description="A crystalline world where liquid starlight flows through quantum channels."
-              onClick={handlePlanetClick}
-              orbitRadius={isMobile ? 300 : 600}
-              orbitSpeed={0.3}
-              orbitOffset={0}
-              isActive={activePlanet === "Aqua Nexus"}
-              onPositionUpdate={handlePlanetPositionUpdate}
-            />
-
-            <Planet
-              size={isMobile ? 65 : 85}
-              color="bg-gradient-to-br from-red-500 via-pink-500 to-red-600"
-              glowColor="rgba(236, 72, 153, 0.8)"
-              title="DEATH BOOTY"
-              description="HARDCORE SKATEBOARDING WHERE ITS RIDE OR DIE"
-              onClick={handlePlanetClick}
-              orbitRadius={isMobile ? 200 : 450}
-              orbitSpeed={0.45}
-              orbitOffset={Math.PI / 2}
-              isActive={activePlanet === "DEATH BOOTY"}
-              onPositionUpdate={handlePlanetPositionUpdate}
-            />
-
-            <Planet
-              size={isMobile ? 65 : 85}
-              color="bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600"
-              glowColor="rgba(16, 185, 129, 0.8)"
-              title="Verdant Sphere"
-              description="An ancient sanctuary where the universe's heartbeat resonates through crystalline forests."
-              onClick={handlePlanetClick}
-              orbitRadius={isMobile ? 350 : 750}
-              orbitSpeed={0.2}
-              orbitOffset={Math.PI}
-              isActive={activePlanet === "Verdant Sphere"}
-              onPositionUpdate={handlePlanetPositionUpdate}
-            />
-
-            <Planet
-              size={isMobile ? 55 : 70}
-              color="bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600"
-              glowColor="rgba(251, 191, 36, 0.8)"
-              title="EPIC RNG WORLD"
-              description="A quantum realm where luck is amplified and fortune favors the bold."
-              onClick={handlePlanetClick}
-              orbitRadius={isMobile ? 250 : 520}
-              orbitSpeed={0.35}
-              orbitOffset={3 * Math.PI / 2}
-              isActive={activePlanet === "EPIC RNG WORLD"}
-              onPositionUpdate={handlePlanetPositionUpdate}
-            />
-
-            <Planet
-              size={isMobile ? 70 : 85}
-              color="bg-gradient-to-br from-yellow-300 via-pink-500 to-purple-500"
-              glowColor="rgba(255, 215, 0, 0.9)"
-              title="DAVID B-DAY"
-              description="🎉 David's Birthday Celebration! 🎂 Interactive terminal with fun effects!"
-              onClick={handlePlanetClick}
-              orbitRadius={isMobile ? 160 : 350}
-              orbitSpeed={0.6}
-              orbitOffset={Math.PI / 4}
-              isActive={activePlanet === "DAVID B-DAY"}
-              onPositionUpdate={handlePlanetPositionUpdate}
-            />
-          </>
+          <Planet
+            size={isMobile ? 65 : 85}
+            color="bg-gradient-to-br from-red-500 via-pink-500 to-red-600"
+            glowColor="rgba(236, 72, 153, 0.8)"
+            title="DEATH BOOTY"
+            onClick={handlePlanetClick}
+            orbitRadius={isMobile ? 200 : 450}
+            orbitSpeed={0.45}
+            orbitOffset={Math.PI / 2}
+            isActive={activePlanet === "DEATH BOOTY"}
+          />
         )}
 
-
-        {/* Enhanced Central Nameplate */}
+        {/* Central Nameplate */}
         <div className="absolute inset-0 flex items-center justify-center z-20">
           <div className="text-center">
             <div className="relative">
-              {/* Glow effect behind text */}
               <div
                 className="absolute inset-0 blur-3xl opacity-50"
                 style={{
@@ -394,22 +189,12 @@ export default function NexuzHero({
                 THE NEXUZ
               </h1>
             </div>
-            {/* Animated underline */}
             <div className="relative w-64 h-px mx-auto overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-slide-line" />
             </div>
           </div>
         </div>
       </div>
-
-      {/* Description Panel */}
-      <DescriptionPanel
-        isVisible={hoveredPlanet.isHovered}
-        title={hoveredPlanet.title}
-        description={hoveredPlanet.description}
-        activePlanetPosition={activePlanetPosition}
-      />
-
     </div>
   )
 }

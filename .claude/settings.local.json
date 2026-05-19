@@ -12,7 +12,9 @@
       "Bash(node:*)",
       "Bash(timeout 300 npm run build)",
       "Bash(grep:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npm uninstall *)",
+      "Bash(git checkout *)"
     ],
     "deny": []
   }
