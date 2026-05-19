@@ -16,7 +16,8 @@
       "Bash(npm uninstall *)",
       "Bash(git checkout *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\LucasK\\\\dev\\\\personal\\\\thenexuz\" -Recurse -Directory -Name)",
-      "Bash(Sort-Object)"
+      "Bash(Sort-Object)",
+      "Bash(pnpm add *)"
     ],
     "deny": []
   }
