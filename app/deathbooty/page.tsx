@@ -13,9 +13,9 @@ export default function HomePage() {
             className="flex items-center space-x-8 text-yellow-200 font-bold text-lg tracking-wider"
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
           >
-            <span>⚠️ HARDCORE SKATING ⚠️</span>
-            <span>⚠️ HARDCORE SKATING ⚠️</span>
-            <span>⚠️ HARDCORE SKATING ⚠️</span>
+            <span>⚠️ SKATING AND WHATNOT ⚠️</span>
+            <span>⚠️ EVIL AND MYSTERIOUS ⚠️</span>
+            <span>⚠️ Prenis ⚠️</span>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function HomePage() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          <span className="text-sm metal-text">BACK TO NEXUZ</span>
+          <span className="text-sm metal-text">ESCAPE</span>
         </a>
       </div>
 
@@ -129,17 +129,17 @@ export default function HomePage() {
             </span>
           </a>
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-yellow-400 text-xs font-bold caution-text">
-            ⚠️ CAUTION ⚠️
+            ⚠️ KEFT BRO ⚠️
           </div>
           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-yellow-400 text-xs font-bold caution-text">
-            ⚠️ DANGER ⚠️
+            ⚠️ I KEFT ⚠️
           </div>
         </div>
 
         {/* Warning sign */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center text-yellow-400 text-sm font-black caution-text">
           <AlertTriangle size={20} className="mr-2" />
-          <span>ENTER AT YOUR OWN RISK</span>
+          <span>BLUE NATHANIEL</span>
           <AlertTriangle size={20} className="ml-2" />
         </div>
       </div>
@@ -152,8 +152,8 @@ export default function HomePage() {
             style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.8)" }}
           >
             <span>⚠️ SKATE OR DIE ⚠️</span>
-            <span>⚠️ SKATE OR DIE ⚠️</span>
-            <span>⚠️ SKATE OR DIE ⚠️</span>
+            <span>⚠️ SKATE OR LIVE ⚠️</span>
+            <span>⚠️ HELP ME ⚠️</span>
           </div>
         </div>
       </div>

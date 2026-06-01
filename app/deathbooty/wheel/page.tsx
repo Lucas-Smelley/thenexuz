@@ -21,30 +21,34 @@ const SEGMENTS: WheelSegment[] = [
   { label: "Wear I like men shirt",                  weight: 1 },
   { label: "Get pantsed",                            weight: 3 },
   { label: "Gun to the bollocks",                    weight: 1 },
-  { label: "Draw on your hands and nipples as eyes", weight: 3 },
+  { label: "Draw on your hands and nipples as eyes", weight: 2 },
   { label: "Post Death Booty video",                 weight: 1 },
   { label: "Make Death Booty design",                weight: 1 },
   { label: "Make the stickers",                      weight: 1 },
   { label: "Make Death Booty poster",                weight: 2 },
-  { label: "Eat a spicy",                            weight: 3 },
-  { label: "Chug a Sprite",                          weight: 3 },
-  { label: "Eat something sour",                     weight: 3 },
-  { label: "Attack a goose",                         weight: 2 },
+  { label: "Eat a spicy",                            weight: 2 },
+  { label: "Chug a Sprite",                          weight: 2 },
+  { label: "Eat something sour",                     weight: 2 },
+  { label: "Attack (touch) a goose",                 weight: 2 },
   { label: "Shot of koolaid",                        weight: 2 },
-  { label: "Energy drink before skate",              weight: 1 },
+  { label: "Down emergy drank",                      weight: 1 },
   { label: "Trip then apologize then run",           weight: 2 },
   { label: "Clean the streets",                      weight: 2 },
   { label: "1 purple nurple",                        weight: 2 },
   { label: "2 purple nurple",                        weight: 1 },
-  { label: "3 Purple nurples",                       weight: 1 },
   { label: "Compliment a stranger",                  weight: 1 },
   { label: "Eff Abel (get creative)",                weight: 1 },
   { label: "EVIL SPIN (+2)",                         weight: 1 },
   { label: "Ask for directions then leave",          weight: 2 },
+  { label: "Akward phone call",                      weight: 2 },
+  { label: "Eddie before skate",                     weight: 2 },
+  { label: "Make a silly video and post",            weight: 2 },
+  { label: "Accent for a day",                       weight: 2 },
+  { label: "Drank before skate",                     weight: 2 },
 ].map((seg, i) => ({ ...seg, color: COLORS[i % COLORS.length] }))
 // ─────────────────────────────────────────────────────────────────────
 
-const SPIN_DURATION = 4000
+const SPIN_DURATION = 6000
 const CX = 200
 const CY = 200
 const R  = 175
@@ -139,7 +143,7 @@ export default function WheelPage() {
             <Skull size={28} className="text-red-600" />
           </div>
           <p className="text-red-500 text-sm caution-text tracking-widest">
-            ⚠️ SPIN AT YOUR OWN RISK ⚠️
+            This John evil
           </p>
         </div>
 
@@ -232,7 +236,7 @@ export default function WheelPage() {
           >
             <span className="flex items-center gap-3">
               <Skull size={22} />
-              {isSpinning ? "SPINNING..." : "SPIN"}
+              {isSpinning ? "Evil penising.." : "touch me"}
               <Skull size={22} />
             </span>
           </button>
@@ -242,7 +246,7 @@ export default function WheelPage() {
         {result && !isSpinning && (
           <div className="mt-8 text-center animate-pulse">
             <div className="bg-black border-4 border-red-600 px-8 py-4 inline-block spike-border">
-              <div className="text-red-400 text-xs caution-text tracking-widest mb-1">YOU GOT</div>
+              <div className="text-red-400 text-xs caution-text tracking-widest mb-1">Ouu shi, you got</div>
               <div className="text-white text-2xl font-black metal-text">{result}</div>
             </div>
           </div>
